@@ -8,168 +8,129 @@
 <title>Tareo Kampfer</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  :root {
-    --azul:#1e3a5f; --azul2:#2563eb; --verde:#065f46; --verde2:#10b981;
-    --gris:#f1f5f9; --borde:#e2e8f0; --texto:#1e293b; --muted:#64748b;
-    --rojo:#ef4444; --amarillo:#f59e0b;
-  }
-  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--gris);
-         color:var(--texto); min-height:100vh; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --azul:#1e3a5f;--azul2:#2563eb;--verde:#065f46;--verde2:#10b981;
+  --gris:#f1f5f9;--borde:#e2e8f0;--texto:#1e293b;--muted:#64748b;
+  --rojo:#ef4444;--amarillo:#f59e0b;--azul-cl:#dbeafe;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--gris);color:var(--texto);min-height:100vh;}
 
-  /* ── PANTALLAS ── */
-  .screen { display:none; min-height:100vh; flex-direction:column; }
-  .screen.active { display:flex; }
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
 
-  /* ── HEADER ── */
-  .hdr { background:var(--azul); padding:16px 20px; display:flex;
-         align-items:center; gap:12px; }
-  .hdr-logo { width:36px; height:36px; background:var(--azul2); border-radius:8px;
-               display:flex; align-items:center; justify-content:center;
-               font-size:18px; flex-shrink:0; }
-  .hdr-title { color:#fff; font-size:16px; font-weight:700; }
-  .hdr-sub { color:#93c5fd; font-size:12px; margin-top:2px; }
-  .hdr-back { margin-left:auto; background:rgba(255,255,255,.15); border:none;
-               color:#fff; padding:8px 14px; border-radius:8px; font-size:13px;
-               cursor:pointer; }
+.hdr{background:var(--azul);padding:14px 18px;display:flex;align-items:center;gap:12px;}
+.hdr-logo{width:34px;height:34px;background:var(--azul2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.hdr-title{color:#fff;font-size:15px;font-weight:700;}
+.hdr-sub{color:#93c5fd;font-size:11px;margin-top:1px;}
+.hdr-back{margin-left:auto;background:rgba(255,255,255,.15);border:none;color:#fff;padding:7px 13px;border-radius:8px;font-size:12px;cursor:pointer;}
 
-  /* ── BODY ── */
-  .body { flex:1; padding:20px; overflow-y:auto; }
-  .body-center { flex:1; padding:20px; display:flex; flex-direction:column;
-                 align-items:center; justify-content:center; }
+.body{flex:1;padding:16px;overflow-y:auto;}
+.body-center{flex:1;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:20px;}
 
-  /* ── SECCION ── */
-  .sec-title { font-size:13px; font-weight:700; color:var(--muted);
-               text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; }
+.sec-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
 
-  /* ── BOTONES GRANDES (supervisores/OTMs) ── */
-  .btn-list { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
-  .btn-item { background:#fff; border:2px solid var(--borde); border-radius:12px;
-              padding:16px 18px; cursor:pointer; transition:all .15s;
-              display:flex; align-items:center; gap:14px; }
-  .btn-item:active { background:var(--gris); border-color:var(--azul2);
-                     transform:scale(.98); }
-  .btn-item.selected { border-color:var(--azul2); background:#eff6ff; }
-  .btn-item-icon { width:40px; height:40px; border-radius:10px; flex-shrink:0;
-                   display:flex; align-items:center; justify-content:center;
-                   font-size:18px; }
-  .btn-item-icon.azul { background:#dbeafe; }
-  .btn-item-icon.verde { background:#d1fae5; }
-  .btn-item-text { flex:1; }
-  .btn-item-name { font-size:14px; font-weight:600; }
-  .btn-item-sub { font-size:12px; color:var(--muted); margin-top:2px; }
-  .btn-item-check { color:var(--azul2); font-size:20px; display:none; }
-  .btn-item.selected .btn-item-check { display:block; }
+.btn-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;}
+.btn-item{background:#fff;border:2px solid var(--borde);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;}
+.btn-item:active{background:var(--gris);border-color:var(--azul2);transform:scale(.98);}
+.btn-item.selected{border-color:var(--azul2);background:#eff6ff;}
+.btn-item-icon{width:38px;height:38px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.btn-item-text{flex:1;}
+.btn-item-name{font-size:13px;font-weight:600;}
+.btn-item-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.btn-item-check{color:var(--azul2);font-size:18px;display:none;}
+.btn-item.selected .btn-item-check{display:block;}
 
-  /* ── BOTÓN PRINCIPAL ── */
-  .btn-main { width:100%; padding:16px; border-radius:12px; border:none;
-              font-size:16px; font-weight:700; cursor:pointer; transition:all .15s;
-              margin-top:8px; }
-  .btn-main:active { transform:scale(.97); }
-  .btn-main.azul { background:var(--azul2); color:#fff; }
-  .btn-main.verde { background:var(--verde2); color:#fff; }
-  .btn-main.gris { background:#cbd5e1; color:var(--muted); pointer-events:none; }
-  .btn-main.rojo { background:var(--rojo); color:#fff; }
+.btn-main{width:100%;padding:15px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:6px;}
+.btn-main:active{transform:scale(.97);}
+.btn-main.azul{background:var(--azul2);color:#fff;}
+.btn-main.verde{background:var(--verde2);color:#fff;}
+.btn-main.rojo{background:var(--rojo);color:#fff;}
+.btn-main.gris{background:#cbd5e1;color:var(--muted);}
 
-  /* ── BÚSQUEDA ── */
-  .search-wrap { position:relative; margin-bottom:12px; }
-  .search-input { width:100%; padding:14px 16px 14px 44px; border:2px solid var(--borde);
-                  border-radius:12px; font-size:15px; background:#fff; outline:none;
-                  transition:border .15s; }
-  .search-input:focus { border-color:var(--azul2); }
-  .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%);
-                 font-size:18px; color:var(--muted); }
+.search-wrap{position:relative;margin-bottom:10px;}
+.search-input{width:100%;padding:13px 14px 13px 42px;border:2px solid var(--borde);border-radius:12px;font-size:14px;background:#fff;outline:none;transition:border .15s;}
+.search-input:focus{border-color:var(--azul2);}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--muted);}
 
-  /* ── ESCÁNER ── */
-  .scanner-wrap { width:100%; max-width:360px; position:relative; }
-  .scanner-video { width:100%; border-radius:16px; display:block; }
-  .scanner-overlay { position:absolute; inset:0; border-radius:16px;
-                     border:3px solid var(--azul2); pointer-events:none; }
-  .scanner-line { position:absolute; left:10%; right:10%; height:2px;
-                  background:var(--azul2); animation:scan 2s linear infinite; }
-  @keyframes scan { 0%{top:15%} 100%{top:85%} }
-  .scanner-hint { text-align:center; margin-top:16px; color:var(--muted);
-                  font-size:13px; line-height:1.5; }
-  .manual-btn { margin-top:16px; background:#fff; border:2px solid var(--borde);
-                border-radius:10px; padding:12px 20px; font-size:14px;
-                font-weight:600; cursor:pointer; width:100%; max-width:360px; }
+/* SCANNER */
+.scanner-wrap{width:100%;max-width:340px;position:relative;}
+.scanner-video{width:100%;border-radius:14px;display:block;}
+.scanner-overlay{position:absolute;inset:0;border-radius:14px;border:3px solid var(--azul2);pointer-events:none;}
+.scanner-line{position:absolute;left:10%;right:10%;height:2px;background:var(--azul2);animation:scan 2s linear infinite;}
+@keyframes scan{0%{top:15%}100%{top:85%}}
 
-  /* ── CONFIRMACIÓN DE TRABAJADOR ── */
-  .worker-card { background:#fff; border-radius:16px; padding:20px;
-                 border:2px solid var(--verde2); width:100%; max-width:360px; }
-  .worker-avatar { width:64px; height:64px; background:#d1fae5; border-radius:50%;
-                   display:flex; align-items:center; justify-content:center;
-                   font-size:28px; margin:0 auto 14px; }
-  .worker-name { text-align:center; font-size:16px; font-weight:700; margin-bottom:4px; }
-  .worker-cargo { text-align:center; font-size:13px; color:var(--muted); }
-  .worker-id { text-align:center; font-size:11px; color:var(--azul2);
-               font-weight:600; margin-top:6px; }
+/* LISTA ACUMULADA */
+.acum-header{width:100%;max-width:340px;display:flex;justify-content:space-between;align-items:center;margin-top:14px;margin-bottom:8px;}
+.acum-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;}
+.acum-count{background:var(--azul2);color:#fff;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;}
+.acum-list{width:100%;max-width:340px;display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;margin-bottom:12px;}
+.acum-item{background:#fff;border:1px solid var(--borde);border-radius:9px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;}
+.acum-item-info{flex:1;}
+.acum-item-name{font-size:12px;font-weight:600;}
+.acum-item-cargo{font-size:11px;color:var(--muted);}
+.acum-item-hora{font-size:10px;color:var(--azul2);font-weight:600;}
+.acum-item-del{background:none;border:none;color:#cbd5e1;font-size:18px;cursor:pointer;padding:2px 6px;border-radius:6px;}
+.acum-item-del:active{color:var(--rojo);background:#fee2e2;}
+.acum-empty{width:100%;max-width:340px;background:#fff;border:2px dashed var(--borde);border-radius:10px;padding:16px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:12px;}
 
-  /* ── INFO BAR ── */
-  .info-bar { background:#fff; border-radius:12px; padding:14px 16px;
-              border:1px solid var(--borde); margin-bottom:16px; }
-  .info-bar-row { display:flex; justify-content:space-between; align-items:center; }
-  .info-bar-label { font-size:12px; color:var(--muted); }
-  .info-bar-value { font-size:13px; font-weight:600; color:var(--azul); }
+/* CONFIRMACIÓN */
+.worker-card{background:#fff;border-radius:14px;padding:18px;border:2px solid var(--verde2);width:100%;max-width:340px;}
+.worker-avatar{width:56px;height:56px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px;}
+.worker-name{text-align:center;font-size:15px;font-weight:700;margin-bottom:3px;}
+.worker-cargo{text-align:center;font-size:12px;color:var(--muted);}
+.worker-id{text-align:center;font-size:11px;color:var(--azul2);font-weight:600;margin-top:4px;}
 
-  /* ── ESTADO / TOAST ── */
-  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-           padding:12px 20px; border-radius:10px; font-size:14px; font-weight:600;
-           color:#fff; z-index:999; opacity:0; transition:opacity .3s;
-           max-width:90vw; text-align:center; pointer-events:none; }
-  .toast.show { opacity:1; }
-  .toast.ok { background:var(--verde2); }
-  .toast.err { background:var(--rojo); }
-  .toast.warn { background:var(--amarillo); }
+.info-bar{background:#fff;border-radius:10px;padding:12px 14px;border:1px solid var(--borde);margin-bottom:14px;width:100%;max-width:340px;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;}
+.info-label{font-size:11px;color:var(--muted);}
+.info-val{font-size:12px;font-weight:600;color:var(--azul);}
 
-  /* ── RESULTADO FINAL ── */
-  .result-icon { font-size:64px; margin-bottom:16px; }
-  .result-title { font-size:22px; font-weight:700; margin-bottom:8px; text-align:center; }
-  .result-sub { font-size:14px; color:var(--muted); text-align:center; margin-bottom:24px; }
-  .result-detail { background:#fff; border-radius:12px; padding:16px;
-                   width:100%; max-width:360px; margin-bottom:16px; }
-  .result-row { display:flex; justify-content:space-between; padding:6px 0;
-                border-bottom:1px solid var(--borde); font-size:13px; }
-  .result-row:last-child { border:none; }
-  .result-row-label { color:var(--muted); }
-  .result-row-val { font-weight:600; text-align:right; max-width:60%; }
+/* RESULTADO */
+.result-list{display:flex;flex-direction:column;gap:7px;}
+.result-item{background:#fff;border:1px solid var(--borde);border-radius:9px;padding:11px 14px;cursor:pointer;transition:all .15s;}
+.result-item:active{border-color:var(--azul2);background:#eff6ff;}
+.result-item-name{font-size:13px;font-weight:600;}
+.result-item-cargo{font-size:11px;color:var(--muted);margin-top:2px;}
+.result-item-id{font-size:10px;color:var(--azul2);font-weight:700;}
 
-  /* ── BÚSQUEDA MANUAL ── */
-  .result-list { display:flex; flex-direction:column; gap:8px; }
-  .result-item { background:#fff; border:1px solid var(--borde); border-radius:10px;
-                 padding:12px 16px; cursor:pointer; transition:all .15s; }
-  .result-item:active { border-color:var(--azul2); background:#eff6ff; }
-  .result-item-name { font-size:14px; font-weight:600; }
-  .result-item-cargo { font-size:12px; color:var(--muted); margin-top:2px; }
-  .result-item-id { font-size:11px; color:var(--azul2); font-weight:700; }
+/* LOADING */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px;flex:1;}
+.spinner{width:44px;height:44px;border:3px solid var(--borde);border-top-color:var(--azul2);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{color:var(--muted);font-size:14px;text-align:center;}
+.loading-sub{color:#94a3b8;font-size:12px;text-align:center;margin-top:4px;}
 
-  /* ── LOADING ── */
-  .loading { display:flex; flex-direction:column; align-items:center;
-             justify-content:center; gap:12px; padding:40px; }
-  .spinner { width:40px; height:40px; border:3px solid var(--borde);
-             border-top-color:var(--azul2); border-radius:50%;
-             animation:spin .8s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+/* RESUMEN FINAL */
+.resumen-card{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--borde);margin-bottom:8px;}
+.resumen-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--borde);font-size:12px;}
+.resumen-row:last-child{border:none;}
+.resumen-label{color:var(--muted);}
+.resumen-val{font-weight:600;text-align:right;max-width:60%;}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;}
+.badge.ok{background:#d1fae5;color:#065f46;}
+.badge.err{background:#fee2e2;color:#991b1b;}
+.badge.warn{background:#fef3c7;color:#92400e;}
 
-  .divider { height:1px; background:var(--borde); margin:16px 0; }
-  .badge { display:inline-block; padding:3px 10px; border-radius:20px;
-           font-size:11px; font-weight:700; }
-  .badge.azul { background:#dbeafe; color:#1e40af; }
-  .badge.verde { background:#d1fae5; color:#065f46; }
+.warn-box{background:#fef3c7;border:1px solid #f59e0b;border-radius:9px;padding:11px 13px;margin-bottom:12px;font-size:12px;color:#92400e;width:100%;max-width:340px;}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;color:#fff;z-index:999;opacity:0;transition:opacity .3s;max-width:88vw;text-align:center;pointer-events:none;}
+.toast.show{opacity:1;}
+.toast.ok{background:var(--verde2);}
+.toast.err{background:var(--rojo);}
+.toast.warn{background:var(--amarillo);}
+
+.manual-btn{margin-top:12px;background:#fff;border:2px solid var(--borde);border-radius:9px;padding:11px 18px;font-size:13px;font-weight:600;cursor:pointer;width:100%;max-width:340px;}
+.divider{height:1px;background:var(--borde);margin:12px 0;}
 </style>
 </head>
 <body>
 
-<!-- ════════════════════════════════════════════
-     PANTALLA 1 — ELEGIR SUPERVISOR
-════════════════════════════════════════════ -->
+<!-- S1 — SUPERVISOR -->
 <div id="s1" class="screen active">
   <div class="hdr">
     <div class="hdr-logo">⛏️</div>
-    <div>
-      <div class="hdr-title">Tareo Kampfer</div>
-      <div class="hdr-sub">Control de Horas Hombre</div>
-    </div>
+    <div><div class="hdr-title">Tareo Kampfer</div><div class="hdr-sub">Control de Horas Hombre</div></div>
   </div>
   <div class="body">
     <div class="sec-title">¿Quién eres tú?</div>
@@ -177,248 +138,206 @@
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     PANTALLA 2 — ELEGIR OTM
-════════════════════════════════════════════ -->
+<!-- S2 — OTM -->
 <div id="s2" class="screen">
   <div class="hdr">
     <div class="hdr-logo">📋</div>
-    <div>
-      <div class="hdr-title" id="s2-title">Seleccionar OTM</div>
-      <div class="hdr-sub" id="s2-sub"></div>
-    </div>
+    <div><div class="hdr-title" id="s2-title">Seleccionar OTM</div><div class="hdr-sub" id="s2-sub"></div></div>
     <button class="hdr-back" onclick="goTo('s1')">← Volver</button>
   </div>
   <div class="body">
     <div class="sec-title">¿En qué OTM trabajas hoy?</div>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input class="search-input" type="text" placeholder="Buscar OTM..." 
-             id="search-otm" oninput="filtrarOTMs(this.value)">
+      <input class="search-input" type="text" placeholder="Buscar OTM..." id="search-otm" oninput="filtrarOTMs(this.value)">
     </div>
     <div class="btn-list" id="lista-otms"></div>
-    <button class="btn-main azul" id="btn-ir-scanner" onclick="goTo('s3')" 
-            style="display:none">
-      📷 Escanear trabajadores →
+    <button class="btn-main azul" id="btn-ir-scanner" onclick="irAScanner()" style="display:none">
+      📷 Empezar a escanear →
     </button>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     PANTALLA 3 — ESCÁNER QR
-════════════════════════════════════════════ -->
+<!-- S3 — SCANNER + LISTA ACUMULADA -->
 <div id="s3" class="screen">
   <div class="hdr">
     <div class="hdr-logo">📷</div>
-    <div>
-      <div class="hdr-title">Escanear QR</div>
-      <div class="hdr-sub" id="s3-sub"></div>
-    </div>
-    <button class="hdr-back" onclick="detenerCamara(); goTo('s2')">← Volver</button>
+    <div><div class="hdr-title">Escanear QR</div><div class="hdr-sub" id="s3-sub"></div></div>
+    <button class="hdr-back" onclick="detenerCamara();goTo('s2')">← Volver</button>
   </div>
   <div class="body-center">
-    <div class="info-bar" style="width:100%;max-width:360px;">
-      <div class="info-bar-row">
-        <span class="info-bar-label">Supervisor</span>
-        <span class="info-bar-value" id="scan-supervisor"></span>
-      </div>
-      <div style="height:6px"></div>
-      <div class="info-bar-row">
-        <span class="info-bar-label">OTM</span>
-        <span class="info-bar-value" id="scan-otm"></span>
-      </div>
-      <div style="height:6px"></div>
-      <div class="info-bar-row">
-        <span class="info-bar-label">Registrados hoy</span>
-        <span class="info-bar-value" id="scan-count" style="color:var(--verde2)">0</span>
-      </div>
+
+    <div class="info-bar">
+      <div class="info-row"><span class="info-label">Supervisor</span><span class="info-val" id="scan-sup"></span></div>
+      <div class="info-row"><span class="info-label">OTM</span><span class="info-val" id="scan-otm-lbl"></span></div>
     </div>
 
     <div class="scanner-wrap">
       <video id="video" class="scanner-video" autoplay playsinline muted></video>
-      <div class="scanner-overlay">
-        <div class="scanner-line"></div>
-      </div>
+      <div class="scanner-overlay"><div class="scanner-line"></div></div>
       <canvas id="canvas" style="display:none"></canvas>
     </div>
 
-    <p class="scanner-hint">Apunta la cámara al código QR<br>del trabajador</p>
+    <p style="text-align:center;color:var(--muted);font-size:12px;margin-top:10px;">Apunta al código QR del trabajador</p>
 
-    <button class="manual-btn" onclick="detenerCamara(); goTo('s3b')">
-      ✍️ Buscar por nombre
-    </button>
+    <button class="manual-btn" onclick="detenerCamara();goTo('s3b')">✍️ Buscar por nombre</button>
 
-    <div style="height:16px"></div>
-    <button class="btn-main rojo" style="max-width:360px" 
-            onclick="detenerCamara(); goTo('s5')">
-      ✅ Finalizar turno
-    </button>
+    <div class="acum-header">
+      <span class="acum-title">Lista a enviar</span>
+      <span class="acum-count" id="acum-count">0</span>
+    </div>
+
+    <div id="acum-empty" class="acum-empty">Escanea el primer trabajador</div>
+    <div class="acum-list" id="acum-list" style="display:none"></div>
+
+    <div style="width:100%;max-width:340px;">
+      <button class="btn-main verde" id="btn-finalizar" onclick="detenerCamara();goTo('s5-confirm')" style="opacity:.4;pointer-events:none;">
+        ✅ Finalizar y enviar registros
+      </button>
+      <div style="height:8px"></div>
+      <button class="btn-main gris" onclick="detenerCamara();goTo('s1')">🏠 Inicio</button>
+    </div>
+
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     PANTALLA 3B — BÚSQUEDA MANUAL
-════════════════════════════════════════════ -->
+<!-- S3B — BÚSQUEDA MANUAL -->
 <div id="s3b" class="screen">
   <div class="hdr">
     <div class="hdr-logo">🔍</div>
-    <div>
-      <div class="hdr-title">Buscar trabajador</div>
-      <div class="hdr-sub">Escribe apellido o nombre</div>
-    </div>
-    <button class="hdr-back" onclick="goTo('s3'); iniciarCamara()">← Volver</button>
+    <div><div class="hdr-title">Buscar trabajador</div><div class="hdr-sub">Escribe apellido o nombre</div></div>
+    <button class="hdr-back" onclick="goTo('s3');iniciarCamara()">← Volver</button>
   </div>
   <div class="body">
     <div class="search-wrap">
       <span class="search-icon">👷</span>
-      <input class="search-input" type="text" id="search-worker" 
-             placeholder="Ej: Becerra, Marco, Lider..."
-             oninput="buscarTrabajador(this.value)"
-             autocomplete="off" autocorrect="off" autocapitalize="off">
+      <input class="search-input" type="text" id="search-worker" placeholder="Ej: Becerra, Flores..."
+             oninput="buscarTrabajador(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off">
     </div>
-    <div id="resultados-busqueda" class="result-list"></div>
+    <div id="res-busqueda" class="result-list"></div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     PANTALLA 4 — CONFIRMAR TRABAJADOR
-════════════════════════════════════════════ -->
+<!-- S4 — CONFIRMAR TRABAJADOR -->
 <div id="s4" class="screen">
   <div class="hdr">
     <div class="hdr-logo">👷</div>
-    <div>
-      <div class="hdr-title">Confirmar registro</div>
-      <div class="hdr-sub" id="s4-sub"></div>
-    </div>
+    <div><div class="hdr-title">¿Agregar a la lista?</div><div class="hdr-sub" id="s4-sub"></div></div>
     <button class="hdr-back" onclick="volverEscanear()">← Volver</button>
   </div>
   <div class="body-center">
     <div class="worker-card">
       <div class="worker-avatar">👷</div>
-      <div class="worker-name" id="worker-nombre"></div>
-      <div class="worker-cargo" id="worker-cargo"></div>
-      <div class="worker-id" id="worker-id"></div>
+      <div class="worker-name" id="w-nombre"></div>
+      <div class="worker-cargo" id="w-cargo"></div>
+      <div class="worker-id" id="w-id"></div>
     </div>
 
-    <div style="height:20px"></div>
+    <div style="height:14px"></div>
 
-    <div class="info-bar" style="width:100%;max-width:360px;">
-      <div class="info-bar-row">
-        <span class="info-bar-label">OTM</span>
-        <span class="info-bar-value" id="confirm-otm"></span>
-      </div>
-      <div style="height:6px"></div>
-      <div class="info-bar-row">
-        <span class="info-bar-label">Hora de registro</span>
-        <span class="info-bar-value" id="confirm-hora"></span>
-      </div>
+    <div class="info-bar">
+      <div class="info-row"><span class="info-label">OTM</span><span class="info-val" id="c-otm"></span></div>
+      <div class="info-row"><span class="info-label">Hora de escaneo</span><span class="info-val" id="c-hora"></span></div>
     </div>
 
-    <div id="confirm-warning" style="display:none;width:100%;max-width:360px;
-         background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;
-         padding:12px 14px;margin-bottom:12px;font-size:13px;color:#92400e;">
-    </div>
+    <div id="c-warn" class="warn-box" style="display:none"></div>
 
-    <div style="width:100%;max-width:360px;">
-      <button class="btn-main verde" id="btn-confirmar" onclick="confirmarRegistro()">
-        ✅ Confirmar y registrar
-      </button>
-      <div style="height:10px"></div>
-      <button class="btn-main" style="background:#f1f5f9;color:var(--muted);"
-              onclick="volverEscanear()">
-        Cancelar
-      </button>
+    <div style="width:100%;max-width:340px;">
+      <button class="btn-main verde" onclick="agregarALista()">➕ Agregar a la lista</button>
+      <div style="height:8px"></div>
+      <button class="btn-main gris" onclick="volverEscanear()" style="background:#f1f5f9;color:var(--muted);">Cancelar</button>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     PANTALLA 4B — REGISTRANDO (loading)
-════════════════════════════════════════════ -->
-<div id="s4b" class="screen">
+<!-- S5-CONFIRM — REVISIÓN ANTES DE ENVIAR -->
+<div id="s5-confirm" class="screen">
   <div class="hdr">
-    <div class="hdr-logo">⏳</div>
-    <div>
-      <div class="hdr-title">Registrando...</div>
-      <div class="hdr-sub">Por favor espera</div>
-    </div>
-  </div>
-  <div class="body-center">
-    <div class="loading">
-      <div class="spinner"></div>
-      <p style="color:var(--muted);font-size:14px;">Guardando en el sistema...</p>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════════════
-     PANTALLA 5 — RESUMEN Y CIERRE
-════════════════════════════════════════════ -->
-<div id="s5" class="screen">
-  <div class="hdr">
-    <div class="hdr-logo">📊</div>
-    <div>
-      <div class="hdr-title">Resumen del turno</div>
-      <div class="hdr-sub" id="s5-sub"></div>
-    </div>
+    <div class="hdr-logo">📋</div>
+    <div><div class="hdr-title">Revisar antes de enviar</div><div class="hdr-sub" id="sc-sub"></div></div>
+    <button class="hdr-back" onclick="goTo('s3');iniciarCamara()">← Seguir escaneando</button>
   </div>
   <div class="body">
-    <div class="sec-title">Trabajadores registrados</div>
-    <div id="resumen-lista"></div>
-    <div style="height:16px"></div>
-    <button class="btn-main azul" onclick="iniciarNuevoRegistro()">
-      ➕ Registrar otra OTM
-    </button>
-    <div style="height:10px"></div>
-    <button class="btn-main" style="background:#f1f5f9;color:var(--muted);"
-            onclick="goTo('s1')">
-      🏠 Inicio
-    </button>
+    <div class="sec-title">Confirma la lista completa</div>
+    <div id="sc-lista"></div>
+    <div style="height:14px"></div>
+    <div class="info-bar">
+      <div class="info-row"><span class="info-label">Supervisor</span><span class="info-val" id="sc-sup"></span></div>
+      <div class="info-row"><span class="info-label">OTM</span><span class="info-val" id="sc-otm"></span></div>
+      <div class="info-row"><span class="info-label">Total trabajadores</span><span class="info-val" id="sc-total" style="color:var(--verde2)"></span></div>
+    </div>
+    <button class="btn-main verde" onclick="enviarRegistros()">📤 Enviar al sistema</button>
+    <div style="height:8px"></div>
+    <button class="btn-main gris" onclick="goTo('s3');iniciarCamara()" style="background:#f1f5f9;color:var(--muted);">✏️ Seguir escaneando</button>
   </div>
 </div>
 
-<!-- TOAST -->
+<!-- S6 — ENVIANDO -->
+<div id="s6" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">📤</div>
+    <div><div class="hdr-title">Enviando registros</div><div class="hdr-sub">Por favor espera...</div></div>
+  </div>
+  <div class="loading">
+    <div class="spinner"></div>
+    <div class="loading-text" id="s6-texto">Procesando trabajadores...</div>
+    <div class="loading-sub" id="s6-sub">0 de 0 registrados</div>
+  </div>
+</div>
+
+<!-- S7 — RESULTADO FINAL -->
+<div id="s7" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">✅</div>
+    <div><div class="hdr-title">Tareo completado</div><div class="hdr-sub" id="s7-sub"></div></div>
+  </div>
+  <div class="body">
+    <div class="sec-title">Resultado del envío</div>
+    <div id="s7-lista"></div>
+    <div style="height:16px"></div>
+    <button class="btn-main azul" onclick="nuevaOTM()">➕ Registrar otra OTM</button>
+    <div style="height:8px"></div>
+    <button class="btn-main gris" onclick="goTo('s1')" style="background:#f1f5f9;color:var(--muted);">🏠 Inicio</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// CONFIGURACIÓN — cambia solo esto si el dominio cambia
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════
 const CONFIG = {
-  webhook: 'https://n8n.apps1.astraera.space/webhook/registro-tareo',
+  webhook: 'https://n8n.apps1.astraera.space/webhook/registro-tareo-batch',
 };
 
-// ═══════════════════════════════════════════════════════
-// DATOS — supervisores y OTMs activas
-// ═══════════════════════════════════════════════════════
 const SUPERVISORES = [
-  { id:'SUP-001', nombre:'ERICK VALDIVIA HUAMANI',   emoji:'👷' },
-  { id:'SUP-002', nombre:'EDGAR HUANCA CAHUANA',      emoji:'👷' },
-  { id:'SUP-003', nombre:'FERNANDO RAMOS TICONA',     emoji:'👷' },
-  { id:'SUP-004', nombre:'BRYAN VALDIVIA ZUÑIGA',     emoji:'👷' },
-  { id:'SUP-005', nombre:'JOSÉ RIVERA ROBLEDO',       emoji:'👷' },
+  {id:'SUP-001',nombre:'ERICK VALDIVIA HUAMANI'},
+  {id:'SUP-002',nombre:'EDGAR HUANCA CAHUANA'},
+  {id:'SUP-003',nombre:'FERNANDO RAMOS TICONA'},
+  {id:'SUP-004',nombre:'BRYAN VALDIVIA ZUÑIGA'},
+  {id:'SUP-005',nombre:'JOSÉ RIVERA ROBLEDO'},
 ];
 
 const OTMS = [
-  { id:'OTM-0005', desc:'Reforzamiento estructural plataforma DV\'s 41&51',     area:'C2 Área Seca'  },
-  { id:'OTM-0016', desc:'Traslado materiales — New Booster Station',             area:'Lixviación'    },
-  { id:'OTM-0017', desc:'Descargüío, traslado e inspección equipos PAD 4A',      area:'Lixviación'    },
-  { id:'OTM-0019', desc:'Acond. mecánico y punch list — Ensambladora',           area:'SX-EW'         },
-  { id:'OTM-0020', desc:'Descargüío y montaje componentes — Ensambladora',       area:'SX-EW'         },
-  { id:'OTM-0021', desc:'Instalación tubería HDPE headworks TIE IN 002 y 009',   area:'Aguas'         },
-  { id:'OTM-0022', desc:'Suministro, fabricación y montaje estructuras CPT Alata',area:'Aguas'        },
-  { id:'OTM-0025', desc:'Trabajos prioritarios CV1002 para tendido de faja',      area:'Mina'         },
-  { id:'OTM-0026', desc:'Trabajos finales y levantamiento de punch list',         area:'SX-EW'        },
-  { id:'OTM-0027', desc:'Sistema contra incendio faja CV023',                     area:'C2 Área Seca' },
-  { id:'OTM-0028', desc:'Trabajos eléctricos & instrumentación faja CV-1002',     area:'Mina'         },
-  { id:'OTM-0030', desc:'Soportería y fabricaciones metálicas — Subcom Heating',  area:'Lixviación'   },
-  { id:'OTM-0031', desc:'Replanteos de campo — Raffinate Heating PAD 4A',         area:'Lixviación'   },
-  { id:'OTM-0032', desc:'SSEE de 200KVA — Oficinas proyectos Enlozada',           area:'Aguas'        },
-  { id:'OTM-0033', desc:'Trabajos diversos en laboratorio metalúrgico C1',        area:'GSC'          },
-  { id:'OTM-0034', desc:'Eliminación bolsas agua — reforzamiento techo ALM2',     area:'GSC'          },
+  {id:'OTM-0005',desc:'Reforzamiento estructural DV\'s 41&51',area:'C2 Área Seca'},
+  {id:'OTM-0016',desc:'Traslado materiales — New Booster Station',area:'Lixviación'},
+  {id:'OTM-0017',desc:'Descargüío, traslado e inspección PAD 4A',area:'Lixviación'},
+  {id:'OTM-0019',desc:'Acond. mecánico y punch list — Ensambladora',area:'SX-EW'},
+  {id:'OTM-0020',desc:'Descargüío y montaje — Ensambladora',area:'SX-EW'},
+  {id:'OTM-0021',desc:'Instalación tubería HDPE headworks',area:'Aguas'},
+  {id:'OTM-0022',desc:'Suministro y montaje estructuras CPT Alata',area:'Aguas'},
+  {id:'OTM-0025',desc:'Trabajos CV1002 para tendido de faja',area:'Mina'},
+  {id:'OTM-0026',desc:'Trabajos finales y punch list',area:'SX-EW'},
+  {id:'OTM-0027',desc:'Sistema contra incendio faja CV023',area:'C2 Área Seca'},
+  {id:'OTM-0028',desc:'Trabajos eléctricos & instrumentación',area:'Mina'},
+  {id:'OTM-0030',desc:'Soportería metálica — Subcom Heating',area:'Lixviación'},
+  {id:'OTM-0031',desc:'Replanteos — Raffinate Heating PAD 4A',area:'Lixviación'},
+  {id:'OTM-0032',desc:'SSEE 200KVA — Oficinas Enlozada',area:'Aguas'},
+  {id:'OTM-0033',desc:'Trabajos laboratorio metalúrgico C1',area:'GSC'},
+  {id:'OTM-0034',desc:'Eliminación bolsas agua — techo ALM2',area:'GSC'},
 ];
 
-// Lista de trabajadores para búsqueda manual
 const TRABAJADORES = [
   {id:'001',nombre:'ALVARADO BUSTAMANTE BRANDON JESUS',cargo:'OFICIAL MECANICO'},
   {id:'002',nombre:'AMUDIO BUSTINZA LEONCIO',cargo:'LIDER MECANICO'},
@@ -521,385 +440,373 @@ const TRABAJADORES = [
   {id:'099',nombre:'ZAMBRANO COSI HARRY CRISTOFHER',cargo:'CONDUCTOR'},
 ];
 
-// ═══════════════════════════════════════════════════════
-// ESTADO DE LA APP
-// ═══════════════════════════════════════════════════════
-let estado = {
+// ═══════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════
+let E = {
   supervisor: null,
   otm: null,
-  trabajadorPendiente: null,
-  registradosHoy: [],
+  lista: [],           // trabajadores acumulados
+  pendiente: null,     // trabajador en pantalla de confirmación
+  origenBusqueda: false,
   videoStream: null,
-  scannerActivo: false,
+  scanActivo: false,
 };
 
-// ═══════════════════════════════════════════════════════
-// INICIALIZACIÓN
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   renderSupervisores();
   renderOTMs(OTMS);
 });
 
+// ═══════════════════════════════════
+// NAVEGACIÓN
+// ═══════════════════════════════════
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════
+// S1 — SUPERVISOR
+// ═══════════════════════════════════
 function renderSupervisores() {
-  const lista = document.getElementById('lista-supervisores');
-  lista.innerHTML = SUPERVISORES.map(s => `
+  document.getElementById('lista-supervisores').innerHTML = SUPERVISORES.map(s=>`
     <div class="btn-item" onclick="elegirSupervisor('${s.id}')">
-      <div class="btn-item-icon azul">${s.emoji}</div>
+      <div class="btn-item-icon" style="background:#dbeafe">👷</div>
       <div class="btn-item-text">
         <div class="btn-item-name">${s.nombre}</div>
         <div class="btn-item-sub">${s.id}</div>
       </div>
       <span class="btn-item-check">✓</span>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-function renderOTMs(lista) {
-  const el = document.getElementById('lista-otms');
-  const areaColors = {
-    'SX-EW':'#dbeafe','Mina':'#d1fae5','Lixviación':'#e9d8fd',
-    'Aguas':'#cffafe','C2 Área Seca':'#fde68a','GSC':'#e2e8f0'
-  };
-  el.innerHTML = lista.map(o => `
-    <div class="btn-item" onclick="elegirOTM('${o.id}')">
-      <div class="btn-item-icon azul" 
-           style="background:${areaColors[o.area]||'#f1f5f9'};font-size:13px;font-weight:700;color:#1e293b">
-        ${o.id.slice(-4)}
-      </div>
-      <div class="btn-item-text">
-        <div class="btn-item-name" style="font-size:13px">${o.desc}</div>
-        <div class="btn-item-sub">${o.id} · ${o.area}</div>
-      </div>
-      <span class="btn-item-check">✓</span>
-    </div>
-  `).join('');
-}
-
-// ═══════════════════════════════════════════════════════
-// NAVEGACIÓN
-// ═══════════════════════════════════════════════════════
-function goTo(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-// ═══════════════════════════════════════════════════════
-// PANTALLA 1 — SUPERVISOR
-// ═══════════════════════════════════════════════════════
 function elegirSupervisor(id) {
-  estado.supervisor = SUPERVISORES.find(s => s.id === id);
-  document.getElementById('s2-title').textContent = estado.supervisor.nombre.split(' ')[0];
-  document.getElementById('s2-sub').textContent = 'Selecciona la OTM de hoy';
+  E.supervisor = SUPERVISORES.find(s=>s.id===id);
+  document.getElementById('s2-title').textContent = E.supervisor.nombre.split(' ')[0];
+  document.getElementById('s2-sub').textContent = 'Selecciona la OTM';
   goTo('s2');
 }
 
-// ═══════════════════════════════════════════════════════
-// PANTALLA 2 — OTM
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════
+// S2 — OTM
+// ═══════════════════════════════════
+const AREA_BG = {'SX-EW':'#cffafe','Mina':'#d1fae5','Lixviación':'#e9d8fd','Aguas':'#dbeafe','C2 Área Seca':'#fde68a','GSC':'#e2e8f0'};
+
+function renderOTMs(lista) {
+  document.getElementById('lista-otms').innerHTML = lista.map(o=>`
+    <div class="btn-item" onclick="elegirOTM('${o.id}')">
+      <div class="btn-item-icon" style="background:${AREA_BG[o.area]||'#f1f5f9'};font-size:11px;font-weight:700;color:#1e293b">
+        ${o.id.slice(-4)}
+      </div>
+      <div class="btn-item-text">
+        <div class="btn-item-name" style="font-size:12px">${o.desc}</div>
+        <div class="btn-item-sub">${o.id} · ${o.area}</div>
+      </div>
+      <span class="btn-item-check">✓</span>
+    </div>`).join('');
+}
+
 function filtrarOTMs(q) {
-  const filtradas = q.length < 2 ? OTMS :
-    OTMS.filter(o => o.id.toLowerCase().includes(q.toLowerCase()) ||
-                     o.desc.toLowerCase().includes(q.toLowerCase()) ||
-                     o.area.toLowerCase().includes(q.toLowerCase()));
-  renderOTMs(filtradas);
+  const f = q.length<2 ? OTMS : OTMS.filter(o=>
+    o.id.toLowerCase().includes(q.toLowerCase())||
+    o.desc.toLowerCase().includes(q.toLowerCase())||
+    o.area.toLowerCase().includes(q.toLowerCase()));
+  renderOTMs(f);
 }
 
 function elegirOTM(id) {
-  estado.otm = OTMS.find(o => o.id === id);
-  estado.registradosHoy = [];
-
-  // Marcar seleccionado visualmente
-  document.querySelectorAll('#lista-otms .btn-item').forEach(el => {
-    el.classList.remove('selected');
-  });
+  E.otm = OTMS.find(o=>o.id===id);
+  E.lista = [];
+  document.querySelectorAll('#lista-otms .btn-item').forEach(el=>el.classList.remove('selected'));
   event.currentTarget.classList.add('selected');
-
-  document.getElementById('btn-ir-scanner').style.display = 'block';
-  document.getElementById('btn-ir-scanner').textContent =
-    `📷 Escanear para ${estado.otm.id} →`;
-
-  setTimeout(() => {
-    document.getElementById('btn-ir-scanner').scrollIntoView({behavior:'smooth'});
-  }, 100);
+  const btn = document.getElementById('btn-ir-scanner');
+  btn.style.display='block';
+  btn.textContent=`📷 Escanear para ${E.otm.id} →`;
+  setTimeout(()=>btn.scrollIntoView({behavior:'smooth'}),100);
 }
 
-// ═══════════════════════════════════════════════════════
-// PANTALLA 3 — ESCÁNER
-// ═══════════════════════════════════════════════════════
+function irAScanner() {
+  document.getElementById('scan-sup').textContent = E.supervisor.nombre.split(' ')[0];
+  document.getElementById('scan-otm-lbl').textContent = E.otm.id;
+  document.getElementById('s3-sub').textContent = E.otm.id + ' · ' + E.otm.desc.slice(0,30)+'...';
+  goTo('s3');
+  actualizarListaAcum();
+  setTimeout(iniciarCamara, 200);
+}
+
+// ═══════════════════════════════════
+// S3 — SCANNER
+// ═══════════════════════════════════
 async function iniciarCamara() {
-  const video = document.getElementById('video');
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment', width:{ideal:1280}, height:{ideal:720} }
+      video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}
     });
-    estado.videoStream = stream;
-    video.srcObject = stream;
-    estado.scannerActivo = true;
+    E.videoStream = stream;
+    document.getElementById('video').srcObject = stream;
+    E.scanActivo = true;
     requestAnimationFrame(scanFrame);
   } catch(e) {
-    mostrarToast('No se pudo acceder a la cámara', 'err');
+    mostrarToast('No se pudo acceder a la cámara','err');
   }
 }
 
 function detenerCamara() {
-  estado.scannerActivo = false;
-  if (estado.videoStream) {
-    estado.videoStream.getTracks().forEach(t => t.stop());
-    estado.videoStream = null;
-  }
+  E.scanActivo = false;
+  if (E.videoStream) { E.videoStream.getTracks().forEach(t=>t.stop()); E.videoStream=null; }
 }
 
 function scanFrame() {
-  if (!estado.scannerActivo) return;
+  if (!E.scanActivo) return;
   const video = document.getElementById('video');
   const canvas = document.getElementById('canvas');
   if (video.readyState === video.HAVE_ENOUGH_DATA) {
     canvas.height = video.videoHeight;
     canvas.width = video.videoWidth;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const code = jsQR(imageData.data, imageData.width, imageData.height,
-                      { inversionAttempts: 'dontInvert' });
-    if (code) {
-      const qrData = code.data.trim();
-      procesarQR(qrData);
-      return;
-    }
+    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    const img = ctx.getImageData(0,0,canvas.width,canvas.height);
+    const code = jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});
+    if (code) { procesarQR(code.data.trim()); return; }
   }
   requestAnimationFrame(scanFrame);
 }
 
-function procesarQR(qrData) {
-  estado.scannerActivo = false;
-  // El QR solo tiene el ID numérico: "010"
-  const id = qrData.padStart(3, '0');
-  const trabajador = TRABAJADORES.find(t => t.id === id);
-
-  if (!trabajador) {
-    mostrarToast(`QR no reconocido: ${qrData}`, 'err');
-    setTimeout(() => { estado.scannerActivo = true; requestAnimationFrame(scanFrame); }, 2000);
+function procesarQR(raw) {
+  E.scanActivo = false;
+  const id = raw.padStart(3,'0');
+  const t = TRABAJADORES.find(x=>x.id===id);
+  if (!t) {
+    mostrarToast(`QR no reconocido: ${raw}`,'err');
+    setTimeout(()=>{ E.scanActivo=true; requestAnimationFrame(scanFrame); },2000);
     return;
   }
-
-  mostrarConfirmacion(trabajador);
+  mostrarConfirmacion(t, false);
 }
 
-// ═══════════════════════════════════════════════════════
-// PANTALLA 3B — BÚSQUEDA MANUAL
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════
+// S3B — BÚSQUEDA MANUAL
+// ═══════════════════════════════════
 function buscarTrabajador(q) {
-  const res = document.getElementById('resultados-busqueda');
-  if (q.length < 2) { res.innerHTML = ''; return; }
-
-  const encontrados = TRABAJADORES.filter(t =>
-    t.nombre.toLowerCase().includes(q.toLowerCase()) ||
-    t.cargo.toLowerCase().includes(q.toLowerCase()) ||
-    t.id === q.padStart(3,'0')
-  ).slice(0, 8);
-
-  if (encontrados.length === 0) {
-    res.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;font-size:14px;">No encontrado</p>';
-    return;
-  }
-
-  res.innerHTML = encontrados.map(t => `
-    <div class="result-item" onclick="seleccionarDeBusqueda('${t.id}')">
-      <div class="result-item-id">ID: ${t.id}</div>
-      <div class="result-item-name">${t.nombre}</div>
-      <div class="result-item-cargo">${t.cargo}</div>
-    </div>
-  `).join('');
+  const el = document.getElementById('res-busqueda');
+  if (q.length<2) { el.innerHTML=''; return; }
+  const found = TRABAJADORES.filter(t=>
+    t.nombre.toLowerCase().includes(q.toLowerCase())||
+    t.cargo.toLowerCase().includes(q.toLowerCase())||
+    t.id===q.padStart(3,'0')).slice(0,8);
+  el.innerHTML = found.length===0
+    ? '<p style="color:var(--muted);text-align:center;padding:20px;font-size:13px;">No encontrado</p>'
+    : found.map(t=>`
+      <div class="result-item" onclick="seleccionarManual('${t.id}')">
+        <div class="result-item-id">ID: ${t.id}</div>
+        <div class="result-item-name">${t.nombre}</div>
+        <div class="result-item-cargo">${t.cargo}</div>
+      </div>`).join('');
 }
 
-function seleccionarDeBusqueda(id) {
-  const trabajador = TRABAJADORES.find(t => t.id === id);
-  document.getElementById('search-worker').value = '';
-  document.getElementById('resultados-busqueda').innerHTML = '';
-  mostrarConfirmacion(trabajador, true);
+function seleccionarManual(id) {
+  document.getElementById('search-worker').value='';
+  document.getElementById('res-busqueda').innerHTML='';
+  mostrarConfirmacion(TRABAJADORES.find(t=>t.id===id), true);
 }
 
-// ═══════════════════════════════════════════════════════
-// PANTALLA 4 — CONFIRMACIÓN
-// ═══════════════════════════════════════════════════════
-function mostrarConfirmacion(trabajador, desdeBusqueda = false) {
-  estado.trabajadorPendiente = trabajador;
-  estado.origenBusqueda = desdeBusqueda;
-
-  const ahora = new Date();
-  const hora = ahora.toTimeString().slice(0,8);
-
-  document.getElementById('worker-nombre').textContent = trabajador.nombre;
-  document.getElementById('worker-cargo').textContent = trabajador.cargo;
-  document.getElementById('worker-id').textContent = `ID: ${trabajador.id}`;
-  document.getElementById('s4-sub').textContent = estado.otm.id;
-  document.getElementById('confirm-otm').textContent = estado.otm.id;
-  document.getElementById('confirm-hora').textContent = hora;
-
-  // Verificar si ya fue registrado en esta sesión
-  const yaRegistrado = estado.registradosHoy.find(r => r.id === trabajador.id);
-  const warnEl = document.getElementById('confirm-warning');
-  if (yaRegistrado) {
-    warnEl.style.display = 'block';
-    warnEl.textContent = `⚠️ ${trabajador.nombre.split(' ')[0]} ya fue registrado en esta sesión a las ${yaRegistrado.hora}`;
-  } else {
-    warnEl.style.display = 'none';
-  }
-
+// ═══════════════════════════════════
+// S4 — CONFIRMAR
+// ═══════════════════════════════════
+function mostrarConfirmacion(t, desdeBusqueda) {
+  E.pendiente = t;
+  E.origenBusqueda = desdeBusqueda;
+  const hora = new Date().toTimeString().slice(0,8);
+  document.getElementById('w-nombre').textContent = t.nombre;
+  document.getElementById('w-cargo').textContent = t.cargo;
+  document.getElementById('w-id').textContent = `ID: ${t.id}`;
+  document.getElementById('s4-sub').textContent = E.otm.id;
+  document.getElementById('c-otm').textContent = E.otm.id;
+  document.getElementById('c-hora').textContent = hora;
+  const yaEnLista = E.lista.find(x=>x.id===t.id);
+  const warn = document.getElementById('c-warn');
+  if (yaEnLista) {
+    warn.style.display='block';
+    warn.textContent = `⚠️ ${t.nombre.split(' ')[0]} ya está en tu lista (${yaEnLista.hora})`;
+  } else { warn.style.display='none'; }
   goTo('s4');
 }
 
-function volverEscanear() {
-  estado.trabajadorPendiente = null;
-  if (estado.origenBusqueda) {
-    goTo('s3b');
+function agregarALista() {
+  const t = E.pendiente;
+  const yaEnLista = E.lista.find(x=>x.id===t.id);
+  if (!yaEnLista) {
+    E.lista.push({ ...t, hora: new Date().toTimeString().slice(0,8) });
+    mostrarToast(`✅ ${t.nombre.split(' ')[0]} agregado`,'ok');
   } else {
-    goTo('s3');
-    estado.scannerActivo = true;
-    requestAnimationFrame(scanFrame);
+    mostrarToast(`Ya está en la lista`,'warn');
+  }
+  volverEscanear();
+}
+
+function volverEscanear() {
+  E.pendiente = null;
+  if (E.origenBusqueda) { goTo('s3b'); }
+  else { goTo('s3'); actualizarListaAcum(); E.scanActivo=true; requestAnimationFrame(scanFrame); }
+}
+
+function actualizarListaAcum() {
+  const n = E.lista.length;
+  document.getElementById('acum-count').textContent = n;
+  const empty = document.getElementById('acum-empty');
+  const list = document.getElementById('acum-list');
+  const btnFin = document.getElementById('btn-finalizar');
+
+  if (n === 0) {
+    empty.style.display='block'; list.style.display='none';
+    btnFin.style.opacity='.4'; btnFin.style.pointerEvents='none';
+  } else {
+    empty.style.display='none'; list.style.display='flex';
+    btnFin.style.opacity='1'; btnFin.style.pointerEvents='auto';
+    list.innerHTML = E.lista.map((t,i)=>`
+      <div class="acum-item">
+        <div class="acum-item-info">
+          <div class="acum-item-hora">${t.hora} · ID ${t.id}</div>
+          <div class="acum-item-name">${t.nombre}</div>
+          <div class="acum-item-cargo">${t.cargo}</div>
+        </div>
+        <button class="acum-item-del" onclick="quitarDeLista(${i})">✕</button>
+      </div>`).join('');
   }
 }
 
-async function confirmarRegistro() {
-  const trabajador = estado.trabajadorPendiente;
-  if (!trabajador) return;
+function quitarDeLista(i) {
+  E.lista.splice(i,1);
+  actualizarListaAcum();
+  mostrarToast('Trabajador quitado de la lista','warn');
+}
 
-  goTo('s4b');
+// ═══════════════════════════════════
+// S5-CONFIRM — REVISIÓN
+// ═══════════════════════════════════
+// Hook cuando va a s5-confirm
+const _goTo = goTo;
+window.goTo = function(id) {
+  if (id==='s5-confirm') {
+    detenerCamara();
+    _goTo(id);
+    renderRevision();
+  } else if (id==='s3') {
+    _goTo(id);
+    actualizarListaAcum();
+  } else { _goTo(id); }
+};
+
+function renderRevision() {
+  document.getElementById('sc-sup').textContent = E.supervisor.nombre.split(' ').slice(0,2).join(' ');
+  document.getElementById('sc-otm').textContent = E.otm.id;
+  document.getElementById('sc-total').textContent = E.lista.length + ' personas';
+  document.getElementById('sc-sub').textContent = E.otm.id + ' · ' + E.lista.length + ' trabajadores';
+  document.getElementById('sc-lista').innerHTML = E.lista.map((t,i)=>`
+    <div class="resumen-card" style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:10px;color:var(--azul2);font-weight:700">ID: ${t.id} · ${t.hora}</div>
+          <div style="font-size:13px;font-weight:600;margin:2px 0">${t.nombre}</div>
+          <div style="font-size:11px;color:var(--muted)">${t.cargo}</div>
+        </div>
+        <button onclick="quitarRevision(${i})" style="background:#fee2e2;border:none;color:#991b1b;padding:6px 10px;border-radius:7px;font-size:12px;cursor:pointer;">✕ Quitar</button>
+      </div>
+    </div>`).join('');
+}
+
+function quitarRevision(i) {
+  E.lista.splice(i,1);
+  if (E.lista.length===0) { goTo('s3'); iniciarCamara(); return; }
+  renderRevision();
+}
+
+// ═══════════════════════════════════
+// ENVIAR — una sola llamada al webhook
+// ═══════════════════════════════════
+async function enviarRegistros() {
+  if (E.lista.length===0) return;
+  goTo('s6');
+
+  const payload = {
+    supervisor_id: E.supervisor.id,
+    supervisor_nombre: E.supervisor.nombre,
+    otm_id: E.otm.id,
+    fecha: new Date().toISOString().slice(0,10),
+    trabajadores: E.lista.map(t=>({
+      trab_id: t.id,
+      nombre: t.nombre,
+      cargo: t.cargo,
+      hora: t.hora,
+    }))
+  };
+
+  document.getElementById('s6-texto').textContent = `Enviando ${E.lista.length} registros...`;
+  document.getElementById('s6-sub').textContent = `${E.otm.id} · ${E.supervisor.nombre.split(' ')[0]}`;
 
   try {
     const resp = await fetch(CONFIG.webhook, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        trab_id: trabajador.id,
-        otm_id: estado.otm.id,
-        supervisor_id: estado.supervisor.id,
-        supervisor_nombre: estado.supervisor.nombre,
-      })
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
     });
-
     const data = await resp.json();
 
-    if (resp.ok && data.status === 'ok') {
-      const ahora = new Date();
-      estado.registradosHoy.push({
-        id: trabajador.id,
-        nombre: trabajador.nombre,
-        cargo: trabajador.cargo,
-        hora: ahora.toTimeString().slice(0,5),
-        otm: estado.otm.id,
-      });
-      actualizarContador();
-      mostrarToast(`✅ ${trabajador.nombre.split(' ')[0]} registrado`, 'ok');
-      // Volver al scanner
-      goTo('s3');
-      estado.scannerActivo = true;
-      requestAnimationFrame(scanFrame);
-
-    } else if (data.code === 'DUPLICATE') {
-      mostrarToast(`⚠️ Ya registrado en ${estado.otm.id}`, 'warn');
-      goTo('s3');
-      estado.scannerActivo = true;
-      requestAnimationFrame(scanFrame);
-
-    } else if (data.code === 'INACTIVE') {
-      mostrarToast('🚫 Trabajador dado de baja — habla con el admin', 'err');
-      goTo('s3');
-      estado.scannerActivo = true;
-      requestAnimationFrame(scanFrame);
-
+    if (resp.ok) {
+      mostrarResultado(data);
     } else {
-      mostrarToast('Error al registrar: ' + (data.message || 'Error desconocido'), 'err');
-      goTo('s4');
+      mostrarToast('Error al enviar: ' + (data.message||'Error'),'err');
+      goTo('s5-confirm');
     }
-
   } catch(e) {
-    mostrarToast('Sin conexión — verifica la señal', 'err');
-    goTo('s4');
+    mostrarToast('Sin conexión — verifica la señal','err');
+    goTo('s5-confirm');
   }
 }
 
-function actualizarContador() {
-  document.getElementById('scan-count').textContent = estado.registradosHoy.length;
-  document.getElementById('scan-supervisor').textContent =
-    estado.supervisor.nombre.split(' ')[0];
-  document.getElementById('scan-otm').textContent = estado.otm.id;
-}
+function mostrarResultado(data) {
+  goTo('s7');
+  const resultados = data.resultados || E.lista.map(t=>({...t,status:'ok'}));
+  const ok = resultados.filter(r=>r.status==='ok').length;
+  const dup = resultados.filter(r=>r.status==='duplicate').length;
+  const err = resultados.filter(r=>r.status==='error').length;
 
-// ═══════════════════════════════════════════════════════
-// PANTALLA 5 — RESUMEN
-// ═══════════════════════════════════════════════════════
-function mostrarResumen() {
-  const lista = document.getElementById('resumen-lista');
-  document.getElementById('s5-sub').textContent =
-    `${estado.otm.id} · ${estado.registradosHoy.length} trabajadores`;
-
-  if (estado.registradosHoy.length === 0) {
-    lista.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;">No se registraron trabajadores</p>';
-    return;
-  }
-
-  lista.innerHTML = estado.registradosHoy.map((r, i) => `
-    <div class="result-item" style="margin-bottom:8px;">
+  document.getElementById('s7-sub').textContent = `${ok} registrados · ${dup} duplicados · ${err} errores`;
+  document.getElementById('s7-lista').innerHTML = resultados.map(r=>`
+    <div class="resumen-card" style="margin-bottom:8px;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div>
-          <div class="result-item-id">ID: ${r.id} · ${r.hora}</div>
-          <div class="result-item-name">${r.nombre}</div>
-          <div class="result-item-cargo">${r.cargo}</div>
+          <div style="font-size:10px;color:var(--azul2);font-weight:700">ID: ${r.trab_id||r.id}</div>
+          <div style="font-size:13px;font-weight:600;margin:2px 0">${r.nombre}</div>
+          <div style="font-size:11px;color:var(--muted)">${r.cargo}</div>
         </div>
-        <span style="font-size:20px;color:var(--verde2)">✓</span>
+        <span class="badge ${r.status==='ok'?'ok':r.status==='duplicate'?'warn':'err'}">
+          ${r.status==='ok'?'✅ OK':r.status==='duplicate'?'⚠️ Duplicado':'❌ Error'}
+        </span>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-function iniciarNuevoRegistro() {
-  estado.otm = null;
-  estado.trabajadorPendiente = null;
-  estado.registradosHoy = [];
-  document.querySelectorAll('#lista-otms .btn-item').forEach(el => el.classList.remove('selected'));
-  document.getElementById('btn-ir-scanner').style.display = 'none';
+function nuevaOTM() {
+  E.otm = null; E.lista = [];
+  document.querySelectorAll('#lista-otms .btn-item').forEach(el=>el.classList.remove('selected'));
+  document.getElementById('btn-ir-scanner').style.display='none';
   goTo('s2');
 }
 
-// ═══════════════════════════════════════════════════════
-// HOOKS DE PANTALLAS — iniciar/detener cámara automático
-// ═══════════════════════════════════════════════════════
-const originalGoTo = goTo;
-window.goTo = function(screenId) {
-  // Iniciar cámara al entrar al scanner
-  if (screenId === 's3') {
-    originalGoTo(screenId);
-    actualizarContador();
-    setTimeout(iniciarCamara, 100);
-  }
-  // Detener cámara al salir del scanner
-  else if (document.getElementById('s3').classList.contains('active')) {
-    detenerCamara();
-    originalGoTo(screenId);
-  }
-  // Mostrar resumen
-  else if (screenId === 's5') {
-    originalGoTo(screenId);
-    mostrarResumen();
-  }
-  else {
-    originalGoTo(screenId);
-  }
-};
-
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════
 // TOAST
-// ═══════════════════════════════════════════════════════
-let toastTimer;
-function mostrarToast(msg, tipo = 'ok') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${tipo} show`;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+// ═══════════════════════════════════
+let _tt;
+function mostrarToast(msg,tipo='ok') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className=`toast ${tipo} show`;
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),3000);
 }
 </script>
 </body>
