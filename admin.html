@@ -543,13 +543,9 @@ function verQR(id, nombre, cargo) {
   QRCode.toDataURL(id, {
     width: 200, margin: 2,
     color: {dark:'#000000', light:'#ffffff'}
-  }).then(url => {
-    const canvas = document.getElementById('modal-canvas');
-    const img = document.createElement('img');
-    img.src = url;
-    img.style.cssText = 'width:200px;height:200px;border-radius:8px;display:block';
-    canvas.replaceWith(img);
-    canvas.id = 'modal-canvas'; // keep reference
+  }).then(function(url) {
+    var wrap = document.getElementById('modal-img-wrap');
+    wrap.innerHTML = '<img src="' + url + '" id="modal-img" style="width:200px;height:200px;border-radius:8px;display:block;margin:0 auto" alt="QR ' + id + '">';
   });
 }
 
@@ -561,38 +557,54 @@ function cerrarModal(e) {
 
 function descargarQR() {
   if (!currentQR) return;
-  QRCode.toDataURL(currentQR.id, {width:400, margin:2,
-    color:{dark:'#000000',light:'#ffffff'}}).then(url => {
-    const link = document.createElement('a');
-    link.download = `QR_${currentQR.id}_${currentQR.nombre.replace(/ /g,'_')}.png`;
+  // Generate high-res QR for download (400px)
+  QRCode.toDataURL(currentQR.id, {
+    width: 400, margin: 3,
+    color: {dark:'#000000', light:'#ffffff'}
+  }).then(function(url) {
+    var link = document.createElement('a');
+    link.download = 'QR_' + currentQR.id + '_' + currentQR.nombre.replace(/ /g,'_') + '.png';
     link.href = url;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+  }).catch(function(err) {
+    alert('Error generando QR: ' + err.message);
   });
 }
 
 // ════════ QR GRID ════════
-async async function renderQRs(list) {
-  const grid = document.getElementById('qr-grid');
+function renderQRs(list) {
+  var grid = document.getElementById('qr-grid');
   if (!list.length) { grid.innerHTML = '<div class="loading">Sin trabajadores activos</div>'; return; }
-  
   grid.innerHTML = '<div class="loading" style="grid-column:1/-1"><div class="spinner"></div>Generando QRs...</div>';
-  
-  // Generar todos los QRs como data URLs primero
-  const qrData = await Promise.all(list.map(w =>
-    QRCode.toDataURL(w.id, {
+
+  var promises = list.map(function(w) {
+    return QRCode.toDataURL(w.id, {
       width: 160, margin: 2,
-      color: {dark:'#000000', light:'#ffffff'}
-    }).then(url => ({...w, qrUrl: url}))
-  ));
-  
-  grid.innerHTML = qrData.map(w => `
-    <div class="qr-card" onclick="verQR('${w.id}','${w.nombre}','${w.cargo}')" style="cursor:pointer">
-      <img src="${w.qrUrl}" style="width:140px;height:140px;border-radius:6px;display:block;margin:0 auto" alt="QR ${w.id}">
-      <div class="qr-card-name">${w.nombre}</div>
-      <div class="qr-card-cargo">${w.cargo}</div>
-      <div class="qr-card-id">ID: ${w.id}</div>
-    </div>
-  `).join('');
+      color: {dark: '#000000', light: '#ffffff'}
+    }).then(function(url) {
+      return {id: w.id, nombre: w.nombre, cargo: w.cargo, activo: w.activo, qrUrl: url};
+    });
+  });
+
+  Promise.all(promises).then(function(workers) {
+    grid.innerHTML = workers.map(function(w) {
+      return '<div class="qr-card" data-id="' + w.id + '" data-nombre="' + w.nombre + '" data-cargo="' + w.cargo + '" style="cursor:pointer">' +
+        '<img src="' + w.qrUrl + '" style="width:140px;height:140px;border-radius:6px;display:block;margin:0 auto" alt="QR ' + w.id + '">' +
+        '<div class="qr-card-name">' + w.nombre + '</div>' +
+        '<div class="qr-card-cargo">' + w.cargo + '</div>' +
+        '<div class="qr-card-id">ID: ' + w.id + '</div>' +
+        '</div>';
+    }).join('');
+    grid.querySelectorAll('.qr-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        verQR(this.dataset.id, this.dataset.nombre, this.dataset.cargo);
+      });
+    });
+  }).catch(function(err) {
+    grid.innerHTML = '<div class="loading" style="color:var(--red)">Error: ' + err.message + '</div>';
+  });
 }
 
 function filtrarQRs(q) {
