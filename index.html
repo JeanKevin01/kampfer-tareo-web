@@ -3,1491 +3,1004 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="theme-color" content="#0a0e1a">
+<meta name="theme-color" content="#060810">
 <title>Tareo · Kampfer</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <style>
-/* ═══════════════════════════════════════════════
-   RESET & ROOT
-═══════════════════════════════════════════════ */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --void:#060810;--deep:#0d1120;--surface:#141926;--raised:#1c2436;
+  --border:#252f45;--border2:#2e3a52;
+  --text:#e8edf5;--text2:#8a96ad;--text3:#4e5a72;
+  --amber:#f59e0b;--amber2:#fbbf24;
+  --amber-bg:rgba(245,158,11,.1);--amber-bd:rgba(245,158,11,.3);
+  --blue:#3b82f6;--blue-bg:rgba(59,130,246,.12);
+  --green:#10b981;--green-bg:rgba(16,185,129,.12);
+  --red:#ef4444;--red-bg:rgba(239,68,68,.12);
+  --font:'Barlow',sans-serif;
+  --font-cond:'Barlow Condensed',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --r:14px;--r-sm:9px;
+}
+html,body{height:100%;background:var(--void);font-family:var(--font);color:var(--text);overflow-x:hidden}
 
-:root {
-  /* Core palette — industrial dark */
-  --void:     #060810;
-  --deep:     #0d1120;
-  --surface:  #141926;
-  --raised:   #1c2436;
-  --border:   #252f45;
-  --border2:  #2e3a52;
+/* ── SPLASH ─────────────────────────────── */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--void);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  transition:opacity .4s ease;
+}
+#splash.hide{opacity:0;pointer-events:none}
+.sp-logo{
+  font-family:var(--font-cond);font-size:44px;font-weight:800;
+  letter-spacing:5px;color:var(--amber);text-transform:uppercase;
+}
+.sp-sub{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)}
+.sp-bar{width:160px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px}
+.sp-fill{height:100%;background:var(--amber);border-radius:2px;width:0;transition:width 1.2s ease}
 
-  /* Text */
-  --text:     #e8edf5;
-  --text2:    #8a96ad;
-  --text3:    #4e5a72;
+/* ── SCREENS ─────────────────────────────── */
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex;animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  /* Brand */
-  --amber:    #f59e0b;
-  --amber2:   #fbbf24;
-  --amber-bg: rgba(245,158,11,.12);
-  --amber-bd: rgba(245,158,11,.25);
+/* ── TOP BAR ─────────────────────────────── */
+.bar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:12px 18px;display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:40;
+}
+.bar-ico{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:var(--amber-bg);border:1px solid var(--amber-bd);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.bar-title{font-family:var(--font-cond);font-size:17px;font-weight:700;letter-spacing:.5px}
+.bar-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.bar-back{
+  margin-left:auto;background:none;
+  border:1px solid var(--border2);color:var(--text2);
+  font-size:12px;font-weight:600;padding:7px 12px;border-radius:8px;
+  cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap;
+}
+.bar-back:active{background:var(--raised);color:var(--text)}
 
-  /* Status */
-  --blue:     #3b82f6;
-  --blue-bg:  rgba(59,130,246,.12);
-  --green:    #10b981;
-  --green-bg: rgba(16,185,129,.12);
-  --red:      #ef4444;
-  --red-bg:   rgba(239,68,68,.12);
+/* ── STEP BAR ────────────────────────────── */
+.steps{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;padding:0 18px;
+}
+.step{
+  flex:1;padding:9px 0;display:flex;align-items:center;justify-content:center;
+  gap:5px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--text3);border-bottom:2px solid transparent;transition:all .2s;
+}
+.step.on{color:var(--amber);border-color:var(--amber)}
+.step.done{color:var(--green);border-color:var(--green)}
+.step-n{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--raised);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;flex-shrink:0;transition:all .2s;
+}
+.step.on .step-n{background:var(--amber);border-color:var(--amber);color:#000}
+.step.done .step-n{background:var(--green);border-color:var(--green);color:#fff}
 
-  /* Typography */
-  --font:     'Barlow', sans-serif;
-  --font-cond:'Barlow Condensed', sans-serif;
-  --font-mono:'JetBrains Mono', monospace;
+/* ── BODY ────────────────────────────────── */
+.body{flex:1;padding:20px 18px;overflow-y:auto}
+.bcenter{flex:1;padding:18px;display:flex;flex-direction:column;align-items:center}
 
-  /* Spacing */
-  --r:   14px;
-  --r-sm: 9px;
+/* ── HERO ────────────────────────────────── */
+.hero{
+  background:linear-gradient(160deg,#0d1525 0%,#111827 60%,#0a1220 100%);
+  padding:28px 18px 22px;border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
 }
+.hero-grid{
+  position:absolute;inset:0;opacity:.03;
+  background-image:linear-gradient(var(--amber) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--amber) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+.hero-inner{position:relative;z-index:1}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--amber-bg);border:1px solid var(--amber-bd);
+  padding:4px 11px;border-radius:20px;margin-bottom:14px;
+}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-tag-text{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber)}
+.hero-title{
+  font-family:var(--font-cond);font-size:34px;font-weight:800;
+  letter-spacing:-.5px;line-height:1;margin-bottom:4px;
+}
+.hero-title em{color:var(--amber);font-style:normal}
+.hero-desc{font-size:13px;color:var(--text3)}
+.hero-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;
+}
+.hstat{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:11px 13px;
+}
+.hstat-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3)}
+.hstat-val{font-family:var(--font-mono);font-size:14px;color:var(--text);margin-top:3px}
+.hstat-val.a{color:var(--amber)}
 
-html { height: 100%; background: var(--void); }
-body {
-  font-family: var(--font);
-  background: var(--void);
-  color: var(--text);
-  min-height: 100%;
-  overflow-x: hidden;
+/* ── SECTION LABEL ───────────────────────── */
+.slabel{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text3);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;
 }
+.slabel::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* ═══════════════════════════════════════════════
-   SCREENS
-═══════════════════════════════════════════════ */
-.screen {
-  display: none;
-  min-height: 100vh;
-  flex-direction: column;
-  animation: screenIn .22s cubic-bezier(.4,0,.2,1);
+/* ── SUPERVISOR CARDS ────────────────────── */
+.sup-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px 18px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:14px;
+  position:relative;overflow:hidden;margin-bottom:8px;
 }
-.screen.active { display: flex; }
-@keyframes screenIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+.sup-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--border);transition:background .15s;
 }
+.sup-card:active{border-color:var(--amber-bd);background:var(--raised);transform:translateX(2px)}
+.sup-card:active::before{background:var(--amber)}
+.sup-ava{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  background:var(--raised);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.sup-name{font-size:14px;font-weight:700;letter-spacing:-.2px}
+.sup-id{
+  display:inline-block;margin-top:4px;
+  background:var(--raised);border:1px solid var(--border2);
+  padding:2px 7px;border-radius:4px;
+  font-family:var(--font-mono);font-size:10px;color:var(--text3);
+}
+.sup-arr{font-size:20px;color:var(--border2);margin-left:auto;flex-shrink:0;transition:color .15s}
+.sup-card:active .sup-arr{color:var(--amber)}
 
-/* ═══════════════════════════════════════════════
-   LOADING SPLASH
-═══════════════════════════════════════════════ */
-#splash {
-  position: fixed; inset: 0; z-index: 999;
-  background: var(--void);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 24px;
+/* ── OTM LIST ────────────────────────────── */
+.otm-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:12px 14px;cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;gap:11px;margin-bottom:7px;
 }
-.splash-logo {
-  font-family: var(--font-cond);
-  font-size: 42px; font-weight: 800;
-  letter-spacing: 4px; color: var(--amber);
-  text-transform: uppercase;
+.otm-item:active{border-color:var(--amber-bd);background:var(--raised)}
+.otm-item.sel{border-color:var(--amber);background:var(--amber-bg)}
+.otm-num{
+  min-width:52px;height:32px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:11px;font-weight:500;flex-shrink:0;
 }
-.splash-sub {
-  font-size: 12px; letter-spacing: 3px;
-  text-transform: uppercase; color: var(--text3);
-}
-.splash-bar {
-  width: 160px; height: 2px;
-  background: var(--border);
-  border-radius: 2px; overflow: hidden;
-}
-.splash-fill {
-  height: 100%; background: var(--amber);
-  border-radius: 2px;
-  animation: fillBar 1.4s cubic-bezier(.4,0,.2,1) forwards;
-}
-@keyframes fillBar { from { width: 0 } to { width: 100% } }
-#splash.done {
-  animation: splashOut .3s ease forwards;
-}
-@keyframes splashOut { to { opacity: 0; pointer-events: none; } }
+.otm-desc{font-size:12px;font-weight:600;color:var(--text);line-height:1.3}
+.otm-meta{font-size:10px;color:var(--text3);margin-top:2px}
+.otm-chk{color:var(--amber);font-size:16px;display:none;flex-shrink:0;margin-left:auto}
+.otm-item.sel .otm-chk{display:block}
 
-/* ═══════════════════════════════════════════════
-   TOP BAR
-═══════════════════════════════════════════════ */
-.topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 18px;
-  display: flex; align-items: center; gap: 12px;
-  position: sticky; top: 0; z-index: 40;
-  backdrop-filter: blur(8px);
-}
-.tb-icon {
-  width: 36px; height: 36px;
-  background: var(--amber-bg);
-  border: 1px solid var(--amber-bd);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px; flex-shrink: 0;
-}
-.tb-title {
-  font-family: var(--font-cond);
-  font-size: 17px; font-weight: 700;
-  letter-spacing: .5px; color: var(--text);
-}
-.tb-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
-.tb-back {
-  margin-left: auto;
-  background: none; border: 1px solid var(--border2);
-  color: var(--text2); font-size: 12px; font-weight: 600;
-  padding: 7px 13px; border-radius: 8px; cursor: pointer;
-  font-family: var(--font); transition: all .15s;
-  white-space: nowrap;
-}
-.tb-back:active { background: var(--raised); color: var(--text); }
+.c-sxew{background:rgba(59,130,246,.15);color:#60a5fa}
+.c-mina{background:rgba(16,185,129,.15);color:#34d399}
+.c-lixv{background:rgba(139,92,246,.15);color:#a78bfa}
+.c-agua{background:rgba(6,182,212,.15);color:#22d3ee}
+.c-c2{background:rgba(245,158,11,.15);color:var(--amber2)}
+.c-gsc{background:rgba(100,116,139,.15);color:#94a3b8}
 
-/* ═══════════════════════════════════════════════
-   STEP INDICATOR
-═══════════════════════════════════════════════ */
-.steps-bar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 18px;
-  display: flex; gap: 0;
+/* ── SEARCH ──────────────────────────────── */
+.sw{position:relative;margin-bottom:12px}
+.si{
+  width:100%;background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--r-sm);padding:12px 14px 12px 40px;
+  font-size:14px;color:var(--text);font-family:var(--font);outline:none;
+  transition:border .15s;
 }
-.step-item {
-  flex: 1; padding: 10px 0;
-  display: flex; align-items: center; justify-content: center;
-  gap: 6px; font-size: 11px; font-weight: 600;
-  color: var(--text3); letter-spacing: .3px;
-  border-bottom: 2px solid transparent;
-  transition: all .2s;
-}
-.step-item.done { color: var(--green); border-color: var(--green); }
-.step-item.active { color: var(--amber); border-color: var(--amber); }
-.step-dot {
-  width: 20px; height: 20px; border-radius: 50%;
-  background: var(--raised); border: 1px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700; flex-shrink: 0;
-  transition: all .2s;
-}
-.step-item.done .step-dot { background: var(--green); border-color: var(--green); color: #fff; }
-.step-item.active .step-dot { background: var(--amber); border-color: var(--amber); color: #000; }
+.si::placeholder{color:var(--text3)}
+.si:focus{border-color:var(--amber)}
+.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px}
 
-/* ═══════════════════════════════════════════════
-   SCROLL BODY
-═══════════════════════════════════════════════ */
-.body { flex: 1; padding: 20px 18px; overflow-y: auto; }
-.body-fill {
-  flex: 1; padding: 18px;
-  display: flex; flex-direction: column; align-items: center;
+/* ── SCANNER ─────────────────────────────── */
+.scan-wrap{
+  width:100%;max-width:340px;border-radius:16px;overflow:hidden;
+  box-shadow:0 0 0 1px var(--border),0 16px 48px rgba(0,0,0,.6);
+  position:relative;
 }
+.scan-video{width:100%;display:block}
+.scan-ui{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.scan-frame{position:relative;width:190px;height:190px}
+.sc{position:absolute;width:22px;height:22px;border-color:var(--amber);border-style:solid}
+.sc.tl{top:0;left:0;border-width:3px 0 0 3px;border-radius:4px 0 0 0}
+.sc.tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 4px 0 0}
+.sc.bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 4px}
+.sc.br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 4px 0}
+.scan-ln{
+  position:absolute;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--amber),transparent);
+  animation:scanln 2s ease-in-out infinite;
+}
+@keyframes scanln{0%,100%{top:8%}50%{top:92%}}
 
-/* ═══════════════════════════════════════════════
-   HERO (Pantalla 1)
-═══════════════════════════════════════════════ */
-.hero {
-  background: linear-gradient(160deg, #0d1525 0%, #111827 50%, #0a1220 100%);
-  padding: 28px 18px 24px;
-  position: relative; overflow: hidden;
-  border-bottom: 1px solid var(--border);
+/* ── CHIPS ───────────────────────────────── */
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;width:100%;max-width:340px}
+.chip{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:20px;padding:5px 11px;
+  font-size:12px;color:var(--text2);display:flex;align-items:center;gap:5px;
 }
-.hero-grid {
-  position: absolute; inset: 0; opacity: .04;
-  background-image:
-    linear-gradient(var(--amber) 1px, transparent 1px),
-    linear-gradient(90deg, var(--amber) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-.hero-content { position: relative; z-index: 1; }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 7px;
-  margin-bottom: 14px;
-  background: var(--amber-bg);
-  border: 1px solid var(--amber-bd);
-  padding: 4px 12px; border-radius: 20px;
-}
-.hero-dot { width: 6px; height: 6px; background: var(--amber); border-radius: 50%; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-.hero-eyebrow-text {
-  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--amber);
-}
-.hero-title {
-  font-family: var(--font-cond);
-  font-size: 32px; font-weight: 800;
-  letter-spacing: -0.5px; color: var(--text);
-  line-height: 1; margin-bottom: 4px;
-}
-.hero-title span { color: var(--amber); }
-.hero-subtitle { font-size: 13px; color: var(--text3); }
+.chip strong{color:var(--text);font-weight:600}
 
-.hero-stats {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 10px; margin-top: 18px;
+/* ── ACUM LIST ───────────────────────────── */
+.acum-wrap{width:100%;max-width:340px;margin-top:16px}
+.acum-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.acum-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
+.acum-badge{
+  background:var(--amber-bg);border:1px solid var(--amber-bd);color:var(--amber);
+  font-family:var(--font-mono);font-size:11px;padding:2px 9px;border-radius:20px;
 }
-.stat-box {
-  background: rgba(255,255,255,.04);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 12px 14px;
+.acum-empty{
+  background:var(--surface);border:1px dashed var(--border2);
+  border-radius:var(--r-sm);padding:14px;
+  text-align:center;color:var(--text3);font-size:12px;
 }
-.stat-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); }
-.stat-value {
-  font-family: var(--font-mono);
-  font-size: 15px; font-weight: 500;
-  color: var(--text); margin-top: 3px;
+.acum-list{max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.arow{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:9px 12px;
+  display:flex;align-items:center;gap:9px;
+  animation:rowIn .2s ease;
 }
-.stat-value.amber { color: var(--amber); }
+@keyframes rowIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.adot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.ainfo{flex:1;min-width:0}
+.ahora{font-family:var(--font-mono);font-size:10px;color:var(--amber)}
+.anom{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acarg{font-size:10px;color:var(--text3)}
+.adel{
+  background:none;border:none;color:var(--border2);
+  font-size:15px;cursor:pointer;padding:3px;border-radius:5px;
+  transition:all .1s;flex-shrink:0;line-height:1;
+}
+.adel:active{color:var(--red);background:var(--red-bg)}
 
-/* ═══════════════════════════════════════════════
-   SECTION LABEL
-═══════════════════════════════════════════════ */
-.slabel {
-  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--text3);
-  margin: 20px 0 10px;
-  display: flex; align-items: center; gap: 8px;
+/* ── WORKER CARD ─────────────────────────── */
+.wcard{
+  width:100%;max-width:340px;background:var(--surface);
+  border:1px solid var(--border2);border-radius:var(--r);
+  overflow:hidden;margin-bottom:14px;
 }
-.slabel::after {
-  content: ''; flex: 1; height: 1px; background: var(--border);
+.wcard-top{
+  background:linear-gradient(135deg,#111827,#1c2436);
+  padding:18px;display:flex;gap:13px;align-items:center;
+  border-bottom:1px solid var(--border);
 }
+.wave{
+  width:50px;height:50px;border-radius:11px;flex-shrink:0;
+  background:var(--amber-bg);border:1px solid var(--amber-bd);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+}
+.wtag{font-family:var(--font-mono);font-size:10px;color:var(--amber);margin-bottom:3px}
+.wnom{font-family:var(--font-cond);font-size:16px;font-weight:700;color:var(--text);line-height:1.1}
+.wcarg{font-size:11px;color:var(--text3);margin-top:2px}
+.wrow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+}
+.wrow:last-child{border:none}
+.wkey{font-size:11px;color:var(--text3)}
+.wval{font-size:12px;font-weight:600;color:var(--text);font-family:var(--font-mono)}
 
-/* ═══════════════════════════════════════════════
-   SUPERVISOR CARDS
-═══════════════════════════════════════════════ */
-.sup-list { display: flex; flex-direction: column; gap: 8px; }
-.sup-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 16px 18px;
-  cursor: pointer;
-  transition: all .15s;
-  display: flex; align-items: center; gap: 14px;
-  position: relative; overflow: hidden;
+/* ── INFO BOX ────────────────────────────── */
+.ibox{
+  width:100%;max-width:340px;background:var(--surface);
+  border:1px solid var(--border2);border-radius:var(--r-sm);
+  overflow:hidden;margin-bottom:14px;
 }
-.sup-card::before {
-  content: '';
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px; background: var(--border);
-  transition: background .15s;
+.irow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;border-bottom:1px solid var(--border);
 }
-.sup-card:active,
-.sup-card:hover {
-  border-color: var(--amber-bd);
-  background: var(--raised);
-  transform: translateX(2px);
-}
-.sup-card:active::before,
-.sup-card:hover::before { background: var(--amber); }
+.irow:last-child{border:none}
+.ikey{font-size:11px;color:var(--text3)}
+.ival{font-size:12px;font-weight:600;color:var(--text);font-family:var(--font-mono)}
+.ival.a{color:var(--amber)}
+.ival.g{color:var(--green)}
 
-.sup-avatar {
-  width: 44px; height: 44px;
-  background: var(--raised);
-  border: 1px solid var(--border2);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; flex-shrink: 0;
+/* ── BUTTONS ─────────────────────────────── */
+.btn{
+  width:100%;padding:15px;border-radius:var(--r-sm);border:none;
+  font-size:14px;font-weight:700;font-family:var(--font);
+  letter-spacing:.3px;text-transform:uppercase;cursor:pointer;
+  transition:all .15s;
 }
-.sup-info { flex: 1; }
-.sup-name {
-  font-size: 14px; font-weight: 700;
-  letter-spacing: -.2px; color: var(--text);
-}
-.sup-badge {
-  display: inline-block; margin-top: 4px;
-  background: var(--raised);
-  border: 1px solid var(--border2);
-  padding: 2px 8px; border-radius: 4px;
-  font-family: var(--font-mono);
-  font-size: 10px; color: var(--text3);
-  letter-spacing: .5px;
-}
-.sup-arrow {
-  font-size: 20px; color: var(--border2);
-  transition: all .15s;
-}
-.sup-card:hover .sup-arrow { color: var(--amber); transform: translateX(2px); }
+.btn:active{transform:scale(.97)}
+.btn-a{background:var(--amber);color:#000;box-shadow:0 4px 16px rgba(245,158,11,.2)}
+.btn-a:active{background:var(--amber2)}
+.btn-g{background:var(--green);color:#fff;box-shadow:0 4px 16px rgba(16,185,129,.15)}
+.btn-gh{background:transparent;border:1px solid var(--border2);color:var(--text2)}
+.btn-gh:active{background:var(--raised);color:var(--text)}
+.btn-sm{padding:11px;font-size:13px}
+.gap8{height:8px}
 
-/* ═══════════════════════════════════════════════
-   OTM LIST
-═══════════════════════════════════════════════ */
-.otm-list { display: flex; flex-direction: column; gap: 7px; }
-.otm-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 13px 14px;
-  cursor: pointer;
-  transition: all .15s;
-  display: flex; align-items: center; gap: 12px;
-}
-.otm-item:active { border-color: var(--amber-bd); background: var(--raised); }
-.otm-item.selected {
-  border-color: var(--amber);
-  background: var(--amber-bg);
-}
-.otm-num {
-  min-width: 56px; height: 34px;
-  border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 11px; font-weight: 500;
-  flex-shrink: 0; letter-spacing: .5px;
-}
-.otm-info { flex: 1; min-width: 0; }
-.otm-name {
-  font-size: 12px; font-weight: 600;
-  color: var(--text); line-height: 1.3;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.otm-meta {
-  font-size: 10px; color: var(--text3);
-  margin-top: 2px; letter-spacing: .3px;
-}
-.otm-check { color: var(--amber); font-size: 18px; display: none; flex-shrink: 0; }
-.otm-item.selected .otm-check { display: block; }
-
-/* Area colors */
-.area-sxew   { background: rgba(59,130,246,.15);  color: #60a5fa; }
-.area-mina   { background: rgba(16,185,129,.15);  color: #34d399; }
-.area-lixv   { background: rgba(139,92,246,.15);  color: #a78bfa; }
-.area-aguas  { background: rgba(6,182,212,.15);   color: #22d3ee; }
-.area-c2     { background: rgba(245,158,11,.15);  color: var(--amber2); }
-.area-gsc    { background: rgba(100,116,139,.15); color: #94a3b8; }
-
-/* ═══════════════════════════════════════════════
-   SEARCH
-═══════════════════════════════════════════════ */
-.search-wrap { position: relative; margin-bottom: 12px; }
-.search {
-  width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: var(--r-sm);
-  padding: 13px 14px 13px 42px;
-  font-size: 14px; color: var(--text);
-  font-family: var(--font);
-  outline: none; transition: border .15s;
-}
-.search::placeholder { color: var(--text3); }
-.search:focus { border-color: var(--amber); }
-.search-ico {
-  position: absolute; left: 13px; top: 50%;
-  transform: translateY(-50%);
-  font-size: 16px; color: var(--text3); pointer-events: none;
+.mlink{
+  background:none;border:none;color:var(--amber);
+  font-size:13px;font-weight:600;cursor:pointer;
+  font-family:var(--font);text-decoration:underline;
+  text-underline-offset:3px;padding:8px 0;margin-top:6px;
 }
 
-/* ═══════════════════════════════════════════════
-   SCANNER
-═══════════════════════════════════════════════ */
-.scanner-container {
-  width: 100%; max-width: 360px;
-  position: relative; border-radius: 16px; overflow: hidden;
-  box-shadow: 0 0 0 1px var(--border), 0 20px 60px rgba(0,0,0,.5);
+/* ── RESULT ITEMS ────────────────────────── */
+.ritem{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:11px 13px;cursor:pointer;
+  transition:all .15s;margin-bottom:7px;
 }
-.scanner-video { width: 100%; display: block; }
-.scanner-ui {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  pointer-events: none;
+.ritem:active{border-color:var(--amber-bd);background:var(--raised)}
+.rid{font-family:var(--font-mono);font-size:10px;color:var(--amber);margin-bottom:2px}
+.rnom{font-size:13px;font-weight:600;color:var(--text)}
+.rcarg{font-size:11px;color:var(--text3);margin-top:1px}
+
+/* ── REVISION ────────────────────────────── */
+.revitem{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:11px 13px;margin-bottom:7px;
+  display:flex;align-items:center;justify-content:space-between;
 }
-.scan-frame { position: relative; width: 200px; height: 200px; }
-.scan-corner {
-  position: absolute; width: 24px; height: 24px;
-  border-color: var(--amber); border-style: solid;
-}
-.scan-corner.tl { top:0;left:0;  border-width:3px 0 0 3px; border-radius:4px 0 0 0; }
-.scan-corner.tr { top:0;right:0; border-width:3px 3px 0 0; border-radius:0 4px 0 0; }
-.scan-corner.bl { bottom:0;left:0;  border-width:0 0 3px 3px; border-radius:0 0 0 4px; }
-.scan-corner.br { bottom:0;right:0; border-width:0 3px 3px 0; border-radius:0 0 4px 0; }
-.scan-line {
-  position: absolute; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--amber), transparent);
-  animation: scanline 2s ease-in-out infinite;
-}
-@keyframes scanline { 0%,100%{top:10%} 50%{top:90%} }
-.scan-hint {
-  text-align: center; font-size: 12px; color: var(--text3);
-  margin-top: 14px; line-height: 1.5;
+.revl{flex:1}
+.revrm{
+  background:var(--red-bg);border:1px solid rgba(239,68,68,.25);
+  color:var(--red);font-size:11px;font-weight:700;
+  padding:4px 9px;border-radius:6px;cursor:pointer;
+  font-family:var(--font);text-transform:uppercase;margin-left:8px;flex-shrink:0;
 }
 
-/* ═══════════════════════════════════════════════
-   ACUM LIST (lista acumulada)
-═══════════════════════════════════════════════ */
-.acum-wrap { width: 100%; max-width: 360px; margin-top: 16px; }
-.acum-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 8px;
+/* ── BADGES ──────────────────────────────── */
+.badge{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:3px 9px;border-radius:4px;font-size:10px;
+  font-weight:700;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;
 }
-.acum-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--text3);
-}
-.acum-badge {
-  background: var(--amber-bg);
-  border: 1px solid var(--amber-bd);
-  color: var(--amber);
-  font-family: var(--font-mono);
-  font-size: 11px; font-weight: 500;
-  padding: 2px 10px; border-radius: 20px;
-}
-.acum-empty {
-  background: var(--surface);
-  border: 1px dashed var(--border2);
-  border-radius: var(--r-sm);
-  padding: 16px; text-align: center;
-  color: var(--text3); font-size: 12px;
-}
-.acum-scroll {
-  max-height: 220px; overflow-y: auto;
-  display: flex; flex-direction: column; gap: 6px;
-  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
-}
-.acum-row {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 10px 12px;
-  display: flex; align-items: center; gap: 10px;
-  animation: rowIn .18s ease;
-}
-@keyframes rowIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
-.acum-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--green); flex-shrink: 0;
-}
-.acum-info { flex: 1; min-width: 0; }
-.acum-hora {
-  font-family: var(--font-mono);
-  font-size: 10px; color: var(--amber); margin-bottom: 1px;
-}
-.acum-nombre {
-  font-size: 12px; font-weight: 600;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.acum-cargo { font-size: 10px; color: var(--text3); }
-.acum-del {
-  background: none; border: none;
-  color: var(--border2); font-size: 16px;
-  cursor: pointer; padding: 4px; border-radius: 6px;
-  transition: all .1s; line-height: 1; flex-shrink: 0;
-}
-.acum-del:active { color: var(--red); background: var(--red-bg); }
+.bok{background:var(--green-bg);color:var(--green);border:1px solid rgba(16,185,129,.25)}
+.bdup{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
+.berr{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.25)}
 
-/* ═══════════════════════════════════════════════
-   WORKER CONFIRM CARD
-═══════════════════════════════════════════════ */
-.worker-card {
-  width: 100%; max-width: 360px;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: var(--r);
-  overflow: hidden; margin-bottom: 14px;
+/* ── SUCCESS ─────────────────────────────── */
+.success-top{
+  background:linear-gradient(135deg,#0a1a0f,#0d2015);
+  border-bottom:1px solid rgba(16,185,129,.2);
+  padding:30px 18px;text-align:center;
 }
-.worker-card-top {
-  background: linear-gradient(135deg, #111827, #1c2436);
-  padding: 20px;
-  display: flex; gap: 14px; align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-.worker-ava {
-  width: 52px; height: 52px;
-  background: var(--amber-bg);
-  border: 1px solid var(--amber-bd);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; flex-shrink: 0;
-}
-.worker-id-tag {
-  font-family: var(--font-mono);
-  font-size: 10px; color: var(--amber); margin-bottom: 4px;
-  letter-spacing: .5px;
-}
-.worker-name {
-  font-family: var(--font-cond);
-  font-size: 17px; font-weight: 700;
-  color: var(--text); letter-spacing: -.2px; line-height: 1.1;
-}
-.worker-cargo { font-size: 11px; color: var(--text3); margin-top: 3px; }
-.worker-card-rows { padding: 0; }
-.worker-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 11px 16px;
-  border-bottom: 1px solid var(--border);
-}
-.worker-row:last-child { border: none; }
-.worker-row-key { font-size: 11px; color: var(--text3); }
-.worker-row-val {
-  font-size: 12px; font-weight: 600; color: var(--text);
-  font-family: var(--font-mono);
+.si-icon{font-size:48px;margin-bottom:10px}
+.si-title{font-family:var(--font-cond);font-size:26px;font-weight:800;letter-spacing:-.5px}
+.si-sub{font-size:13px;color:var(--text3);margin-top:4px}
+
+/* ── LOADING ─────────────────────────────── */
+.loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px}
+.spinner{width:38px;height:38px;border:2px solid var(--border2);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ltitle{font-family:var(--font-cond);font-size:16px;font-weight:700;letter-spacing:.5px}
+.lsub{font-size:12px;color:var(--text3);text-align:center}
+
+/* ── WARN BOX ────────────────────────────── */
+.warn{
+  width:100%;max-width:340px;
+  background:rgba(245,158,11,.08);border:1px solid var(--amber-bd);
+  border-radius:var(--r-sm);padding:10px 13px;
+  margin-bottom:12px;font-size:12px;color:var(--amber2);line-height:1.4;
 }
 
-/* ═══════════════════════════════════════════════
-   INFO CHIP ROW
-═══════════════════════════════════════════════ */
-.chips {
-  display: flex; gap: 8px; flex-wrap: wrap;
-  margin-bottom: 14px; width: 100%; max-width: 360px;
+/* ── TOAST ───────────────────────────────── */
+.toast{
+  position:fixed;bottom:22px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  padding:10px 16px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:600;color:var(--text);
+  z-index:9999;opacity:0;pointer-events:none;
+  transition:all .25s ease;
+  white-space:nowrap;max-width:88vw;
+  backdrop-filter:blur(12px);border:1px solid;
 }
-.chip {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 20px; padding: 5px 12px;
-  display: flex; align-items: center; gap: 5px;
-  font-size: 12px; color: var(--text2);
-}
-.chip strong { color: var(--text); font-weight: 600; }
-
-/* ═══════════════════════════════════════════════
-   BUTTONS
-═══════════════════════════════════════════════ */
-.btn {
-  width: 100%; padding: 16px;
-  border-radius: var(--r-sm); border: none;
-  font-size: 14px; font-weight: 700;
-  font-family: var(--font);
-  letter-spacing: .3px; cursor: pointer;
-  transition: all .15s; text-transform: uppercase;
-}
-.btn:active { transform: scale(.97); }
-
-.btn-amber {
-  background: var(--amber);
-  color: #000;
-  box-shadow: 0 4px 20px rgba(245,158,11,.25);
-}
-.btn-amber:active { background: var(--amber2); }
-
-.btn-green {
-  background: var(--green);
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(16,185,129,.2);
-}
-
-.btn-ghost {
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--text2);
-}
-.btn-ghost:active { background: var(--raised); color: var(--text); }
-
-.btn-danger {
-  background: var(--red-bg);
-  border: 1px solid rgba(239,68,68,.3);
-  color: var(--red);
-}
-
-.btn-disabled {
-  background: var(--raised);
-  color: var(--text3);
-  border: 1px solid var(--border);
-  pointer-events: none; cursor: default;
-}
-.btn-sm { padding: 11px; font-size: 13px; }
-.btn-gap { height: 8px; }
-
-.manual-btn {
-  background: none; border: none;
-  color: var(--amber); font-size: 13px; font-weight: 600;
-  cursor: pointer; font-family: var(--font);
-  text-decoration: underline; text-underline-offset: 3px;
-  padding: 8px 0; margin-top: 8px;
-}
-
-/* ═══════════════════════════════════════════════
-   RESULTS (busqueda manual)
-═══════════════════════════════════════════════ */
-.res-list { display: flex; flex-direction: column; gap: 7px; }
-.res-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 12px 14px; cursor: pointer;
-  transition: all .15s;
-}
-.res-item:active { border-color: var(--amber-bd); background: var(--raised); }
-.res-id { font-family: var(--font-mono); font-size: 10px; color: var(--amber); margin-bottom: 2px; }
-.res-name { font-size: 13px; font-weight: 600; color: var(--text); }
-.res-cargo { font-size: 11px; color: var(--text3); margin-top: 2px; }
-
-/* ═══════════════════════════════════════════════
-   REVISION ITEMS
-═══════════════════════════════════════════════ */
-.rev-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 12px 14px; margin-bottom: 7px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.rev-left { flex: 1; }
-.rev-id { font-family: var(--font-mono); font-size: 10px; color: var(--amber); }
-.rev-name { font-size: 13px; font-weight: 600; color: var(--text); margin: 2px 0; }
-.rev-cargo { font-size: 11px; color: var(--text3); }
-.rev-rm {
-  background: var(--red-bg);
-  border: 1px solid rgba(239,68,68,.25);
-  color: var(--red); font-size: 11px; font-weight: 700;
-  padding: 5px 10px; border-radius: 6px; cursor: pointer;
-  font-family: var(--font); text-transform: uppercase;
-  flex-shrink: 0; margin-left: 8px;
-}
-
-/* ═══════════════════════════════════════════════
-   SUMMARY SCREEN
-═══════════════════════════════════════════════ */
-.summary-hero {
-  background: linear-gradient(135deg, #0a1a0f, #0d2015);
-  border-bottom: 1px solid rgba(16,185,129,.2);
-  padding: 28px 18px; text-align: center;
-}
-.summary-icon { font-size: 48px; margin-bottom: 10px; }
-.summary-title {
-  font-family: var(--font-cond);
-  font-size: 26px; font-weight: 800;
-  letter-spacing: -.5px; color: var(--text);
-}
-.summary-sub { font-size: 13px; color: var(--text3); margin-top: 4px; }
-
-.result-row {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 12px 14px; margin-bottom: 7px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 3px 10px; border-radius: 4px;
-  font-size: 10px; font-weight: 700; letter-spacing: .5px;
-  text-transform: uppercase; flex-shrink: 0;
-}
-.badge-ok   { background: var(--green-bg); color: var(--green); border: 1px solid rgba(16,185,129,.25); }
-.badge-dup  { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
-.badge-err  { background: var(--red-bg);   color: var(--red);   border: 1px solid rgba(239,68,68,.25); }
-
-/* ═══════════════════════════════════════════════
-   LOADING
-═══════════════════════════════════════════════ */
-.loading-screen {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 16px; padding: 40px;
-}
-.spinner {
-  width: 40px; height: 40px;
-  border: 2px solid var(--border2);
-  border-top-color: var(--amber);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-title {
-  font-family: var(--font-cond);
-  font-size: 16px; font-weight: 700; letter-spacing: .5px;
-  color: var(--text);
-}
-.loading-sub { font-size: 12px; color: var(--text3); text-align: center; }
-
-/* ═══════════════════════════════════════════════
-   WARN BOX
-═══════════════════════════════════════════════ */
-.warn-box {
-  width: 100%; max-width: 360px;
-  background: rgba(245,158,11,.08);
-  border: 1px solid var(--amber-bd);
-  border-radius: var(--r-sm);
-  padding: 11px 14px; margin-bottom: 12px;
-  font-size: 12px; color: var(--amber2); line-height: 1.4;
-}
-
-/* ═══════════════════════════════════════════════
-   INFO SUMMARY BOX
-═══════════════════════════════════════════════ */
-.info-box {
-  width: 100%; max-width: 360px;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: var(--r-sm); overflow: hidden;
-  margin-bottom: 14px;
-}
-.info-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 11px 14px; border-bottom: 1px solid var(--border);
-}
-.info-row:last-child { border: none; }
-.info-key { font-size: 11px; color: var(--text3); }
-.info-val {
-  font-size: 12px; font-weight: 600; color: var(--text);
-  font-family: var(--font-mono); text-align: right;
-}
-.info-val.amber { color: var(--amber); }
-.info-val.green { color: var(--green); }
-
-/* ═══════════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════════ */
-.toast {
-  position: fixed; bottom: 24px; left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  padding: 11px 18px; border-radius: var(--r-sm);
-  font-size: 13px; font-weight: 600; color: var(--text);
-  z-index: 9999; opacity: 0; pointer-events: none;
-  transition: all .25s cubic-bezier(.4,0,.2,1);
-  white-space: nowrap; max-width: 88vw;
-  backdrop-filter: blur(12px);
-  border: 1px solid;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast-ok  { background: rgba(16,185,129,.15); border-color: rgba(16,185,129,.3); }
-.toast-err { background: rgba(239,68,68,.15);  border-color: rgba(239,68,68,.3); }
-.toast-warn{ background: rgba(245,158,11,.15); border-color: var(--amber-bd); color: var(--amber2); }
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.tok{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.3)}
+.terr{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3)}
+.twarn{background:rgba(245,158,11,.12);border-color:var(--amber-bd);color:var(--amber2)}
 </style>
 </head>
 <body>
 
-<!-- ═══════ SPLASH ═══════ -->
+<!-- SPLASH -->
 <div id="splash">
-  <div class="splash-logo">KAMPFER</div>
-  <div class="splash-sub">Sistema de Tareo · SMCV</div>
-  <div class="splash-bar"><div class="splash-fill"></div></div>
+  <div class="sp-logo">KAMPFER</div>
+  <div class="sp-sub">Sistema de Tareo · SMCV</div>
+  <div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     S1 — ELEGIR SUPERVISOR
-═══════════════════════════════════════ -->
-<div id="s1" class="screen">
+<!-- S1 — SUPERVISOR -->
+<div id="s1" class="screen active">
   <div class="hero">
     <div class="hero-grid"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow">
+    <div class="hero-inner">
+      <div class="hero-tag">
         <div class="hero-dot"></div>
-        <span class="hero-eyebrow-text">Sistema Activo · SMCV</span>
+        <span class="hero-tag-text">Sistema Activo · SMCV</span>
       </div>
-      <div class="hero-title">TAREO<br><span>DIARIO</span></div>
-      <div class="hero-subtitle">Control de Horas Hombre por OTM</div>
-      <div class="hero-stats">
-        <div class="stat-box">
-          <div class="stat-label">Fecha</div>
-          <div class="stat-value amber" id="hero-fecha">—</div>
+      <div class="hero-title">TAREO <em>DIARIO</em></div>
+      <div class="hero-desc">Control de Horas Hombre por OTM</div>
+      <div class="hero-row">
+        <div class="hstat">
+          <div class="hstat-lbl">Fecha</div>
+          <div class="hstat-val a" id="hero-fecha">—</div>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Turno</div>
-          <div class="stat-value" id="hero-turno">—</div>
+        <div class="hstat">
+          <div class="hstat-lbl">Turno</div>
+          <div class="hstat-val" id="hero-turno">—</div>
         </div>
       </div>
     </div>
   </div>
-
   <div class="body">
     <div class="slabel">¿Quién eres?</div>
-    <div class="sup-list" id="lista-sups">
-      <div style="text-align:center;padding:30px;color:var(--text3);font-size:13px;">
-        Cargando supervisores...
+    <div id="lista-sups">
+      <div style="text-align:center;padding:30px;color:var(--text3);font-size:13px">
+        <div class="spinner" style="margin:0 auto 12px"></div>
+        Cargando...
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     S2 — ELEGIR OTM
-═══════════════════════════════════════ -->
+<!-- S2 — OTM -->
 <div id="s2" class="screen">
-  <div class="topbar">
-    <div class="tb-icon">📋</div>
+  <div class="bar">
+    <div class="bar-ico">📋</div>
     <div>
-      <div class="tb-title" id="s2-title">Seleccionar OTM</div>
-      <div class="tb-sub">¿En qué frente trabajas hoy?</div>
+      <div class="bar-title" id="s2t">OTM</div>
+      <div class="bar-sub">¿En qué frente trabajas?</div>
     </div>
-    <button class="tb-back" onclick="goTo('s1')">← Volver</button>
+    <button class="bar-back" onclick="ir('s1')">← Volver</button>
   </div>
-
-  <div class="steps-bar">
-    <div class="step-item done"><div class="step-dot">✓</div>Supervisor</div>
-    <div class="step-item active"><div class="step-dot">2</div>OTM</div>
-    <div class="step-item"><div class="step-dot">3</div>Escanear</div>
-    <div class="step-item"><div class="step-dot">4</div>Enviar</div>
+  <div class="steps">
+    <div class="step done"><div class="step-n">✓</div>Supervisor</div>
+    <div class="step on"><div class="step-n">2</div>OTM</div>
+    <div class="step"><div class="step-n">3</div>Escanear</div>
+    <div class="step"><div class="step-n">4</div>Enviar</div>
   </div>
-
   <div class="body">
-    <div class="search-wrap">
-      <span class="search-ico">🔍</span>
-      <input class="search" type="text" id="search-otm"
-             placeholder="Buscar por número o área..."
-             oninput="filtrarOTMs(this.value)">
+    <div class="sw">
+      <span class="sico">🔍</span>
+      <input class="si" type="text" id="q-otm" placeholder="Buscar OTM o área..." oninput="filtOTM(this.value)">
     </div>
-    <div class="otm-list" id="lista-otms">
-      <div style="text-align:center;padding:30px;color:var(--text3);font-size:13px;">
-        Cargando OTMs...
-      </div>
+    <div id="lista-otms">
+      <div style="text-align:center;padding:20px;color:var(--text3);font-size:13px">Cargando OTMs...</div>
     </div>
-    <div style="height:16px"></div>
-    <button class="btn btn-amber" id="btn-scan" onclick="irAScanner()" style="display:none">
+    <div class="gap8"></div>
+    <button class="btn btn-a" id="btn-escanear" onclick="irEscanear()" style="display:none">
       ESCANEAR TRABAJADORES →
     </button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     S3 — SCANNER
-═══════════════════════════════════════ -->
+<!-- S3 — SCANNER -->
 <div id="s3" class="screen">
-  <div class="topbar">
-    <div class="tb-icon">📷</div>
+  <div class="bar">
+    <div class="bar-ico">📷</div>
     <div>
-      <div class="tb-title">Escanear QR</div>
-      <div class="tb-sub" id="s3-sub">—</div>
+      <div class="bar-title">Escanear QR</div>
+      <div class="bar-sub" id="s3sub">—</div>
     </div>
-    <button class="tb-back" onclick="detenerCamara();goTo('s2')">← Volver</button>
+    <button class="bar-back" onclick="stopCam();ir('s2')">← Volver</button>
   </div>
-
-  <div class="steps-bar">
-    <div class="step-item done"><div class="step-dot">✓</div>Supervisor</div>
-    <div class="step-item done"><div class="step-dot">✓</div>OTM</div>
-    <div class="step-item active"><div class="step-dot">3</div>Escanear</div>
-    <div class="step-item"><div class="step-dot">4</div>Enviar</div>
+  <div class="steps">
+    <div class="step done"><div class="step-n">✓</div>Supervisor</div>
+    <div class="step done"><div class="step-n">✓</div>OTM</div>
+    <div class="step on"><div class="step-n">3</div>Escanear</div>
+    <div class="step"><div class="step-n">4</div>Enviar</div>
   </div>
-
-  <div class="body-fill">
+  <div class="bcenter">
     <div class="chips">
       <div class="chip">👷 <strong id="c-sup">—</strong></div>
       <div class="chip">📋 <strong id="c-otm">—</strong></div>
     </div>
 
-    <div class="scanner-container">
-      <video id="video" class="scanner-video" autoplay playsinline muted></video>
-      <div class="scanner-ui">
+    <div class="scan-wrap">
+      <video id="video" class="scan-video" autoplay playsinline muted></video>
+      <div class="scan-ui">
         <div class="scan-frame">
-          <div class="scan-corner tl"></div>
-          <div class="scan-corner tr"></div>
-          <div class="scan-corner bl"></div>
-          <div class="scan-corner br"></div>
-          <div class="scan-line"></div>
+          <div class="sc tl"></div><div class="sc tr"></div>
+          <div class="sc bl"></div><div class="sc br"></div>
+          <div class="scan-ln"></div>
         </div>
       </div>
       <canvas id="canvas" style="display:none"></canvas>
     </div>
 
-    <p class="scan-hint">Apunta al código QR del trabajador<br>Se detecta automáticamente</p>
-    <button class="manual-btn" onclick="detenerCamara();goTo('s3b')">✍️ Buscar por nombre</button>
+    <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:12px;line-height:1.5">
+      Apunta al código QR del trabajador<br>Se detecta automáticamente
+    </p>
+    <button class="mlink" onclick="stopCam();ir('s3b')">✍️ Buscar por nombre</button>
 
     <div class="acum-wrap">
-      <div class="acum-header">
-        <span class="acum-label">Lista para enviar</span>
+      <div class="acum-hdr">
+        <span class="acum-lbl">Lista para enviar</span>
         <span class="acum-badge" id="acum-n">0 personas</span>
       </div>
-      <div id="acum-empty" class="acum-empty">
-        Escanea el primer trabajador ↑
-      </div>
-      <div id="acum-scroll" class="acum-scroll" style="display:none"></div>
+      <div id="acum-empty" class="acum-empty">Escanea el primer trabajador ↑</div>
+      <div id="acum-list" class="acum-list" style="display:none"></div>
     </div>
 
-    <div style="width:100%;max-width:360px;margin-top:14px;">
-      <button class="btn btn-green" id="btn-fin"
-              onclick="detenerCamara();goTo('s5c')"
-              style="opacity:.35;pointer-events:none;">
+    <div style="width:100%;max-width:340px;margin-top:14px">
+      <button class="btn btn-g" id="btn-fin" onclick="stopCam();ir('s5c')"
+              style="opacity:.3;pointer-events:none">
         REVISAR Y ENVIAR →
       </button>
-      <div class="btn-gap"></div>
-      <button class="btn btn-ghost btn-sm" onclick="detenerCamara();goTo('s1')">
-        🏠 Inicio
-      </button>
+      <div class="gap8"></div>
+      <button class="btn btn-gh btn-sm" onclick="stopCam();ir('s1')">🏠 Inicio</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     S3B — BÚSQUEDA MANUAL
-═══════════════════════════════════════ -->
+<!-- S3B — BÚSQUEDA MANUAL -->
 <div id="s3b" class="screen">
-  <div class="topbar">
-    <div class="tb-icon">🔍</div>
+  <div class="bar">
+    <div class="bar-ico">🔍</div>
     <div>
-      <div class="tb-title">Buscar trabajador</div>
-      <div class="tb-sub">Por nombre, apellido o cargo</div>
+      <div class="bar-title">Buscar trabajador</div>
+      <div class="bar-sub">Nombre, apellido o cargo</div>
     </div>
-    <button class="tb-back" onclick="goTo('s3');iniciarCamara()">← Volver</button>
+    <button class="bar-back" onclick="ir('s3');startCam()">← Volver</button>
   </div>
   <div class="body">
-    <div class="search-wrap">
-      <span class="search-ico">👷</span>
-      <input class="search" type="text" id="sw"
-             placeholder="Ej: Becerra, Flores, Conductor..."
-             oninput="buscar(this.value)"
-             autocomplete="off" autocorrect="off" autocapitalize="off">
+    <div class="sw">
+      <span class="sico">👷</span>
+      <input class="si" type="text" id="q-trab" placeholder="Ej: Becerra, Flores, Conductor..."
+             oninput="buscar(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off">
     </div>
-    <div id="res-bus" class="res-list"></div>
+    <div id="res-bus"></div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     S4 — CONFIRMAR TRABAJADOR
-═══════════════════════════════════════ -->
+<!-- S4 — CONFIRMAR -->
 <div id="s4" class="screen">
-  <div class="topbar">
-    <div class="tb-icon">✅</div>
+  <div class="bar">
+    <div class="bar-ico">✅</div>
     <div>
-      <div class="tb-title">Confirmar</div>
-      <div class="tb-sub" id="s4-sub">Verificar antes de agregar</div>
+      <div class="bar-title">Confirmar</div>
+      <div class="bar-sub" id="s4sub">Verificar antes de agregar</div>
     </div>
-    <button class="tb-back" onclick="volverScan()">← Volver</button>
+    <button class="bar-back" onclick="volverScan()">← Volver</button>
   </div>
-  <div class="body-fill">
-    <div class="worker-card">
-      <div class="worker-card-top">
-        <div class="worker-ava">👷</div>
+  <div class="bcenter">
+    <div class="wcard">
+      <div class="wcard-top">
+        <div class="wave">👷</div>
         <div>
-          <div class="worker-id-tag" id="w-id">ID: —</div>
-          <div class="worker-name" id="w-nom">—</div>
-          <div class="worker-cargo" id="w-carg">—</div>
+          <div class="wtag" id="w-id">ID: —</div>
+          <div class="wnom" id="w-nom">—</div>
+          <div class="wcarg" id="w-carg">—</div>
         </div>
       </div>
-      <div class="worker-card-rows">
-        <div class="worker-row">
-          <span class="worker-row-key">OTM</span>
-          <span class="worker-row-val" id="c-otm2">—</span>
-        </div>
-        <div class="worker-row">
-          <span class="worker-row-key">Hora de escaneo</span>
-          <span class="worker-row-val" id="c-hora">—</span>
-        </div>
-      </div>
+      <div class="wrow"><span class="wkey">OTM</span><span class="wval" id="w-otm">—</span></div>
+      <div class="wrow"><span class="wkey">Hora</span><span class="wval" id="w-hora">—</span></div>
     </div>
-
-    <div id="c-warn" class="warn-box" style="display:none"></div>
-
-    <div style="width:100%;max-width:360px;">
-      <button class="btn btn-amber" onclick="agregarLista()">
-        + AGREGAR A LA LISTA
-      </button>
-      <div class="btn-gap"></div>
-      <button class="btn btn-ghost btn-sm" onclick="volverScan()">Cancelar</button>
+    <div id="w-warn" class="warn" style="display:none"></div>
+    <div style="width:100%;max-width:340px">
+      <button class="btn btn-a" onclick="agregarLista()">+ AGREGAR A LA LISTA</button>
+      <div class="gap8"></div>
+      <button class="btn btn-gh btn-sm" onclick="volverScan()">Cancelar</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     S5C — REVISIÓN FINAL
-═══════════════════════════════════════ -->
+<!-- S5C — REVISIÓN -->
 <div id="s5c" class="screen">
-  <div class="topbar">
-    <div class="tb-icon">📋</div>
+  <div class="bar">
+    <div class="bar-ico">📋</div>
     <div>
-      <div class="tb-title">Revisar lista</div>
-      <div class="tb-sub" id="sc-sub">Confirma antes de enviar</div>
+      <div class="bar-title">Revisar lista</div>
+      <div class="bar-sub" id="s5sub">Confirma antes de enviar</div>
     </div>
-    <button class="tb-back" onclick="goTo('s3');iniciarCamara()">+ Más</button>
+    <button class="bar-back" onclick="ir('s3');startCam()">+ Más</button>
   </div>
-
-  <div class="steps-bar">
-    <div class="step-item done"><div class="step-dot">✓</div>Supervisor</div>
-    <div class="step-item done"><div class="step-dot">✓</div>OTM</div>
-    <div class="step-item done"><div class="step-dot">✓</div>Escanear</div>
-    <div class="step-item active"><div class="step-dot">4</div>Enviar</div>
+  <div class="steps">
+    <div class="step done"><div class="step-n">✓</div>Supervisor</div>
+    <div class="step done"><div class="step-n">✓</div>OTM</div>
+    <div class="step done"><div class="step-n">✓</div>Escanear</div>
+    <div class="step on"><div class="step-n">4</div>Enviar</div>
   </div>
-
   <div class="body">
     <div class="slabel">Lista completa</div>
-    <div id="sc-lista"></div>
-
+    <div id="rev-lista"></div>
     <div class="slabel">Resumen</div>
-    <div class="info-box" style="max-width:100%">
-      <div class="info-row">
-        <span class="info-key">Supervisor</span>
-        <span class="info-val" id="sc-sup">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">OTM</span>
-        <span class="info-val amber" id="sc-otm">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Total trabajadores</span>
-        <span class="info-val green" id="sc-tot">—</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Fecha</span>
-        <span class="info-val" id="sc-fecha">—</span>
-      </div>
+    <div class="ibox" style="max-width:100%">
+      <div class="irow"><span class="ikey">Supervisor</span><span class="ival" id="rc-sup">—</span></div>
+      <div class="irow"><span class="ikey">OTM</span><span class="ival a" id="rc-otm">—</span></div>
+      <div class="irow"><span class="ikey">Total</span><span class="ival g" id="rc-tot">—</span></div>
+      <div class="irow"><span class="ikey">Fecha</span><span class="ival" id="rc-fecha">—</span></div>
     </div>
-
-    <button class="btn btn-green" onclick="enviar()">
-      📤 ENVIAR AL SISTEMA
-    </button>
-    <div class="btn-gap"></div>
-    <button class="btn btn-ghost btn-sm" onclick="goTo('s3');iniciarCamara()">
-      ← Seguir escaneando
-    </button>
+    <button class="btn btn-g" onclick="enviar()">📤 ENVIAR AL SISTEMA</button>
+    <div class="gap8"></div>
+    <button class="btn btn-gh btn-sm" onclick="ir('s3');startCam()">← Seguir escaneando</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     S6 — ENVIANDO
-═══════════════════════════════════════ -->
+<!-- S6 — ENVIANDO -->
 <div id="s6" class="screen">
-  <div class="topbar">
-    <div class="tb-icon">📤</div>
-    <div>
-      <div class="tb-title">Enviando registros</div>
-      <div class="tb-sub">No cierres la aplicación</div>
-    </div>
+  <div class="bar">
+    <div class="bar-ico">📤</div>
+    <div><div class="bar-title">Enviando</div><div class="bar-sub">No cierres la app</div></div>
   </div>
-  <div class="loading-screen">
+  <div class="loading">
     <div class="spinner"></div>
-    <div class="loading-title" id="s6t">Procesando...</div>
-    <div class="loading-sub" id="s6s">Guardando en la base de datos</div>
+    <div class="ltitle" id="s6t">Procesando...</div>
+    <div class="lsub" id="s6s">Guardando en la base de datos</div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     S7 — RESULTADO
-═══════════════════════════════════════ -->
+<!-- S7 — RESULTADO -->
 <div id="s7" class="screen">
-  <div class="summary-hero">
-    <div class="summary-icon">✅</div>
-    <div class="summary-title">TAREO ENVIADO</div>
-    <div class="summary-sub" id="s7-sub">—</div>
+  <div class="success-top">
+    <div class="si-icon">✅</div>
+    <div class="si-title">TAREO ENVIADO</div>
+    <div class="si-sub" id="s7sub">—</div>
   </div>
   <div class="body">
-    <div class="slabel">Detalle del registro</div>
+    <div class="slabel">Detalle</div>
     <div id="s7-lista"></div>
     <div style="height:14px"></div>
-    <button class="btn btn-amber" onclick="nuevaOTM()">
-      + REGISTRAR OTRA OTM
-    </button>
-    <div class="btn-gap"></div>
-    <button class="btn btn-ghost btn-sm" onclick="goTo('s1')">
-      🏠 Inicio
-    </button>
+    <button class="btn btn-a" onclick="nuevaOTM()">+ REGISTRAR OTRA OTM</button>
+    <div class="gap8"></div>
+    <button class="btn btn-gh btn-sm" onclick="ir('s1')">🏠 Inicio</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════════════
+// ═══════ CONFIG ═══════
 const API = 'https://api.apps1.astraera.space';
 
-const AREA_CLASS = {
-  'SX-EW':'area-sxew','Mina':'area-mina','Lixviacion':'area-lixv',
-  'Aguas':'area-aguas','C2 Area Seca':'area-c2','GSC':'area-gsc',
-  'Lixviación':'area-lixv','C2 Área Seca':'area-c2',
+const AREA_CLS = {
+  'SX-EW':'c-sxew','Mina':'c-mina','Lixviacion':'c-lixv','Lixviación':'c-lixv',
+  'Aguas':'c-agua','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gsc'
 };
 
-// ═══════════════════════════════════════════════
-// ESTADO
-// ═══════════════════════════════════════════════
-let E = {
-  sup: null, otm: null,
-  lista: [], pend: null, desdeBus: false,
-  stream: null, scan: false,
-  data: { sups: [], otms: [], trabs: [] }
+// ═══════ ESTADO ═══════
+const S = {
+  sup:null, otm:null, lista:[], pend:null,
+  desdeBus:false, stream:null, scan:false,
+  sups:[], otms:[], trabs:[]
 };
 
-// ═══════════════════════════════════════════════
-// INIT & DATA LOADING
-// ═══════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', async () => {
-  // Fecha y turno en hero
+// ═══════ INIT ═══════
+window.addEventListener('load', () => {
+  // Animación splash
+  const fill = document.getElementById('sp-fill');
+  requestAnimationFrame(() => { fill.style.width = '100%'; });
+
+  // Fecha y turno
   const now = new Date();
-  const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const ds = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const ms = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   document.getElementById('hero-fecha').textContent =
-    `${dias[now.getDay()]} ${now.getDate()} ${meses[now.getMonth()]}`;
+    `${ds[now.getDay()]} ${now.getDate()} ${ms[now.getMonth()]}`;
   const h = now.getHours();
   document.getElementById('hero-turno').textContent =
-    h < 12 ? 'Mañana' : h < 17 ? 'Tarde' : 'Noche';
+    h < 6 ? 'Madrugada' : h < 12 ? 'Mañana' : h < 17 ? 'Tarde' : 'Noche';
 
-  // Cargar datos
-  await cargarDatos();
-
-  // Ocultar splash
+  // Ocultar splash a 1.5s SIEMPRE
   setTimeout(() => {
     const sp = document.getElementById('splash');
-    sp.classList.add('done');
-    setTimeout(() => sp.style.display = 'none', 300);
+    sp.classList.add('hide');
+    setTimeout(() => { sp.style.display = 'none'; }, 400);
   }, 1500);
+
+  // Cargar datos sin bloquear
+  loadData();
 });
 
-async function cargarDatos() {
+async function loadData() {
   try {
-    const [sups, otms, trabs] = await Promise.all([
+    const [rs, ro, rt] = await Promise.all([
       fetch(`${API}/api/supervisores`).then(r => r.json()),
       fetch(`${API}/api/otms`).then(r => r.json()),
       fetch(`${API}/api/trabajadores`).then(r => r.json()),
     ]);
-    E.data = { sups, otms, trabs };
-    // Guardar caché
-    localStorage.setItem('kp_sups',  JSON.stringify(sups));
-    localStorage.setItem('kp_otms',  JSON.stringify(otms));
-    localStorage.setItem('kp_trabs', JSON.stringify(trabs));
-    localStorage.setItem('kp_cache_ts', Date.now().toString());
+    S.sups = rs; S.otms = ro; S.trabs = rt;
+    localStorage.setItem('kp_s', JSON.stringify(rs));
+    localStorage.setItem('kp_o', JSON.stringify(ro));
+    localStorage.setItem('kp_t', JSON.stringify(rt));
   } catch(e) {
-    // Usar caché si existe
-    const cs = localStorage.getItem('kp_sups');
-    const co = localStorage.getItem('kp_otms');
-    const ct = localStorage.getItem('kp_trabs');
-    if (cs && co && ct) {
-      E.data = {
-        sups:  JSON.parse(cs),
-        otms:  JSON.parse(co),
-        trabs: JSON.parse(ct),
-      };
-      toast('⚠️ Sin conexión — usando datos del caché', 'warn');
-    } else {
-      toast('Error al cargar datos — revisa la conexión', 'err');
-    }
+    const ks = localStorage.getItem('kp_s');
+    const ko = localStorage.getItem('kp_o');
+    const kt = localStorage.getItem('kp_t');
+    if (ks) { S.sups = JSON.parse(ks); S.otms = JSON.parse(ko); S.trabs = JSON.parse(kt); toast('Sin conexión — usando caché', 'warn'); }
+    else toast('Error al cargar datos — revisa la conexión', 'err');
   }
   renderSups();
-  renderOTMs(E.data.otms);
+  renderOTMs(S.otms);
 }
 
-// ═══════════════════════════════════════════════
-// NAVEGACIÓN
-// ═══════════════════════════════════════════════
-function goTo(id) {
+// ═══════ NAV ═══════
+function ir(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
-
-  if (id === 's3') { actualizarAcum(); setTimeout(iniciarCamara, 200); }
+  if (id === 's3') { actualizarAcum(); setTimeout(startCam, 200); }
   if (id === 's5c') renderRevision();
 }
 
-// ═══════════════════════════════════════════════
-// S1 — SUPERVISOR
-// ═══════════════════════════════════════════════
+// ═══════ S1 ═══════
 function renderSups() {
   const el = document.getElementById('lista-sups');
-  if (!E.data.sups.length) {
-    el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3)">No hay supervisores</div>';
-    return;
-  }
-  el.innerHTML = E.data.sups.map(s => `
+  if (!S.sups.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3);font-size:13px">Sin supervisores</div>'; return; }
+  el.innerHTML = S.sups.map(s => `
     <div class="sup-card" onclick="elegirSup('${s.id}')">
-      <div class="sup-avatar">👷</div>
-      <div class="sup-info">
+      <div class="sup-ava">👷</div>
+      <div>
         <div class="sup-name">${s.nombre}</div>
-        <span class="sup-badge">${s.id}</span>
+        <span class="sup-id">${s.id}</span>
       </div>
-      <span class="sup-arrow">›</span>
+      <span class="sup-arr">›</span>
     </div>
   `).join('');
 }
 
 function elegirSup(id) {
-  E.sup = E.data.sups.find(s => s.id === id);
-  document.getElementById('s2-title').textContent =
-    E.sup.nombre.split(' ').slice(0,2).join(' ');
-  goTo('s2');
+  S.sup = S.sups.find(s => s.id === id);
+  document.getElementById('s2t').textContent = S.sup.nombre.split(' ').slice(0,2).join(' ');
+  ir('s2');
 }
 
-// ═══════════════════════════════════════════════
-// S2 — OTM
-// ═══════════════════════════════════════════════
+// ═══════ S2 ═══════
 function renderOTMs(list) {
   const el = document.getElementById('lista-otms');
-  if (!list.length) {
-    el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3)">No hay OTMs activas</div>';
-    return;
-  }
+  if (!list.length) { el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);font-size:13px">Sin OTMs activas</div>'; return; }
   el.innerHTML = list.map(o => {
-    const aclass = AREA_CLASS[o.area] || 'area-gsc';
+    const cls = AREA_CLS[o.area] || 'c-gsc';
     return `
       <div class="otm-item" onclick="elegirOTM('${o.id}')" id="oi-${o.id}">
-        <div class="otm-num ${aclass}">${o.id.slice(-4)}</div>
-        <div class="otm-info">
-          <div class="otm-name">${o.descripcion}</div>
-          <div class="otm-meta">${o.id} · ${o.area} · ${o.estado}</div>
+        <div class="otm-num ${cls}">${o.id.slice(-4)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="otm-desc">${o.descripcion}</div>
+          <div class="otm-meta">${o.id} · ${o.area}</div>
         </div>
-        <span class="otm-check">✓</span>
+        <span class="otm-chk">✓</span>
       </div>
     `;
   }).join('');
 }
 
-function filtrarOTMs(q) {
-  const f = q.length < 2 ? E.data.otms :
-    E.data.otms.filter(o =>
-      o.id.toLowerCase().includes(q.toLowerCase()) ||
-      o.descripcion.toLowerCase().includes(q.toLowerCase()) ||
-      o.area.toLowerCase().includes(q.toLowerCase())
-    );
+function filtOTM(q) {
+  const f = q.length < 2 ? S.otms : S.otms.filter(o =>
+    o.id.toLowerCase().includes(q.toLowerCase()) ||
+    o.descripcion.toLowerCase().includes(q.toLowerCase()) ||
+    (o.area && o.area.toLowerCase().includes(q.toLowerCase()))
+  );
   renderOTMs(f);
 }
 
 function elegirOTM(id) {
-  E.otm = E.data.otms.find(o => o.id === id);
-  E.lista = [];
-  document.querySelectorAll('.otm-item').forEach(el => el.classList.remove('selected'));
-  document.getElementById('oi-' + id)?.classList.add('selected');
-  const btn = document.getElementById('btn-scan');
+  S.otm = S.otms.find(o => o.id === id);
+  S.lista = [];
+  document.querySelectorAll('.otm-item').forEach(el => el.classList.remove('sel'));
+  document.getElementById('oi-' + id)?.classList.add('sel');
+  const btn = document.getElementById('btn-escanear');
   btn.style.display = 'block';
-  btn.textContent = `ESCANEAR PARA ${E.otm.id} →`;
+  btn.textContent = `ESCANEAR PARA ${S.otm.id} →`;
   setTimeout(() => btn.scrollIntoView({ behavior: 'smooth' }), 80);
 }
 
-function irAScanner() {
-  document.getElementById('c-sup').textContent = E.sup.nombre.split(' ')[0];
-  document.getElementById('c-otm').textContent = E.otm.id;
-  document.getElementById('s3-sub').textContent = E.otm.id + ' · ' + E.otm.area;
-  goTo('s3');
+function irEscanear() {
+  document.getElementById('c-sup').textContent = S.sup.nombre.split(' ')[0];
+  document.getElementById('c-otm').textContent = S.otm.id;
+  document.getElementById('s3sub').textContent = S.otm.id + ' · ' + S.otm.area;
+  ir('s3');
 }
 
-// ═══════════════════════════════════════════════
-// CÁMARA
-// ═══════════════════════════════════════════════
-async function iniciarCamara() {
+// ═══════ CÁMARA ═══════
+async function startCam() {
+  if (S.stream) return;
   try {
-    const s = await navigator.mediaDevices.getUserMedia({
+    const stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
     });
-    E.stream = s;
-    document.getElementById('video').srcObject = s;
-    E.scan = true;
-    requestAnimationFrame(scanFrame);
-  } catch(e) {
-    toast('No se pudo acceder a la cámara', 'err');
-  }
+    S.stream = stream;
+    document.getElementById('video').srcObject = stream;
+    S.scan = true;
+    requestAnimationFrame(tick);
+  } catch(e) { toast('No se pudo acceder a la cámara', 'err'); }
 }
 
-function detenerCamara() {
-  E.scan = false;
-  if (E.stream) {
-    E.stream.getTracks().forEach(t => t.stop());
-    E.stream = null;
-  }
+function stopCam() {
+  S.scan = false;
+  if (S.stream) { S.stream.getTracks().forEach(t => t.stop()); S.stream = null; }
 }
 
-function scanFrame() {
-  if (!E.scan) return;
+function tick() {
+  if (!S.scan) return;
   const v = document.getElementById('video');
   const c = document.getElementById('canvas');
   if (v.readyState === v.HAVE_ENOUGH_DATA) {
-    c.height = v.videoHeight;
-    c.width  = v.videoWidth;
+    c.height = v.videoHeight; c.width = v.videoWidth;
     const ctx = c.getContext('2d');
     ctx.drawImage(v, 0, 0, c.width, c.height);
     const img = ctx.getImageData(0, 0, c.width, c.height);
-    const qr = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
+    const qr  = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
     if (qr) { procesarQR(qr.data.trim()); return; }
   }
-  requestAnimationFrame(scanFrame);
+  requestAnimationFrame(tick);
 }
 
 function procesarQR(raw) {
-  E.scan = false;
+  S.scan = false;
   const id = raw.padStart(3, '0');
-  const t = E.data.trabs.find(x => x.id === id);
+  const t  = S.trabs.find(x => x.id === id);
   if (!t) {
     toast(`QR no reconocido: ${raw}`, 'err');
-    setTimeout(() => { E.scan = true; requestAnimationFrame(scanFrame); }, 2000);
+    setTimeout(() => { S.scan = true; requestAnimationFrame(tick); }, 2000);
     return;
   }
   mostrarConfirm(t, false);
 }
 
-// ═══════════════════════════════════════════════
-// S3B — BÚSQUEDA MANUAL
-// ═══════════════════════════════════════════════
+// ═══════ S3B ═══════
 function buscar(q) {
   const el = document.getElementById('res-bus');
   if (q.length < 2) { el.innerHTML = ''; return; }
-  const found = E.data.trabs.filter(t =>
+  const f = S.trabs.filter(t =>
     t.nombre.toLowerCase().includes(q.toLowerCase()) ||
     t.cargo.toLowerCase().includes(q.toLowerCase()) ||
-    t.id === q.padStart(3, '0')
+    t.id === q.padStart(3,'0')
   ).slice(0, 8);
-
-  el.innerHTML = found.length === 0
-    ? '<p style="text-align:center;padding:20px;color:var(--text3);font-size:13px">No encontrado</p>'
-    : found.map(t => `
-        <div class="res-item" onclick="selManual('${t.id}')">
-          <div class="res-id">ID: ${t.id}</div>
-          <div class="res-name">${t.nombre}</div>
-          <div class="res-cargo">${t.cargo}</div>
-        </div>
-      `).join('');
+  el.innerHTML = f.length ? f.map(t => `
+    <div class="ritem" onclick="selManual('${t.id}')">
+      <div class="rid">ID: ${t.id}</div>
+      <div class="rnom">${t.nombre}</div>
+      <div class="rcarg">${t.cargo}</div>
+    </div>
+  `).join('') : '<p style="text-align:center;padding:20px;color:var(--text3);font-size:13px">No encontrado</p>';
 }
 
 function selManual(id) {
-  document.getElementById('sw').value = '';
+  document.getElementById('q-trab').value = '';
   document.getElementById('res-bus').innerHTML = '';
-  mostrarConfirm(E.data.trabs.find(t => t.id === id), true);
+  mostrarConfirm(S.trabs.find(t => t.id === id), true);
 }
 
-// ═══════════════════════════════════════════════
-// S4 — CONFIRMACIÓN
-// ═══════════════════════════════════════════════
+// ═══════ S4 ═══════
 function mostrarConfirm(t, desdeBus) {
-  E.pend = t;
-  E.desdeBus = desdeBus;
-  const hora = new Date().toTimeString().slice(0, 8);
-
+  S.pend = t; S.desdeBus = desdeBus;
+  const h = new Date().toTimeString().slice(0, 8);
   document.getElementById('w-id').textContent   = `ID: ${t.id}`;
   document.getElementById('w-nom').textContent  = t.nombre;
   document.getElementById('w-carg').textContent = t.cargo;
-  document.getElementById('s4-sub').textContent = E.otm.id;
-  document.getElementById('c-otm2').textContent = E.otm.id;
-  document.getElementById('c-hora').textContent = hora;
-
-  const ya = E.lista.find(x => x.id === t.id);
-  const w  = document.getElementById('c-warn');
-  if (ya) {
-    w.style.display = 'block';
-    w.textContent = `⚠️ ${t.nombre.split(' ')[0]} ya está en la lista (${ya.hora})`;
-  } else {
-    w.style.display = 'none';
-  }
-  goTo('s4');
+  document.getElementById('s4sub').textContent  = S.otm.id;
+  document.getElementById('w-otm').textContent  = S.otm.id;
+  document.getElementById('w-hora').textContent = h;
+  const ya = S.lista.find(x => x.id === t.id);
+  const w  = document.getElementById('w-warn');
+  w.style.display = ya ? 'block' : 'none';
+  if (ya) w.textContent = `⚠️ ${t.nombre.split(' ')[0]} ya está en la lista (${ya.hora})`;
+  ir('s4');
 }
 
 function agregarLista() {
-  const t = E.pend;
-  if (!E.lista.find(x => x.id === t.id)) {
-    E.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, hora: new Date().toTimeString().slice(0, 8) });
+  const t = S.pend;
+  if (!S.lista.find(x => x.id === t.id)) {
+    S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, hora: new Date().toTimeString().slice(0, 8) });
     toast(`✅ ${t.nombre.split(' ')[0]} agregado`, 'ok');
-  } else {
-    toast('Ya está en la lista', 'warn');
-  }
+  } else toast('Ya está en la lista', 'warn');
   volverScan();
 }
 
 function volverScan() {
-  E.pend = null;
-  if (E.desdeBus) { goTo('s3b'); }
-  else { goTo('s3'); actualizarAcum(); E.scan = true; requestAnimationFrame(scanFrame); }
+  S.pend = null;
+  if (S.desdeBus) ir('s3b');
+  else { ir('s3'); actualizarAcum(); S.scan = true; requestAnimationFrame(tick); }
 }
 
-// ═══════════════════════════════════════════════
-// LISTA ACUMULADA
-// ═══════════════════════════════════════════════
+// ═══════ ACUM ═══════
 function actualizarAcum() {
-  const n      = E.lista.length;
-  const empty  = document.getElementById('acum-empty');
-  const scroll = document.getElementById('acum-scroll');
-  const btnFin = document.getElementById('btn-fin');
-  const badge  = document.getElementById('acum-n');
-
-  badge.textContent = n === 0 ? '0 personas' : `${n} persona${n > 1 ? 's' : ''}`;
-
+  const n = S.lista.length;
+  document.getElementById('acum-n').textContent = n === 0 ? '0 personas' : `${n} persona${n > 1 ? 's' : ''}`;
+  const empty = document.getElementById('acum-empty');
+  const list  = document.getElementById('acum-list');
+  const btn   = document.getElementById('btn-fin');
   if (n === 0) {
-    empty.style.display = 'block';
-    scroll.style.display = 'none';
-    btnFin.style.opacity = '.35';
-    btnFin.style.pointerEvents = 'none';
+    empty.style.display = 'block'; list.style.display = 'none';
+    btn.style.opacity = '.3'; btn.style.pointerEvents = 'none';
   } else {
-    empty.style.display = 'none';
-    scroll.style.display = 'flex';
-    btnFin.style.opacity = '1';
-    btnFin.style.pointerEvents = 'auto';
-    scroll.innerHTML = E.lista.map((t, i) => `
-      <div class="acum-row">
-        <div class="acum-dot"></div>
-        <div class="acum-info">
-          <div class="acum-hora">${t.hora} · ID ${t.id}</div>
-          <div class="acum-nombre">${t.nombre}</div>
-          <div class="acum-cargo">${t.cargo}</div>
+    empty.style.display = 'none'; list.style.display = 'flex';
+    btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
+    list.innerHTML = S.lista.map((t, i) => `
+      <div class="arow">
+        <div class="adot"></div>
+        <div class="ainfo">
+          <div class="ahora">${t.hora} · ID ${t.id}</div>
+          <div class="anom">${t.nombre}</div>
+          <div class="acarg">${t.cargo}</div>
         </div>
-        <button class="acum-del" onclick="quitarAcum(${i})">✕</button>
+        <button class="adel" onclick="quitarAcum(${i})">✕</button>
       </div>
     `).join('');
   }
 }
 
 function quitarAcum(i) {
-  E.lista.splice(i, 1);
+  S.lista.splice(i, 1);
   actualizarAcum();
-  toast('Trabajador quitado', 'warn');
+  toast('Quitado de la lista', 'warn');
 }
 
-// ═══════════════════════════════════════════════
-// S5C — REVISIÓN
-// ═══════════════════════════════════════════════
+// ═══════ S5C ═══════
 function renderRevision() {
   const hoy = new Date().toISOString().slice(0, 10);
-  document.getElementById('sc-sup').textContent   = E.sup.nombre.split(' ').slice(0,2).join(' ');
-  document.getElementById('sc-otm').textContent   = E.otm.id;
-  document.getElementById('sc-tot').textContent   = `${E.lista.length} persona${E.lista.length > 1 ? 's' : ''}`;
-  document.getElementById('sc-fecha').textContent = hoy;
-  document.getElementById('sc-sub').textContent   = `${E.otm.id} · ${E.lista.length} trabajadores`;
-
-  document.getElementById('sc-lista').innerHTML = E.lista.map((t, i) => `
-    <div class="rev-item">
-      <div class="rev-left">
-        <div class="rev-id">${t.hora} · ID ${t.id}</div>
-        <div class="rev-name">${t.nombre}</div>
-        <div class="rev-cargo">${t.cargo}</div>
+  document.getElementById('s5sub').textContent  = `${S.otm.id} · ${S.lista.length} trabajadores`;
+  document.getElementById('rc-sup').textContent = S.sup.nombre.split(' ').slice(0,2).join(' ');
+  document.getElementById('rc-otm').textContent = S.otm.id;
+  document.getElementById('rc-tot').textContent = `${S.lista.length} persona${S.lista.length > 1 ? 's' : ''}`;
+  document.getElementById('rc-fecha').textContent = hoy;
+  document.getElementById('rev-lista').innerHTML = S.lista.map((t, i) => `
+    <div class="revitem">
+      <div class="revl">
+        <div class="rid">${t.hora} · ID ${t.id}</div>
+        <div class="rnom">${t.nombre}</div>
+        <div class="rcarg">${t.cargo}</div>
       </div>
-      <button class="rev-rm" onclick="quitarRev(${i})">✕</button>
+      <button class="revrm" onclick="quitarRev(${i})">✕</button>
     </div>
   `).join('');
 }
 
 function quitarRev(i) {
-  E.lista.splice(i, 1);
-  if (E.lista.length === 0) { goTo('s3'); iniciarCamara(); return; }
+  S.lista.splice(i, 1);
+  if (!S.lista.length) { ir('s3'); startCam(); return; }
   renderRevision();
 }
 
-// ═══════════════════════════════════════════════
-// ENVIAR
-// ═══════════════════════════════════════════════
+// ═══════ ENVIAR ═══════
 async function enviar() {
-  if (!E.lista.length) return;
-  goTo('s6');
-  document.getElementById('s6t').textContent = `Enviando ${E.lista.length} trabajador${E.lista.length > 1 ? 'es' : ''}...`;
-  document.getElementById('s6s').textContent = `${E.otm.id} · ${E.sup.nombre.split(' ')[0]}`;
-
+  if (!S.lista.length) return;
+  ir('s6');
+  document.getElementById('s6t').textContent = `Enviando ${S.lista.length} trabajador${S.lista.length > 1 ? 'es' : ''}...`;
+  document.getElementById('s6s').textContent = `${S.otm.id} · ${S.sup.nombre.split(' ')[0]}`;
   try {
-    const resp = await fetch(`${API}/api/registro`, {
+    const r = await fetch(`${API}/api/registro`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        supervisor_id:     E.sup.id,
-        supervisor_nombre: E.sup.nombre,
-        otm_id:            E.otm.id,
+        supervisor_id:     S.sup.id,
+        supervisor_nombre: S.sup.nombre,
+        otm_id:            S.otm.id,
         fecha:             new Date().toISOString().slice(0, 10),
-        trabajadores:      E.lista.map(t => ({
-          trab_id: t.id,
-          nombre:  t.nombre,
-          cargo:   t.cargo,
-          hora:    t.hora,
-        }))
+        trabajadores:      S.lista.map(t => ({ trab_id: t.id, nombre: t.nombre, cargo: t.cargo, hora: t.hora }))
       })
     });
-
-    const data = await resp.json();
-    if (resp.ok) mostrarResultado(data);
-    else { toast('Error: ' + (data.detail || 'Error del servidor'), 'err'); goTo('s5c'); }
-
-  } catch(e) {
-    toast('Sin conexión — verifica la señal', 'err');
-    goTo('s5c');
-  }
+    const data = await r.json();
+    if (r.ok) mostrarResultado(data);
+    else { toast('Error: ' + (data.detail || 'Error del servidor'), 'err'); ir('s5c'); }
+  } catch(e) { toast('Sin conexión — verifica la señal', 'err'); ir('s5c'); }
 }
 
-function mostrarResultado(data) {
-  goTo('s7');
-  const res = data.resultados || E.lista.map(t => ({ ...t, trab_id: t.id, status: 'ok' }));
+function mostrarResultado(d) {
+  ir('s7');
+  const res = d.resultados || S.lista.map(t => ({ ...t, trab_id: t.id, status: 'ok' }));
   const ok  = res.filter(r => r.status === 'ok').length;
   const dup = res.filter(r => r.status === 'duplicate').length;
-
-  document.getElementById('s7-sub').textContent =
-    `${ok} registrado${ok !== 1 ? 's' : ''} · ${dup} duplicado${dup !== 1 ? 's' : ''}`;
-
+  document.getElementById('s7sub').textContent = `${ok} registrado${ok !== 1 ? 's' : ''} · ${dup} duplicado${dup !== 1 ? 's' : ''}`;
   document.getElementById('s7-lista').innerHTML = res.map(r => `
-    <div class="result-row">
-      <div class="rev-left">
-        <div class="rev-id">ID: ${r.trab_id || r.id}</div>
-        <div class="rev-name">${r.nombre}</div>
-        <div class="rev-cargo">${r.cargo}</div>
+    <div class="revitem">
+      <div class="revl">
+        <div class="rid">ID: ${r.trab_id || r.id}</div>
+        <div class="rnom">${r.nombre}</div>
+        <div class="rcarg">${r.cargo}</div>
       </div>
-      <span class="badge ${r.status === 'ok' ? 'badge-ok' : r.status === 'duplicate' ? 'badge-dup' : 'badge-err'}">
+      <span class="badge ${r.status === 'ok' ? 'bok' : r.status === 'duplicate' ? 'bdup' : 'berr'}">
         ${r.status === 'ok' ? '✓ OK' : r.status === 'duplicate' ? '⚠ DUP' : '✗ ERR'}
       </span>
     </div>
@@ -1495,20 +1008,18 @@ function mostrarResultado(data) {
 }
 
 function nuevaOTM() {
-  E.otm = null; E.lista = [];
-  document.querySelectorAll('.otm-item').forEach(el => el.classList.remove('selected'));
-  document.getElementById('btn-scan').style.display = 'none';
-  goTo('s2');
+  S.otm = null; S.lista = [];
+  document.querySelectorAll('.otm-item').forEach(el => el.classList.remove('sel'));
+  document.getElementById('btn-escanear').style.display = 'none';
+  ir('s2');
 }
 
-// ═══════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════
+// ═══════ TOAST ═══════
 let _tt;
 function toast(msg, tipo = 'ok') {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = `toast toast-${tipo} show`;
+  t.className = `toast t${tipo} show`;
   clearTimeout(_tt);
   _tt = setTimeout(() => t.classList.remove('show'), 3200);
 }
