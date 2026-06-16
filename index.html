@@ -50,11 +50,11 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .bar-ico{width:36px;height:36px;border-radius:10px;flex-shrink:0;
   background:var(--amber-bg);border:1px solid var(--amber-bd);
   display:flex;align-items:center;justify-content:center;font-size:16px}
-.bar-title{font-family:var(--cond);font-size:17px;font-weight:700}
+.bar-title{font-family:var(--cond);font-size:17px;font-weight:700;line-height:1.2}
 .bar-sub{font-size:11px;color:var(--text3);margin-top:1px}
 .bar-btn{margin-left:auto;background:none;border:1px solid var(--border2);
   color:var(--text2);font-size:12px;font-weight:600;padding:7px 12px;border-radius:8px;
-  cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s}
+  cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s;flex-shrink:0}
 .bar-btn:active{background:var(--raised);color:var(--text)}
 
 /* HERO */
@@ -86,7 +86,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   color:var(--text3);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
 .slabel::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* SUPERVISOR CARDS */
+/* S1: Supervisor cards */
 .sup-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
   padding:14px 16px;cursor:pointer;transition:all .15s;
   display:flex;align-items:center;gap:12px;margin-bottom:8px;position:relative;overflow:hidden}
@@ -103,22 +103,76 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   font-family:var(--mono);font-size:10px;color:var(--text3)}
 .sup-arr{font-size:20px;color:var(--border2);margin-left:auto}
 
-/* SESION CARDS */
-.ses-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-  padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:all .15s}
-.ses-card:active{background:var(--raised)}
-.ses-card.borrador{border-left:3px solid var(--amber)}
-.ses-card.enviada{border-left:3px solid var(--green);opacity:.7}
-.ses-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.ses-otm{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:500}
-.ses-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase}
-.badge-bor{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
-.badge-env{background:var(--green-bg);color:var(--green);border:1px solid rgba(16,185,129,.25)}
-.ses-desc{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
-.ses-meta{font-size:11px;color:var(--text3)}
-.ses-actions{display:flex;gap:8px;margin-top:10px}
+/* S2: Cuadrilla cards */
+.cua-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:18px 16px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:14px;margin-bottom:12px;position:relative}
+.cua-card.preset{border-color:var(--amber-bd)}
+.cua-card:active{transform:scale(.98);background:var(--raised)}
+.cua-card.preset:active{border-color:var(--amber)}
+.cua-card.disabled{opacity:.45;cursor:default;pointer-events:none}
+.cua-ico{width:48px;height:48px;border-radius:12px;flex-shrink:0;font-size:22px;
+  display:flex;align-items:center;justify-content:center}
+.cua-ico.amber{background:var(--amber-bg);border:1px solid var(--amber-bd)}
+.cua-ico.green{background:var(--green-bg);border:1px solid rgba(16,185,129,.25)}
+.cua-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
+.cua-meta{font-size:12px;color:var(--text3)}
+.cua-count{font-family:var(--mono);font-size:11px;font-weight:600;
+  background:var(--amber-bg);border:1px solid var(--amber-bd);
+  color:var(--amber);padding:3px 9px;border-radius:20px;white-space:nowrap}
+.cua-arr{font-size:22px;color:var(--text3);margin-left:auto;flex-shrink:0}
 
-/* OTM LIST */
+/* S2: sesiones enviadas hoy */
+.ses-mini{background:var(--surface);border:1px solid rgba(16,185,129,.2);
+  border-radius:var(--rsm);padding:10px 14px;margin-bottom:7px;
+  display:flex;align-items:center;justify-content:space-between}
+.ses-mini-otm{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--amber)}
+.ses-mini-meta{font-size:11px;color:var(--text3)}
+.ses-mini-hh{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green)}
+
+/* S3: Worker search results */
+.wrow-res{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);
+  padding:11px 14px;display:flex;align-items:center;gap:11px;margin-bottom:6px;
+  cursor:pointer;transition:all .15s}
+.wrow-res:active{border-color:var(--amber-bd);background:var(--raised)}
+.wrow-res.ya{border-color:rgba(16,185,129,.3);background:var(--green-bg)}
+.wava{width:38px;height:38px;border-radius:9px;flex-shrink:0;background:var(--raised);
+  border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px}
+.wid{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:2px}
+.wnom{font-size:13px;font-weight:700;color:var(--text)}
+.wcarg{font-size:10px;color:var(--text3);margin-top:1px}
+.wadd{margin-left:auto;font-size:20px;flex-shrink:0}
+
+/* S3: Lista de trabajadores */
+.lrow{background:var(--surface);border:1px solid rgba(16,185,129,.25);
+  border-radius:var(--rsm);padding:10px 12px;
+  display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.linfo{flex:1;min-width:0}
+.lhh{flex-shrink:0;background:var(--raised);border:1px solid var(--border2);
+  border-radius:7px;padding:5px 10px;cursor:pointer;transition:all .15s}
+.lhh:active{border-color:var(--amber-bd);background:var(--amber-bg)}
+.lhh-val{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--amber);text-align:center}
+.lhh-lbl{font-size:9px;color:var(--text3);text-align:center;margin-top:1px}
+.ldel{background:none;border:none;color:var(--text3);font-size:17px;
+  cursor:pointer;padding:4px;border-radius:6px;transition:all .1s;flex-shrink:0;line-height:1}
+.ldel:active{color:var(--red);background:var(--red-bg)}
+
+/* COUNT BAR */
+.count-bar{background:var(--raised);border:1px solid var(--border);border-radius:var(--rsm);
+  padding:11px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.count-n{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--amber)}
+.count-lbl{font-size:11px;color:var(--text3)}
+
+/* SEARCH */
+.sw{position:relative;margin-bottom:12px}
+.si{width:100%;background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--rsm);padding:12px 14px 12px 40px;
+  font-size:15px;color:var(--text);font-family:var(--font);outline:none;transition:border .15s}
+.si::placeholder{color:var(--text3)}
+.si:focus{border-color:var(--amber)}
+.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
+
+/* S4: OTM items */
 .otm-item{background:var(--surface);border:1px solid var(--border);
   border-radius:var(--rsm);padding:12px 14px;cursor:pointer;
   transition:all .15s;display:flex;align-items:center;gap:11px;margin-bottom:7px}
@@ -149,59 +203,15 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .hh-btn:active{background:var(--amber-bg);border-color:var(--amber-bd)}
 .hh-val-wrap{display:flex;flex-direction:column;align-items:center}
 .hh-val{font-family:var(--mono);font-size:38px;font-weight:500;color:var(--amber);
-  min-width:90px;text-align:center;cursor:pointer;border-bottom:2px solid var(--amber-bd);
-  padding-bottom:2px}
+  min-width:90px;text-align:center;cursor:pointer;
+  border-bottom:2px solid var(--amber-bd);padding-bottom:2px}
 .hh-val:focus{outline:none;border-color:var(--amber)}
 .hh-unit{font-size:11px;color:var(--text3);margin-top:6px}
 
-/* SEARCH */
-.sw{position:relative;margin-bottom:12px}
-.si{width:100%;background:var(--surface);border:1px solid var(--border2);
-  border-radius:var(--rsm);padding:12px 14px 12px 40px;
-  font-size:15px;color:var(--text);font-family:var(--font);outline:none;transition:border .15s}
-.si::placeholder{color:var(--text3)}
-.si:focus{border-color:var(--amber)}
-.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
-
-/* WORKER ROWS — resultados de búsqueda */
-.wrow-res{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);
-  padding:11px 14px;display:flex;align-items:center;gap:11px;margin-bottom:6px;
-  cursor:pointer;transition:all .15s}
-.wrow-res:active{border-color:var(--amber-bd);background:var(--raised)}
-.wrow-res.ya{border-color:rgba(16,185,129,.3);background:var(--green-bg)}
-.wava{width:38px;height:38px;border-radius:9px;flex-shrink:0;background:var(--raised);
-  border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px}
-.wid{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:2px}
-.wnom{font-size:13px;font-weight:700;color:var(--text)}
-.wcarg{font-size:10px;color:var(--text3);margin-top:1px}
-.wadd{margin-left:auto;font-size:20px;flex-shrink:0}
-
-/* WORKER ROWS — lista agregada */
-.lrow{background:var(--surface);border:1px solid rgba(16,185,129,.25);
-  border-radius:var(--rsm);padding:10px 12px;
-  display:flex;align-items:center;gap:10px;margin-bottom:6px;
-  animation:ri .15s ease}
-@keyframes ri{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:none}}
-.linfo{flex:1;min-width:0}
-.lhh{flex-shrink:0;background:var(--raised);border:1px solid var(--border2);
-  border-radius:7px;padding:5px 10px;cursor:pointer;transition:all .15s}
-.lhh:active{border-color:var(--amber-bd);background:var(--amber-bg)}
-.lhh-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--amber);text-align:center}
-.lhh-lbl{font-size:9px;color:var(--text3);text-align:center;margin-top:1px}
-.ldel{background:none;border:none;color:var(--text3);font-size:17px;
-  cursor:pointer;padding:4px;border-radius:6px;transition:all .1s;flex-shrink:0;line-height:1}
-.ldel:active{color:var(--red);background:var(--red-bg)}
-
-/* COUNT BAR */
-.count-bar{background:var(--raised);border:1px solid var(--border);border-radius:var(--rsm);
-  padding:11px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.count-n{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--amber)}
-.count-lbl{font-size:11px;color:var(--text3)}
-
 /* SCANNER */
-#s4b{position:fixed!important;inset:0;z-index:50;background:#000;
+#s3b{position:fixed!important;inset:0;z-index:50;background:#000;
   display:none;flex-direction:column;align-items:center;justify-content:center}
-#s4b.active{display:flex}
+#s3b.active{display:flex}
 .scan-video{width:100%;max-height:70svh;object-fit:cover}
 .scan-ui{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .scan-frame{position:relative;width:200px;height:200px}
@@ -219,10 +229,10 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   padding:16px;display:flex;gap:10px;align-items:center}
 .torch-btn{width:50px;height:50px;border-radius:12px;border:1px solid var(--border2);
   background:var(--raised);color:var(--text);font-size:22px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+  display:flex;align-items:center;justify-content:middle;flex-shrink:0;transition:all .15s}
 .torch-btn.on{background:var(--amber-bg);border-color:var(--amber-bd)}
 
-/* HH PICKER OVERLAY */
+/* HH PICKER */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;
   display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
 .overlay.open{display:flex}
@@ -318,90 +328,68 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   </div>
 </div>
 
-<!-- S2: SESIONES DEL DÍA -->
+<!-- S2: MI CUADRILLA -->
 <div id="s2" class="screen">
   <div class="bar">
-    <div class="bar-ico">📋</div>
+    <div class="bar-ico">👥</div>
     <div>
-      <div class="bar-title" id="s2-titulo">Mis sesiones</div>
-      <div class="bar-sub">Hoy</div>
+      <div class="bar-title" id="s2-sup">—</div>
+      <div class="bar-sub" id="s2-fecha">—</div>
     </div>
     <button class="bar-btn" onclick="ir('s1')">← Cambiar</button>
   </div>
   <div class="body">
-    <div id="s2-sesiones"></div>
-    <div class="gap8"></div>
-    <button class="btn btn-a btn-icon" onclick="irNuevaSesion()">
-      <span>+</span><span>NUEVA SESIÓN</span>
-    </button>
-  </div>
-</div>
+    <div class="slabel">Selecciona tu cuadrilla</div>
 
-<!-- S3: CONFIGURAR SESIÓN -->
-<div id="s3" class="screen">
-  <div class="bar">
-    <div class="bar-ico">⚙️</div>
-    <div><div class="bar-title">Nueva sesión</div><div class="bar-sub">OTM y horas del turno</div></div>
-    <button class="bar-btn" onclick="ir('s2')">← Volver</button>
-  </div>
-  <div class="body">
-    <div class="hh-box">
-      <div class="hh-lbl">Horas del turno (por persona)</div>
-      <div class="hh-row">
-        <button class="hh-btn" onclick="cambiarHH(-0.5)">−</button>
-        <div class="hh-val-wrap">
-          <div class="hh-val" id="hh-display" contenteditable="true"
-               inputmode="decimal"
-               onblur="validarHH(this)"
-               onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">9.5</div>
-          <div class="hh-unit">horas por persona</div>
-        </div>
-        <button class="hh-btn" onclick="cambiarHH(+0.5)">+</button>
+    <!-- Card: cuadrilla pre-configurada -->
+    <div class="cua-card preset" id="cua-card-preset" onclick="usarCuadrilla()">
+      <div class="cua-ico amber">👥</div>
+      <div style="flex:1;min-width:0">
+        <div class="cua-title">Mi cuadrilla habitual</div>
+        <div class="cua-meta" id="cua-meta-preset">Cargando...</div>
       </div>
+      <span class="cua-count" id="cua-count-preset">—</span>
+      <span class="cua-arr">›</span>
     </div>
-    <div class="slabel">Seleccionar OTM</div>
-    <div class="sw">
-      <span class="sico">🔍</span>
-      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área..."
-             oninput="filtOTM(this.value)" autocomplete="off">
+
+    <!-- Card: nueva cuadrilla -->
+    <div class="cua-card" onclick="nuevaCuadrilla()">
+      <div class="cua-ico green" style="font-size:26px;font-weight:300">+</div>
+      <div>
+        <div class="cua-title">Nueva cuadrilla</div>
+        <div class="cua-meta">Empezar con lista vacía</div>
+      </div>
+      <span class="cua-arr" style="color:var(--green)">›</span>
     </div>
-    <div id="lista-otms"></div>
-    <div class="gap8"></div>
-    <button class="btn btn-a" id="btn-crear-ses" onclick="crearSesion()"
-            style="opacity:.4;pointer-events:none">
-      AGREGAR TRABAJADORES →
-    </button>
+
+    <!-- Sesiones enviadas hoy -->
+    <div id="s2-enviadas" style="margin-top:8px"></div>
   </div>
 </div>
 
-<!-- S4: ARMAR LISTA + ENVIAR -->
-<div id="s4" class="screen">
+<!-- S3: EDITAR LISTA -->
+<div id="s3" class="screen">
   <div class="bar">
     <div class="bar-ico">👷</div>
     <div>
-      <div class="bar-title" id="s4-titulo">Lista</div>
-      <div class="bar-sub" id="s4-sub">Busca y agrega trabajadores</div>
+      <div class="bar-title" id="s3-titulo">Lista de trabajadores</div>
+      <div class="bar-sub" id="s3-sub">Agrega o retira personal</div>
     </div>
-    <button class="bar-btn" onclick="volverS2()">← Volver</button>
+    <button class="bar-btn" onclick="ir('s2')">← Volver</button>
   </div>
   <div class="body">
-    <div id="cua-btn-wrap" style="margin-bottom:10px;display:none">
-      <button class="btn btn-gh btn-sm btn-icon" id="btn-cua" onclick="cargarCuadrilla()">
-        <span>👥</span><span id="btn-cua-txt">Cargar mi cuadrilla</span>
-      </button>
-    </div>
     <div class="sw">
       <span class="sico">🔍</span>
-      <input class="si" id="q-trab" type="text" placeholder="Nombre, apellido o ID..."
+      <input class="si" id="q-trab" type="text" placeholder="Buscar por nombre o ID..."
              oninput="buscarTrab(this.value)"
              autocomplete="off" autocorrect="off" autocapitalize="words">
     </div>
     <div id="res-trab"></div>
 
-    <div class="slabel" style="margin-top:20px">Trabajadores agregados</div>
+    <div class="slabel" style="margin-top:20px">Trabajadores en lista</div>
     <div class="count-bar">
-      <span class="count-lbl">Total · HH a registrar</span>
-      <span class="count-n" id="count-resumen">0 · 0 HH</span>
+      <span class="count-lbl">Total</span>
+      <span class="count-n" id="count-lista">0 personas</span>
     </div>
     <div id="lista-actual"></div>
 
@@ -411,19 +399,16 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     </button>
     <div class="gap8"></div>
   </div>
-
-  <!-- Footer sticky con ENVIAR -->
-  <div style="position:sticky;bottom:0;background:var(--void);
-              border-top:1px solid var(--border);padding:12px 16px">
-    <button class="btn btn-g btn-icon" id="btn-enviar"
-            onclick="enviar()" style="opacity:.4;pointer-events:none">
-      <span>📤</span><span id="btn-enviar-txt">ENVIAR TAREO</span>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
+    <button class="btn btn-a btn-icon" id="btn-sig" onclick="irAOTM()"
+            style="opacity:.4;pointer-events:none">
+      <span>›</span><span id="btn-sig-txt">ELEGIR OTM</span>
     </button>
   </div>
 </div>
 
-<!-- S4b: QR ESCÁNER -->
-<div id="s4b" class="screen">
+<!-- S3b: QR SCANNER -->
+<div id="s3b" class="screen">
   <video id="video" class="scan-video" autoplay playsinline muted></video>
   <div class="scan-ui">
     <div class="scan-frame">
@@ -440,7 +425,49 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
       <div style="font-size:11px;color:var(--text3);margin-top:2px">Se detecta automáticamente</div>
     </div>
     <button class="btn btn-gh btn-sm" style="width:auto;padding:11px 14px"
-            onclick="stopCam();ir('s4')">✕ Cerrar</button>
+            onclick="stopCam();ir('s3')">✕ Cerrar</button>
+  </div>
+</div>
+
+<!-- S4: OTM + HH + ENVIAR -->
+<div id="s4" class="screen">
+  <div class="bar">
+    <div class="bar-ico">📋</div>
+    <div>
+      <div class="bar-title" id="s4-titulo">Seleccionar OTM</div>
+      <div class="bar-sub" id="s4-sub">Define la actividad y las horas</div>
+    </div>
+    <button class="bar-btn" onclick="ir('s3')">← Lista</button>
+  </div>
+  <div class="body">
+    <div class="hh-box">
+      <div class="hh-lbl">Horas del turno (por persona)</div>
+      <div class="hh-row">
+        <button class="hh-btn" onclick="cambiarHH(-0.5)">−</button>
+        <div class="hh-val-wrap">
+          <div class="hh-val" id="hh-display" contenteditable="true" inputmode="decimal"
+               onblur="validarHH(this)"
+               onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">9.5</div>
+          <div class="hh-unit">horas por persona</div>
+        </div>
+        <button class="hh-btn" onclick="cambiarHH(+0.5)">+</button>
+      </div>
+    </div>
+
+    <div class="slabel">OTM activa</div>
+    <div class="sw">
+      <span class="sico">🔍</span>
+      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área..."
+             oninput="filtOTM(this.value)" autocomplete="off">
+    </div>
+    <div id="lista-otms"></div>
+    <div style="height:90px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
+    <button class="btn btn-g btn-icon" id="btn-enviar"
+            onclick="enviar()" style="opacity:.4;pointer-events:none">
+      <span>📤</span><span id="btn-enviar-txt">ENVIAR TAREO</span>
+    </button>
   </div>
 </div>
 
@@ -463,9 +490,9 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   <div class="body">
     <div id="s7-ibox" class="ibox"></div>
     <div class="gap8"></div>
-    <button class="btn btn-a" onclick="nuevaSesion()">+ NUEVA SESIÓN</button>
+    <button class="btn btn-a" onclick="irNuevoRegistro()">+ NUEVO REGISTRO</button>
     <div class="gap8"></div>
-    <button class="btn btn-gh btn-sm" onclick="irS2()">← Volver al inicio</button>
+    <button class="btn btn-gh btn-sm" onclick="irInicio()">← Cambiar de supervisor</button>
   </div>
 </div>
 
@@ -495,16 +522,17 @@ const AREA_CLS = {
   'SX-EW':'c-sxew','Mina':'c-mina','Lixviacion':'c-lixv','Lixviación':'c-lixv',
   'Aguas':'c-agua','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gsc'
 }
-const HH_PICKER_OPTS = [4, 6, 7, 8, 9, 9.5, 10, 11, 12]
+const HH_OPTS = [4, 6, 7, 8, 9, 9.5, 10, 11, 12]
 
 // ═══════════════════════════════════════════
 // ESTADO
 // ═══════════════════════════════════════════
 const S = {
   sup: null, sups: [], trabs: [], otms: [],
-  sesionId: null, otm: null, hhTurno: 9.5,
-  lista: [],        // [{id, nombre, cargo, hhOverride, via}]
-  cuadrilla: [],    // [{id, nombre, cargo}] – cuadrilla pre-establecida del supervisor
+  cuadrilla: [],    // [{trab_id, nombre, cargo}] cargada de /api/cuadrilla
+  lista: [],        // [{id, nombre, cargo, hhOverride, via}] sesión actual
+  otm: null,
+  hhTurno: 9.5,
   scan: false, stream: null, torch: false,
   pickerTrabId: null
 }
@@ -546,7 +574,7 @@ async function loadData() {
     S.otms = lsGet('kp_otms') || []
     S.trabs = lsGet('kp_trabs') || []
     if (S.sups.length) toast('Sin conexión — usando caché', 'warn')
-    else toast('Sin datos — revisa la conexión', 'err')
+    else toast('Sin datos — verifica la conexión', 'err')
   }
   renderSups()
 }
@@ -566,7 +594,7 @@ function ir(id) {
 function renderSups() {
   const el = document.getElementById('lista-sups')
   if (!S.sups.length) {
-    el.innerHTML = '<p style="text-align:center;padding:30px;color:var(--text3);font-size:13px">Sin supervisores</p>'
+    el.innerHTML = '<p style="text-align:center;padding:30px;color:var(--text3);font-size:13px">Sin supervisores cargados</p>'
     return
   }
   el.innerHTML = S.sups.map(s => `
@@ -580,216 +608,96 @@ function renderSups() {
     </div>`).join('')
 }
 
-function elegirSup(id) {
+async function elegirSup(id) {
   S.sup = S.sups.find(s => s.id === id)
-  cargarCuadrillaFetch()
-  irS2()
+  S.lista = []
+  S.otm = null
+  S.hhTurno = 9.5
+  // Actualizar S2
+  const now = new Date()
+  const ds = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
+  const ms = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+  document.getElementById('s2-sup').textContent = S.sup.nombre.split(' ').slice(0,2).join(' ')
+  document.getElementById('s2-fecha').textContent =
+    `${ds[now.getDay()]} ${now.getDate()} ${ms[now.getMonth()]}`
+  ir('s2')
+  // Cargar cuadrilla y sesiones en paralelo
+  await Promise.all([cargarCuadrillaFetch(), cargarSesionesHoy()])
 }
 
+// ═══════════════════════════════════════════
+// S2 — CUADRILLA
+// ═══════════════════════════════════════════
 async function cargarCuadrillaFetch() {
+  const preset = document.getElementById('cua-card-preset')
+  const meta = document.getElementById('cua-meta-preset')
+  const count = document.getElementById('cua-count-preset')
   try {
     const r = await fetch(`${API}/api/cuadrilla/${S.sup.id}`)
     S.cuadrilla = r.ok ? await r.json() : []
   } catch { S.cuadrilla = [] }
+
+  if (!S.cuadrilla.length) {
+    preset.classList.add('disabled')
+    meta.textContent = 'Sin configurar — pide al admin que la configure'
+    count.textContent = '0'
+    count.style.opacity = '.4'
+  } else {
+    preset.classList.remove('disabled')
+    meta.textContent = `${S.cuadrilla.length} trabajador${S.cuadrilla.length > 1 ? 'es' : ''} pre-configurado${S.cuadrilla.length > 1 ? 's' : ''}`
+    count.textContent = S.cuadrilla.length
+    count.style.opacity = '1'
+  }
 }
 
-// ═══════════════════════════════════════════
-// S2 — SESIONES DEL DÍA
-// ═══════════════════════════════════════════
-async function irS2() {
-  document.getElementById('s2-titulo').textContent =
-    S.sup.nombre.split(' ').slice(0, 2).join(' ')
-  await cargarSesiones()
-  ir('s2')
-}
-
-async function cargarSesiones() {
-  const el = document.getElementById('s2-sesiones')
-  let sesiones = []
+async function cargarSesionesHoy() {
+  const el = document.getElementById('s2-enviadas')
   try {
     const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
-    sesiones = await r.json()
-  } catch {
-    el.innerHTML = '<p style="font-size:13px;color:var(--text3);margin-bottom:16px">Sin conexión — no se pueden cargar las sesiones</p>'
-    return
-  }
-  if (!sesiones.length) {
-    el.innerHTML = '<div class="slabel">Sin sesiones hoy</div><p style="font-size:13px;color:var(--text3);margin-bottom:16px">Crea tu primera sesión del día</p>'
-    return
-  }
-  el.innerHTML = '<div class="slabel">Sesiones de hoy</div>' + sesiones.map(s => {
-    const bor = s.estado === 'borrador'
-    return `
-      <div class="ses-card ${s.estado}">
-        <div class="ses-top">
-          <span class="ses-otm">${s.otm_id}</span>
-          <span class="ses-badge ${bor ? 'badge-bor' : 'badge-env'}">
-            ${bor ? '📝 Borrador' : '✓ Enviada'}
-          </span>
-        </div>
-        <div class="ses-desc">${s.otm_id}</div>
-        <div class="ses-meta">${s.total || 0} trabajadores · ${s.hh_turno}h por persona</div>
-        ${bor ? `
-        <div class="ses-actions">
-          <button class="btn btn-a btn-sm" style="flex:1"
-                  onclick="continuarSesion(${s.id})">✏️ Continuar</button>
-        </div>` : ''}
-      </div>`
-  }).join('')
+    if (!r.ok) { el.innerHTML = ''; return }
+    const sesiones = (await r.json()).filter(s => s.estado === 'enviada')
+    if (!sesiones.length) { el.innerHTML = ''; return }
+    const totalHH = sesiones.reduce((sum, s) => sum + (s.presentes || s.total || 0) * parseFloat(s.hh_turno), 0)
+    el.innerHTML = `<div class="slabel">Ya enviados hoy</div>` +
+      sesiones.map(s => `
+        <div class="ses-mini">
+          <div>
+            <div class="ses-mini-otm">${s.otm_id}</div>
+            <div class="ses-mini-meta">${s.total || 0} trabajadores</div>
+          </div>
+          <div class="ses-mini-hh">✓ ${s.hh_turno}h</div>
+        </div>`).join('')
+  } catch { el.innerHTML = '' }
 }
 
-function irNuevaSesion() {
-  S.sesionId = null; S.otm = null; S.lista = []; S.hhTurno = 9.5
-  document.getElementById('hh-display').textContent = '9.5'
-  document.getElementById('q-otm').value = ''
-  renderOTMs(S.otms)
-  ir('s3')
+function usarCuadrilla() {
+  if (!S.cuadrilla.length) return
+  S.lista = S.cuadrilla.map(t => ({
+    id: t.trab_id || t.id,
+    nombre: t.nombre,
+    cargo: t.cargo,
+    hhOverride: null,
+    via: 'cuadrilla'
+  }))
+  vibrate()
+  abrirS3('Mi cuadrilla habitual', `${S.lista.length} miembros cargados`)
+}
+
+function nuevaCuadrilla() {
+  S.lista = []
+  abrirS3('Nueva cuadrilla', 'Lista vacía — agrega trabajadores')
 }
 
 // ═══════════════════════════════════════════
-// S3 — CONFIGURAR SESIÓN
+// S3 — EDITAR LISTA
 // ═══════════════════════════════════════════
-function cambiarHH(delta) {
-  S.hhTurno = parseFloat(
-    Math.min(24, Math.max(0.5, S.hhTurno + delta)).toFixed(1)
-  )
-  document.getElementById('hh-display').textContent = S.hhTurno
-}
-
-function validarHH(el) {
-  const v = parseFloat(el.textContent)
-  if (!v || v < 0.5 || v > 24) {
-    el.textContent = S.hhTurno
-    return
-  }
-  // redondear a múltiplo de 0.5
-  S.hhTurno = Math.round(v * 2) / 2
-  el.textContent = S.hhTurno
-}
-
-function renderOTMs(list) {
-  const el = document.getElementById('lista-otms')
-  el.innerHTML = list.map(o => {
-    const cls = AREA_CLS[o.area] || 'c-gsc'
-    return `
-      <div class="otm-item${S.otm?.id === o.id ? ' sel' : ''}" onclick="elegirOTM('${o.id}')">
-        <div class="otm-num ${cls}">${o.id.slice(-4)}</div>
-        <div style="flex:1;min-width:0">
-          <div class="otm-desc">${o.descripcion}</div>
-          <div class="otm-meta">${o.id} · ${o.area || '—'}</div>
-        </div>
-        <span class="otm-chk">✓</span>
-      </div>`
-  }).join('')
-}
-
-function filtOTM(q) {
-  const f = q.length < 2 ? S.otms : S.otms.filter(o =>
-    o.id.toLowerCase().includes(q.toLowerCase()) ||
-    o.descripcion.toLowerCase().includes(q.toLowerCase()) ||
-    (o.area || '').toLowerCase().includes(q.toLowerCase())
-  )
-  renderOTMs(f)
-}
-
-function elegirOTM(id) {
-  S.otm = S.otms.find(o => o.id === id)
-  filtOTM(document.getElementById('q-otm').value)
-  const btn = document.getElementById('btn-crear-ses')
-  btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'
-}
-
-async function crearSesion() {
-  if (!S.otm) return
-  try {
-    const r = await fetch(`${API}/api/sesion`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        supervisor_id: S.sup.id,
-        otm_id: S.otm.id,
-        fecha: hoy(),
-        hh_turno: S.hhTurno,
-        trabajadores: []
-      })
-    })
-    if (!r.ok) throw new Error('Error ' + r.status)
-    const d = await r.json()
-    if (!d.id) throw new Error('Sin ID')
-    S.sesionId = d.id
-    abrirS4()
-  } catch (e) {
-    toast('Error al crear sesión: ' + e.message, 'err')
-  }
-}
-
-async function continuarSesion(id) {
-  try {
-    const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
-    if (!r.ok) throw new Error('Error ' + r.status)
-    const sesiones = await r.json()
-    const s = sesiones.find(x => x.id === id)
-    if (!s) { toast('Sesión no encontrada', 'err'); return }
-    S.sesionId = id
-    S.otm = S.otms.find(o => o.id === s.otm_id) || { id: s.otm_id, descripcion: s.otm_id }
-    S.hhTurno = parseFloat(s.hh_turno)
-    S.lista = (s.trabajadores || []).map(t => ({
-      id: t.trab_id, nombre: t.nombre, cargo: t.cargo,
-      hhOverride: t.hh_override ? parseFloat(t.hh_override) : null,
-      via: t.agregado_via || 'busqueda'
-    }))
-    abrirS4()
-  } catch (e) { toast('Error cargando sesión: ' + e.message, 'err') }
-}
-
-function abrirS4() {
-  document.getElementById('s4-titulo').textContent = S.otm.id
-  document.getElementById('s4-sub').textContent = `${S.hhTurno}h por persona`
+function abrirS3(titulo, sub) {
+  document.getElementById('s3-titulo').textContent = titulo || 'Lista de trabajadores'
+  document.getElementById('s3-sub').textContent = sub || 'Agrega o retira personal'
   document.getElementById('q-trab').value = ''
   document.getElementById('res-trab').innerHTML = ''
-  // Mostrar botón cuadrilla solo si hay miembros configurados
-  const cuaBtnWrap = document.getElementById('cua-btn-wrap')
-  if (S.cuadrilla.length) {
-    cuaBtnWrap.style.display = 'block'
-    document.getElementById('btn-cua-txt').textContent =
-      `Cargar mi cuadrilla (${S.cuadrilla.length} personas)`
-  } else {
-    cuaBtnWrap.style.display = 'none'
-  }
   renderLista()
-  ir('s4')
-}
-
-function volverS2() {
-  ir('s2')
-  cargarSesiones()
-}
-
-// ═══════════════════════════════════════════
-// S4 — ARMAR LISTA
-// ═══════════════════════════════════════════
-function cargarCuadrilla() {
-  let agregados = 0
-  const enLista = new Set(S.lista.map(t => t.id))
-  for (const t of S.cuadrilla) {
-    if (!enLista.has(t.trab_id || t.id)) {
-      S.lista.push({
-        id: t.trab_id || t.id,
-        nombre: t.nombre,
-        cargo: t.cargo,
-        hhOverride: null,
-        via: 'cuadrilla'
-      })
-      agregados++
-    }
-  }
-  if (agregados) {
-    vibrate()
-    toast(`✅ ${agregados} trabajador${agregados > 1 ? 'es' : ''} de tu cuadrilla agregados`, 'ok')
-    renderLista()
-  } else {
-    toast('Todos los miembros ya están en la lista', 'warn')
-  }
+  ir('s3')
 }
 
 function buscarTrab(q) {
@@ -838,18 +746,12 @@ function quitarDeLista(id) {
 
 function renderLista() {
   const n = S.lista.length
-  const hhTotal = S.lista.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0)
-
-  document.getElementById('count-resumen').textContent =
-    `${n} · ${parseFloat(hhTotal.toFixed(1))} HH`
-
-  const btn = document.getElementById('btn-enviar')
-  const activo = n > 0
-  btn.style.opacity = activo ? '1' : '.4'
-  btn.style.pointerEvents = activo ? 'auto' : 'none'
-  document.getElementById('btn-enviar-txt').textContent =
-    activo ? `ENVIAR TAREO — ${n} PERS · ${parseFloat(hhTotal.toFixed(1))} HH` : 'ENVIAR TAREO'
-
+  document.getElementById('count-lista').textContent = `${n} persona${n !== 1 ? 's' : ''}`
+  const btn = document.getElementById('btn-sig')
+  btn.style.opacity = n ? '1' : '.4'
+  btn.style.pointerEvents = n ? 'auto' : 'none'
+  document.getElementById('btn-sig-txt').textContent =
+    n ? `ELEGIR OTM (${n} persona${n !== 1 ? 's' : ''})` : 'ELEGIR OTM'
   const el = document.getElementById('lista-actual')
   if (!n) {
     el.innerHTML = '<p style="text-align:center;padding:16px;color:var(--text3);font-size:13px">Usa el buscador para agregar trabajadores ↑</p>'
@@ -861,7 +763,7 @@ function renderLista() {
       <div class="lrow">
         <div class="wava">👷</div>
         <div class="linfo">
-          <div class="wid">ID: ${t.id}${t.via === 'qr' ? ' · <span style="color:var(--blue-400,#60a5fa)">QR</span>' : ''}</div>
+          <div class="wid">ID: ${t.id}${t.via === 'qr' ? ' · <span style="color:#60a5fa">QR</span>' : ''}</div>
           <div class="wnom">${t.nombre}</div>
           <div class="wcarg">${t.cargo}</div>
         </div>
@@ -874,17 +776,28 @@ function renderLista() {
   }).join('')
 }
 
+function irAOTM() {
+  if (!S.lista.length) return
+  document.getElementById('hh-display').textContent = S.hhTurno
+  document.getElementById('q-otm').value = ''
+  S.otm = null
+  actualizarBtnEnviar()
+  renderOTMs(S.otms)
+  document.getElementById('s4-titulo').textContent = `Elegir OTM`
+  document.getElementById('s4-sub').textContent = `${S.lista.length} personas · ${S.hhTurno}h por persona`
+  ir('s4')
+}
+
 // ═══════════════════════════════════════════
-// QR ESCÁNER
+// QR SCANNER
 // ═══════════════════════════════════════════
-function abrirQR() { ir('s4b'); startCam() }
+function abrirQR() { ir('s3b'); startCam() }
 
 function toggleTorch() {
   if (!S.stream) return
   S.torch = !S.torch
   document.getElementById('torch-btn').classList.toggle('on', S.torch)
-  const track = S.stream.getVideoTracks()[0]
-  try { track.applyConstraints({ advanced: [{ torch: S.torch }] }) } catch {}
+  try { S.stream.getVideoTracks()[0].applyConstraints({ advanced: [{ torch: S.torch }] }) } catch {}
 }
 
 let _scanTime = 0
@@ -897,7 +810,7 @@ async function startCam() {
     S.stream = stream; S.scan = true
     document.getElementById('video').srcObject = stream
     requestAnimationFrame(tick)
-  } catch { toast('No se pudo acceder a la cámara', 'err'); ir('s4') }
+  } catch { toast('No se pudo acceder a la cámara', 'err'); ir('s3') }
 }
 
 function stopCam() {
@@ -915,8 +828,7 @@ function tick() {
   const c = document.getElementById('canvas')
   if (v.readyState === v.HAVE_ENOUGH_DATA) {
     c.height = v.videoHeight; c.width = v.videoWidth
-    const ctx = c.getContext('2d')
-    ctx.drawImage(v, 0, 0, c.width, c.height)
+    const ctx = c.getContext('2d'); ctx.drawImage(v, 0, 0, c.width, c.height)
     const qr = jsQR(ctx.getImageData(0, 0, c.width, c.height).data, c.width, c.height,
                     { inversionAttempts: 'dontInvert' })
     if (qr) { procesarQR(qr.data.trim()); return }
@@ -937,12 +849,69 @@ function procesarQR(raw) {
     S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, hhOverride: null, via: 'qr' })
     toast(`✅ ${t.nombre.split(' ')[0]} agregado`, 'ok')
     vibrate()
-  } else {
-    toast(`${t.nombre.split(' ')[0]} ya está en la lista`, 'warn')
-  }
+  } else { toast(`${t.nombre.split(' ')[0]} ya está en la lista`, 'warn') }
   stopCam()
   renderLista()
-  ir('s4')
+  ir('s3')
+}
+
+// ═══════════════════════════════════════════
+// S4 — OTM + HH
+// ═══════════════════════════════════════════
+function cambiarHH(delta) {
+  S.hhTurno = parseFloat(Math.min(24, Math.max(0.5, S.hhTurno + delta)).toFixed(1))
+  document.getElementById('hh-display').textContent = S.hhTurno
+  actualizarBtnEnviar()
+}
+
+function validarHH(el) {
+  const v = parseFloat(el.textContent)
+  if (!v || v < 0.5 || v > 24) { el.textContent = S.hhTurno; return }
+  S.hhTurno = Math.round(v * 2) / 2
+  el.textContent = S.hhTurno
+  actualizarBtnEnviar()
+}
+
+function renderOTMs(list) {
+  const el = document.getElementById('lista-otms')
+  el.innerHTML = list.map(o => {
+    const cls = AREA_CLS[o.area] || 'c-gsc'
+    return `
+      <div class="otm-item${S.otm?.id === o.id ? ' sel' : ''}" onclick="elegirOTM('${o.id}')">
+        <div class="otm-num ${cls}">${o.id.slice(-4)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="otm-desc">${o.descripcion}</div>
+          <div class="otm-meta">${o.id} · ${o.area || '—'}</div>
+        </div>
+        <span class="otm-chk">✓</span>
+      </div>`
+  }).join('')
+}
+
+function filtOTM(q) {
+  const f = q.length < 2 ? S.otms : S.otms.filter(o =>
+    o.id.toLowerCase().includes(q.toLowerCase()) ||
+    o.descripcion.toLowerCase().includes(q.toLowerCase()) ||
+    (o.area || '').toLowerCase().includes(q.toLowerCase())
+  )
+  renderOTMs(f)
+}
+
+function elegirOTM(id) {
+  S.otm = S.otms.find(o => o.id === id)
+  filtOTM(document.getElementById('q-otm').value)
+  actualizarBtnEnviar()
+}
+
+function actualizarBtnEnviar() {
+  const btn = document.getElementById('btn-enviar')
+  const activo = !!(S.otm && S.lista.length)
+  btn.style.opacity = activo ? '1' : '.4'
+  btn.style.pointerEvents = activo ? 'auto' : 'none'
+  const hhTotal = parseFloat(S.lista.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0).toFixed(1))
+  document.getElementById('btn-enviar-txt').textContent = activo
+    ? `ENVIAR — ${S.lista.length} PERS · ${hhTotal} HH`
+    : 'ENVIAR TAREO (elige una OTM)'
 }
 
 // ═══════════════════════════════════════════
@@ -955,7 +924,7 @@ function abrirPicker(id) {
     t ? t.nombre.split(' ').slice(0, 2).join(' ') : ''
   document.getElementById('picker-inp').value = ''
   const actual = t?.hhOverride ?? S.hhTurno
-  document.getElementById('picker-grid').innerHTML = HH_PICKER_OPTS.map(h => `
+  document.getElementById('picker-grid').innerHTML = HH_OPTS.map(h => `
     <div class="picker-opt${h === actual ? ' sel' : ''}" onclick="aplicarPicker(${h})">
       <div class="picker-opt-val">${h}</div>
       <div class="picker-opt-lbl">horas</div>
@@ -984,28 +953,30 @@ function cerrarPicker(e) {
 // ENVIAR
 // ═══════════════════════════════════════════
 async function enviar() {
-  if (!S.lista.length) return
-  const hhTotal = parseFloat(
-    S.lista.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0).toFixed(1)
-  )
+  if (!S.lista.length || !S.otm) return
+  const hhTotal = parseFloat(S.lista.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0).toFixed(1))
   ir('s6')
   document.getElementById('s6t').textContent =
     `Enviando ${S.lista.length} trabajador${S.lista.length > 1 ? 'es' : ''}...`
-  document.getElementById('s6s').textContent =
-    `${S.otm.id} · ${S.sup.nombre.split(' ')[0]}`
-
-  const payload = S.lista.map(t => ({
-    trab_id: t.id,
-    presente: true,
-    hh_override: t.hhOverride,
-    agregado_via: t.via
-  }))
-
+  document.getElementById('s6s').textContent = `${S.otm.id} · ${S.sup.nombre.split(' ')[0]}`
+  const now = new Date()
+  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
+  const payload = {
+    supervisor_id: S.sup.id,
+    otm_id: S.otm.id,
+    fecha,
+    hh_turno: S.hhTurno,
+    trabajadores: S.lista.map(t => ({
+      trab_id: t.id,
+      hh_override: t.hhOverride,
+      agregado_via: t.via
+    }))
+  }
   try {
-    const r = await fetch(`${API}/api/sesion/${S.sesionId}/enviar`, {
+    const r = await fetch(`${API}/api/sesion/enviar-directo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ trabajadores: payload })
+      body: JSON.stringify(payload)
     })
     const d = await r.json()
     if (!r.ok) throw new Error(d.detail || 'Error ' + r.status)
@@ -1023,7 +994,7 @@ function mostrarResultado(enviados, hhTotal) {
     <div class="irow"><span class="ikey">Supervisor</span><span class="ival">${S.sup.nombre.split(' ').slice(0,2).join(' ')}</span></div>
     <div class="irow"><span class="ikey">Trabajadores registrados</span><span class="ival g">${enviados}</span></div>
     <div class="irow"><span class="ikey">HH totales</span><span class="ival g">${hhTotal}</span></div>
-    <div class="irow"><span class="ikey">Fecha</span><span class="ival">${hoy()}</span></div>`
+    <div class="irow"><span class="ikey">Fecha</span><span class="ival">${new Date().toLocaleDateString('es-PE')}</span></div>`
   vibrate([100, 50, 200])
   ir('s7')
 }
@@ -1031,18 +1002,22 @@ function mostrarResultado(enviados, hhTotal) {
 // ═══════════════════════════════════════════
 // NAVEGACIÓN EXTRA
 // ═══════════════════════════════════════════
-function nuevaSesion() {
-  S.sesionId = null; S.otm = null; S.lista = []; S.hhTurno = 9.5
+function irNuevoRegistro() {
+  // Vuelve a S2 (misma cuadrilla disponible, nueva OTM)
+  S.lista = []; S.otm = null; S.hhTurno = 9.5
   document.getElementById('hh-display').textContent = '9.5'
-  document.getElementById('q-otm').value = ''
-  renderOTMs(S.otms)
-  ir('s3')
+  cargarSesionesHoy()
+  ir('s2')
+}
+
+function irInicio() {
+  S.sup = null; S.lista = []; S.otm = null; S.cuadrilla = []
+  ir('s1')
 }
 
 // ═══════════════════════════════════════════
 // UTILS
 // ═══════════════════════════════════════════
-function hoy() { return new Date().toISOString().slice(0, 10) }
 function vibrate(p = 80) { navigator.vibrate?.(p) }
 function ls(k, v) { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)) } catch { return null } }
