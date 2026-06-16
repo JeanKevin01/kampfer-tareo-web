@@ -395,7 +395,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   <div class="bar">
     <div class="bar-ico">👷</div>
     <div><div class="bar-title" id="s4-titulo">Armar lista</div><div class="bar-sub" id="s4-sub">Busca y agrega trabajadores</div></div>
-    <button class="bar-btn" onclick="ir('s3')">← Volver</button>
+    <button class="bar-btn" onclick="guardarYVolverS2()">← Guardar</button>
   </div>
   <div class="body">
     <div class="sw">
@@ -629,7 +629,10 @@ async function cargarSesiones() {
   // Mostrar pendientes de la cola offline
   const q = S.sendQueue.length
   const pb = document.getElementById('s2-pendientes')
-  pb.innerHTML = q ? `<div class="pending-banner">⏳ ${q} sesión${q>1?'es':''} pendiente${q>1?'s':''} de envío — se enviarán cuando haya señal</div>` : ''
+  pb.innerHTML = q ? `<div class="pending-banner" style="justify-content:space-between">
+    <span>⏳ ${q} sesión${q>1?'es':''} pendiente${q>1?'s':''} de envío</span>
+    <button onclick="limpiarCola()" style="background:none;border:1px solid var(--amber-bd);color:var(--amber2);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;white-space:nowrap">✕ Limpiar</button>
+  </div>` : ''
 
   let sesiones = []
   try {
@@ -763,11 +766,18 @@ async function continuarSesion(id) {
     S.sesionId = id
     S.otm = S.otms.find(o => o.id === s.otm_id)
     S.hhTurno = parseFloat(s.hh_turno)
-    S.lista = (s.trabajadores || []).map(t => ({
-      id: t.trab_id, nombre: t.nombre, cargo: t.cargo,
-      presente: t.presente, hhOverride: t.hh_override ? parseFloat(t.hh_override) : null,
-      via: t.agregado_via || 'busqueda'
-    }))
+    // Restaurar desde localStorage si hay cambios sin guardar en servidor
+    const draft = lsGet('kp_draft_' + id)
+    if (draft?.lista?.length) {
+      S.lista = draft.lista
+      S.hhTurno = draft.hhTurno || parseFloat(s.hh_turno)
+    } else {
+      S.lista = (s.trabajadores || []).map(t => ({
+        id: t.trab_id, nombre: t.nombre, cargo: t.cargo,
+        presente: t.presente, hhOverride: t.hh_override ? parseFloat(t.hh_override) : null,
+        via: t.agregado_via || 'busqueda'
+      }))
+    }
     document.getElementById('s4-titulo').textContent = S.otm?.id || 'Lista'
     document.getElementById('s4-sub').textContent = `${S.hhTurno}h por persona`
     document.getElementById('q-trab').value = ''
@@ -815,14 +825,30 @@ function agregarTrab(id) {
   if (!t || S.lista.find(x => x.id === id)) return
   S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, presente: true, hhOverride: null, via: 'busqueda' })
   vibrate()
+  saveLista()
   renderListaActual()
   buscarTrab(document.getElementById('q-trab').value)
 }
 
 function quitarDeLista(id) {
   S.lista = S.lista.filter(x => x.id !== id)
+  saveLista()
   renderListaActual()
   buscarTrab(document.getElementById('q-trab').value)
+}
+
+function saveLista() {
+  if (!S.sesionId) return
+  ls('kp_draft_' + S.sesionId, {
+    lista: S.lista, hhTurno: S.hhTurno,
+    otmId: S.otm?.id, supId: S.sup?.id
+  })
+}
+
+function guardarYVolverS2() {
+  saveLista()
+  cargarSesiones()
+  ir('s2')
 }
 
 function renderListaActual() {
@@ -919,6 +945,7 @@ function procesarQR(raw) {
     S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, presente: true, hhOverride: null, via: 'qr' })
     toast(`✅ ${t.nombre.split(' ')[0]} agregado`, 'ok')
     vibrate()
+    saveLista()
   } else { toast(`${t.nombre.split(' ')[0]} ya está en la lista`, 'warn') }
   stopCam()
   ir(S.returnScreen)
@@ -1042,7 +1069,8 @@ async function confirmarEnvio() {
       if (!d.id) throw new Error('Sin ID de sesión')
       S.sesionId = d.id
     } catch {
-      addToQueue({ sesionId: S.sesionId, payload, presEnviados, hhTotal })
+      addToQueue({ sesionId: S.sesionId, payload, presEnviados, hhTotal,
+      supervisor_id: S.sup?.id, otm_id: S.otm?.id, hhTurno: S.hhTurno })
       mostrarResultadoPendiente(presEnviados, hhTotal)
       return
     }
@@ -1058,7 +1086,8 @@ async function confirmarEnvio() {
     if (r.ok) mostrarResultado(d.enviados, hhTotal)
     else { toast('Error al enviar: ' + (d.detail || ''), 'err'); ir('s5') }
   } catch {
-    addToQueue({ sesionId: S.sesionId, payload, presEnviados, hhTotal })
+    addToQueue({ sesionId: S.sesionId, payload, presEnviados, hhTotal,
+      supervisor_id: S.sup?.id, otm_id: S.otm?.id, hhTurno: S.hhTurno })
     mostrarResultadoPendiente(presEnviados, hhTotal)
   }
 }
@@ -1075,6 +1104,8 @@ function mostrarResultado(enviados, hhTotal) {
     <div class="irow"><span class="ikey">Fecha</span><span class="ival">${hoy()}</span></div>
   `
   vibrate([100,50,200])
+  // Limpiar el draft local de esta sesión
+  try { localStorage.removeItem('kp_draft_' + S.sesionId) } catch {}
   ir('s7')
 }
 
@@ -1100,6 +1131,14 @@ function addToQueue(item) {
   toast('Sin señal — se enviará cuando vuelva la conexión', 'warn')
 }
 
+function limpiarCola() {
+  S.sendQueue = []
+  ls('kp_queue', [])
+  document.getElementById('queue-badge').style.display = 'none'
+  cargarSesiones()
+  toast('Cola limpiada', 'ok')
+}
+
 function loadQueue() {
   S.sendQueue = lsGet('kp_queue') || []
   if (S.sendQueue.length) {
@@ -1116,14 +1155,21 @@ async function flushQueue() {
     try {
       let sid = item.sesionId
       if (String(sid).startsWith('local_')) {
-        const r2 = await fetch(`${API}/api/sesion`, {
-          method: 'POST', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({
-            supervisor_id: S.sup?.id || item.supervisor_id,
-            otm_id: item.otm_id || '', fecha: hoy(),
-            hh_turno: item.hhTurno || 10, trabajadores: []
-          })
+        // Validar que tenemos los datos mínimos para recrear la sesión
+      if (!item.supervisor_id || !item.otm_id) {
+        console.warn('Item de cola sin datos suficientes, descartando:', item)
+        continue
+      }
+      const r2 = await fetch(`${API}/api/sesion`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          supervisor_id: item.supervisor_id,
+          otm_id: item.otm_id,
+          fecha: hoy(),
+          hh_turno: item.hhTurno || 10,
+          trabajadores: []
         })
+      })
         const d2 = await r2.json()
         sid = d2.id
       }
