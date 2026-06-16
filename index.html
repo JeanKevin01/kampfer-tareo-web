@@ -737,7 +737,9 @@ async function crearSesion() {
         trabajadores: []
       })
     })
+    if (!r.ok) throw new Error('Server error ' + r.status)
     const d = await r.json()
+    if (!d.id) throw new Error('Sin ID de sesión')
     S.sesionId = d.id
   } catch {
     S.sesionId = 'local_' + Date.now()
@@ -1035,7 +1037,9 @@ async function confirmarEnvio() {
           fecha: hoy(), hh_turno: S.hhTurno, trabajadores: []
         })
       })
+      if (!r.ok) throw new Error('Server error ' + r.status)
       const d = await r.json()
+      if (!d.id) throw new Error('Sin ID de sesión')
       S.sesionId = d.id
     } catch {
       addToQueue({ sesionId: S.sesionId, payload, presEnviados, hhTotal })
