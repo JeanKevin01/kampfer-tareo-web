@@ -454,6 +454,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
       </div>
     </div>
 
+    <div id="dup-aviso" style="display:none;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--amber2)"></div>
     <div class="slabel">OTM activa</div>
     <div class="sw">
       <span class="sico">🔍</span>
@@ -533,6 +534,7 @@ const S = {
   lista: [],        // [{id, nombre, cargo, hhOverride, via}] sesión actual
   otm: null,
   hhTurno: 9.5,
+  sesionesHoy: [],  // sesiones enviadas hoy — para detectar duplicados
   scan: false, stream: null, torch: false,
   pickerTrabId: null
 }
@@ -564,7 +566,7 @@ async function loadData() {
   try {
     const [rs, ro, rt] = await Promise.all([
       fetch(`${API}/api/supervisores`).then(r => r.json()),
-      fetch(`${API}/api/otms`).then(r => r.json()),
+      fetch(`${API}/api/otms?activas=true`).then(r => r.json()),
       fetch(`${API}/api/trabajadores`).then(r => r.json()),
     ])
     S.sups = rs; S.otms = ro; S.trabs = rt
@@ -654,20 +656,26 @@ async function cargarSesionesHoy() {
   const el = document.getElementById('s2-enviadas')
   try {
     const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
-    if (!r.ok) { el.innerHTML = ''; return }
-    const sesiones = (await r.json()).filter(s => s.estado === 'enviada')
-    if (!sesiones.length) { el.innerHTML = ''; return }
-    const totalHH = sesiones.reduce((sum, s) => sum + (s.presentes || s.total || 0) * parseFloat(s.hh_turno), 0)
-    el.innerHTML = `<div class="slabel">Ya enviados hoy</div>` +
-      sesiones.map(s => `
-        <div class="ses-mini">
-          <div>
-            <div class="ses-mini-otm">${s.otm_id}</div>
-            <div class="ses-mini-meta">${s.total || 0} trabajadores</div>
-          </div>
-          <div class="ses-mini-hh">✓ ${s.hh_turno}h</div>
-        </div>`).join('')
-  } catch { el.innerHTML = '' }
+    if (!r.ok) { el.innerHTML = ''; S.sesionesHoy = []; return }
+    const todas = await r.json()
+    S.sesionesHoy = todas  // guardar para chequeo de duplicados en S4
+    const enviadas = todas.filter(s => s.estado === 'enviada')
+    if (!enviadas.length) { el.innerHTML = ''; return }
+    const hhTotal = enviadas.reduce((sum, s) =>
+      sum + (s.total || 0) * parseFloat(s.hh_turno), 0).toFixed(1)
+    el.innerHTML = `
+      <div class="slabel">Enviado hoy · ${hhTotal} HH totales</div>
+      <div style="background:var(--surface);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);overflow:hidden;margin-bottom:8px">
+        ${enviadas.map(s => {
+          const hhSes = ((s.total || 0) * parseFloat(s.hh_turno)).toFixed(1)
+          return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border)">
+            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--amber);min-width:80px">${s.otm_id}</span>
+            <span style="flex:1;font-size:11px;color:var(--text3)">${s.total || 0} trabajadores</span>
+            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)">✓ ${hhSes} HH</span>
+          </div>`
+        }).join('').replace(/border-bottom:[^"]+"/,'style="display:flex;align-items:center;gap:12px;padding:10px 14px"')}
+      </div>`
+  } catch { el.innerHTML = ''; S.sesionesHoy = [] }
 }
 
 function usarCuadrilla() {
@@ -900,6 +908,15 @@ function filtOTM(q) {
 function elegirOTM(id) {
   S.otm = S.otms.find(o => o.id === id)
   filtOTM(document.getElementById('q-otm').value)
+  // Chequear si ya se envió esta OTM hoy
+  const dup = S.sesionesHoy.find(s => s.otm_id === id && s.estado === 'enviada')
+  const aviso = document.getElementById('dup-aviso')
+  if (dup) {
+    aviso.style.display = 'block'
+    aviso.innerHTML = `⚠️ Ya enviaste <strong>${id}</strong> hoy con ${dup.total || 0} trabajadores · ${dup.hh_turno}h por persona. Puedes continuar pero se sobreescribirán los registros.`
+  } else {
+    aviso.style.display = 'none'
+  }
   actualizarBtnEnviar()
 }
 
@@ -1006,6 +1023,7 @@ function irNuevoRegistro() {
   // Vuelve a S2 (misma cuadrilla disponible, nueva OTM)
   S.lista = []; S.otm = null; S.hhTurno = 9.5
   document.getElementById('hh-display').textContent = '9.5'
+  document.getElementById('dup-aviso').style.display = 'none'
   cargarSesionesHoy()
   ir('s2')
 }
