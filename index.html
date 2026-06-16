@@ -21,7 +21,6 @@
   --amber-bg:rgba(245,158,11,.1);--amber-bd:rgba(245,158,11,.3);
   --green:#10b981;--green-bg:rgba(16,185,129,.12);
   --red:#ef4444;--red-bg:rgba(239,68,68,.12);
-  --blue:#3b82f6;
   --font:'Barlow',system-ui,sans-serif;
   --cond:'Barlow Condensed',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
@@ -29,7 +28,7 @@
 }
 html,body{height:100%;background:var(--void);font-family:var(--font);color:var(--text);overflow-x:hidden}
 
-/* ── SPLASH ── */
+/* SPLASH */
 #splash{position:fixed;inset:0;z-index:9999;background:var(--void);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
   transition:opacity .4s}
@@ -39,12 +38,12 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .sp-bar{width:160px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px}
 .sp-fill{height:100%;background:var(--amber);width:0;transition:width 1.2s ease}
 
-/* ── SCREENS ── */
+/* SCREENS */
 .screen{display:none;min-height:100svh;flex-direction:column}
 .screen.active{display:flex;animation:fu .2s ease}
 @keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-/* ── BAR ── */
+/* BAR */
 .bar{background:var(--surface);border-bottom:1px solid var(--border);
   padding:12px 16px;display:flex;align-items:center;gap:10px;
   position:sticky;top:0;z-index:40}
@@ -58,7 +57,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s}
 .bar-btn:active{background:var(--raised);color:var(--text)}
 
-/* ── HERO (S1) ── */
+/* HERO */
 .hero{background:linear-gradient(160deg,#0d1525,#111827,#0a1220);
   padding:28px 16px 22px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
 .hero-grid{position:absolute;inset:0;opacity:.03;
@@ -79,15 +78,15 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .hstat-val{font-family:var(--mono);font-size:14px;color:var(--text);margin-top:3px}
 .hstat-val.a{color:var(--amber)}
 
-/* ── BODY ── */
+/* BODY */
 .body{flex:1;padding:16px;overflow-y:auto}
 
-/* ── SECTION LABEL ── */
+/* SECTION LABEL */
 .slabel{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
   color:var(--text3);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
 .slabel::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* ── SUPERVISOR CARDS ── */
+/* SUPERVISOR CARDS */
 .sup-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
   padding:14px 16px;cursor:pointer;transition:all .15s;
   display:flex;align-items:center;gap:12px;margin-bottom:8px;position:relative;overflow:hidden}
@@ -104,12 +103,12 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   font-family:var(--mono);font-size:10px;color:var(--text3)}
 .sup-arr{font-size:20px;color:var(--border2);margin-left:auto}
 
-/* ── SESION CARDS (S2) ── */
+/* SESION CARDS */
 .ses-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
   padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:all .15s}
-.ses-card:active{background:var(--raised);border-color:var(--border2)}
+.ses-card:active{background:var(--raised)}
 .ses-card.borrador{border-left:3px solid var(--amber)}
-.ses-card.enviada{border-left:3px solid var(--green);opacity:.7;cursor:default}
+.ses-card.enviada{border-left:3px solid var(--green);opacity:.7}
 .ses-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .ses-otm{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:500}
 .ses-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase}
@@ -119,7 +118,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .ses-meta{font-size:11px;color:var(--text3)}
 .ses-actions{display:flex;gap:8px;margin-top:10px}
 
-/* ── OTM LIST (S3) ── */
+/* OTM LIST */
 .otm-item{background:var(--surface);border:1px solid var(--border);
   border-radius:var(--rsm);padding:12px 14px;cursor:pointer;
   transition:all .15s;display:flex;align-items:center;gap:11px;margin-bottom:7px}
@@ -138,20 +137,24 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .c-c2{background:rgba(245,158,11,.15);color:var(--amber2)}
 .c-gsc{background:rgba(100,116,139,.15);color:#94a3b8}
 
-/* ── HH STEPPER ── */
+/* HH STEPPER */
 .hh-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);
   padding:16px;margin-bottom:16px}
-.hh-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+.hh-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text3);margin-bottom:12px}
 .hh-row{display:flex;align-items:center;justify-content:center;gap:16px}
-.hh-btn{width:48px;height:48px;border-radius:12px;border:1px solid var(--border2);
-  background:var(--raised);color:var(--text);font-size:22px;font-weight:300;
+.hh-btn{width:52px;height:52px;border-radius:12px;border:1px solid var(--border2);
+  background:var(--raised);color:var(--text);font-size:24px;font-weight:300;
   cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
 .hh-btn:active{background:var(--amber-bg);border-color:var(--amber-bd)}
-.hh-val{font-family:var(--mono);font-size:36px;font-weight:500;color:var(--amber);
-  min-width:80px;text-align:center}
-.hh-unit{font-size:12px;color:var(--text3);margin-top:4px;text-align:center}
+.hh-val-wrap{display:flex;flex-direction:column;align-items:center}
+.hh-val{font-family:var(--mono);font-size:38px;font-weight:500;color:var(--amber);
+  min-width:90px;text-align:center;cursor:pointer;border-bottom:2px solid var(--amber-bd);
+  padding-bottom:2px}
+.hh-val:focus{outline:none;border-color:var(--amber)}
+.hh-unit{font-size:11px;color:var(--text3);margin-top:6px}
 
-/* ── SEARCH ── */
+/* SEARCH */
 .sw{position:relative;margin-bottom:12px}
 .si{width:100%;background:var(--surface);border:1px solid var(--border2);
   border-radius:var(--rsm);padding:12px 14px 12px 40px;
@@ -160,58 +163,42 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .si:focus{border-color:var(--amber)}
 .sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
 
-/* ── WORKER ROWS ── */
-.wrow{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);
+/* WORKER ROWS — resultados de búsqueda */
+.wrow-res{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);
   padding:11px 14px;display:flex;align-items:center;gap:11px;margin-bottom:6px;
-  cursor:pointer;transition:all .15s;animation:ri .15s ease}
-@keyframes ri{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:none}}
-.wrow:active{border-color:var(--amber-bd);background:var(--raised)}
-.wrow.in-list{border-color:rgba(16,185,129,.3);background:var(--green-bg)}
-.wrow.in-list:active{border-color:var(--red);background:var(--red-bg)}
+  cursor:pointer;transition:all .15s}
+.wrow-res:active{border-color:var(--amber-bd);background:var(--raised)}
+.wrow-res.ya{border-color:rgba(16,185,129,.3);background:var(--green-bg)}
 .wava{width:38px;height:38px;border-radius:9px;flex-shrink:0;background:var(--raised);
   border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px}
 .wid{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:2px}
 .wnom{font-size:13px;font-weight:700;color:var(--text)}
 .wcarg{font-size:10px;color:var(--text3);margin-top:1px}
-.wadd{margin-left:auto;font-size:18px;flex-shrink:0;transition:transform .15s}
-.wrow:active .wadd{transform:scale(1.3)}
+.wadd{margin-left:auto;font-size:20px;flex-shrink:0}
 
-/* ── CAMPO ROWS (S5) ── */
-.crow{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);
-  padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:7px;transition:all .15s}
-.crow.ausente{opacity:.45}
-.ctoggle{width:40px;height:40px;border-radius:10px;border:2px solid var(--green);
-  background:var(--green-bg);display:flex;align-items:center;justify-content:center;
-  font-size:18px;cursor:pointer;flex-shrink:0;transition:all .15s}
-.crow.ausente .ctoggle{border-color:var(--red);background:var(--red-bg)}
-.cinfo{flex:1;min-width:0}
-.chh{flex-shrink:0;background:var(--raised);border:1px solid var(--border2);
+/* WORKER ROWS — lista agregada */
+.lrow{background:var(--surface);border:1px solid rgba(16,185,129,.25);
+  border-radius:var(--rsm);padding:10px 12px;
+  display:flex;align-items:center;gap:10px;margin-bottom:6px;
+  animation:ri .15s ease}
+@keyframes ri{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:none}}
+.linfo{flex:1;min-width:0}
+.lhh{flex-shrink:0;background:var(--raised);border:1px solid var(--border2);
   border-radius:7px;padding:5px 10px;cursor:pointer;transition:all .15s}
-.chh:active{border-color:var(--amber-bd);background:var(--amber-bg)}
-.chh-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--amber);text-align:center}
-.chh-lbl{font-size:9px;color:var(--text3);text-align:center;margin-top:1px}
+.lhh:active{border-color:var(--amber-bd);background:var(--amber-bg)}
+.lhh-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--amber);text-align:center}
+.lhh-lbl{font-size:9px;color:var(--text3);text-align:center;margin-top:1px}
+.ldel{background:none;border:none;color:var(--text3);font-size:17px;
+  cursor:pointer;padding:4px;border-radius:6px;transition:all .1s;flex-shrink:0;line-height:1}
+.ldel:active{color:var(--red);background:var(--red-bg)}
 
-/* ── HH PICKER OVERLAY ── */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;
-  display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
-.overlay.open{display:flex}
-.picker{background:var(--surface);border:1px solid var(--border2);
-  border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px}
-.picker-title{font-family:var(--cond);font-size:16px;font-weight:800;margin-bottom:4px}
-.picker-sub{font-size:12px;color:var(--text3);margin-bottom:18px}
-.picker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-.picker-opt{background:var(--raised);border:1px solid var(--border2);border-radius:var(--rsm);
-  padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s}
-.picker-opt:active,.picker-opt.sel{background:var(--amber-bg);border-color:var(--amber-bd)}
-.picker-opt-val{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--amber)}
-.picker-opt-lbl{font-size:9px;color:var(--text3);margin-top:2px}
-.picker-custom{display:flex;gap:8px;align-items:center;margin-top:8px}
-.picker-inp{flex:1;background:var(--raised);border:1px solid var(--border2);
-  border-radius:var(--rsm);padding:12px;font-size:16px;color:var(--text);
-  font-family:var(--mono);text-align:center;outline:none}
-.picker-inp:focus{border-color:var(--amber)}
+/* COUNT BAR */
+.count-bar{background:var(--raised);border:1px solid var(--border);border-radius:var(--rsm);
+  padding:11px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.count-n{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--amber)}
+.count-lbl{font-size:11px;color:var(--text3)}
 
-/* ── SCANNER (S4b) ── */
+/* SCANNER */
 #s4b{position:fixed!important;inset:0;z-index:50;background:#000;
   display:none;flex-direction:column;align-items:center;justify-content:center}
 #s4b.active{display:flex}
@@ -235,38 +222,41 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
 .torch-btn.on{background:var(--amber-bg);border-color:var(--amber-bd)}
 
-/* ── BUTTONS ── */
+/* HH PICKER OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;
+  display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.overlay.open{display:flex}
+.picker{background:var(--surface);border:1px solid var(--border2);
+  border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px}
+.picker-title{font-family:var(--cond);font-size:16px;font-weight:800;margin-bottom:4px}
+.picker-sub{font-size:12px;color:var(--text3);margin-bottom:18px}
+.picker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.picker-opt{background:var(--raised);border:1px solid var(--border2);border-radius:var(--rsm);
+  padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s}
+.picker-opt:active,.picker-opt.sel{background:var(--amber-bg);border-color:var(--amber-bd)}
+.picker-opt-val{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--amber)}
+.picker-opt-lbl{font-size:9px;color:var(--text3);margin-top:2px}
+.picker-custom{display:flex;gap:8px;align-items:center;margin-top:8px}
+.picker-inp{flex:1;background:var(--raised);border:1px solid var(--border2);
+  border-radius:var(--rsm);padding:12px;font-size:16px;color:var(--text);
+  font-family:var(--mono);text-align:center;outline:none}
+.picker-inp:focus{border-color:var(--amber)}
+
+/* BUTTONS */
 .btn{width:100%;padding:16px;border-radius:var(--rsm);border:none;
   font-size:14px;font-weight:700;font-family:var(--font);
   letter-spacing:.3px;text-transform:uppercase;cursor:pointer;transition:all .15s}
 .btn:active{transform:scale(.97)}
 .btn-a{background:var(--amber);color:#000;box-shadow:0 4px 16px rgba(245,158,11,.2)}
 .btn-a:active{background:var(--amber2)}
-.btn-g{background:var(--green);color:#fff}
+.btn-g{background:var(--green);color:#fff;box-shadow:0 4px 16px rgba(16,185,129,.15)}
 .btn-gh{background:transparent;border:1px solid var(--border2);color:var(--text2)}
 .btn-gh:active{background:var(--raised);color:var(--text)}
 .btn-sm{padding:11px;font-size:12px}
 .btn-icon{display:flex;align-items:center;justify-content:center;gap:8px}
 .gap8{height:8px}
 
-/* ── FAB (S5) ── */
-.fab{position:fixed;bottom:20px;right:16px;z-index:30;
-  width:52px;height:52px;border-radius:50%;
-  background:var(--raised);border:1px solid var(--border2);
-  display:none;align-items:center;justify-content:center;
-  font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.5);
-  transition:all .15s}
-.fab.visible{display:flex}
-.fab:active{background:var(--amber-bg);border-color:var(--amber-bd);transform:scale(.92)}
-
-/* ── COUNTER BAR ── */
-.count-bar{background:var(--raised);border:1px solid var(--border);border-radius:var(--rsm);
-  padding:11px 14px;display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:12px}
-.count-n{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--amber)}
-.count-lbl{font-size:11px;color:var(--text3)}
-
-/* ── LOADING / SUCCESS ── */
+/* LOADING / SUCCESS */
 .loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px}
 .spinner{width:36px;height:36px;border:2px solid var(--border2);border-top-color:var(--amber);
   border-radius:50%;animation:spin .7s linear infinite}
@@ -278,8 +268,6 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .si-icon{font-size:52px;margin-bottom:10px}
 .si-title{font-family:var(--cond);font-size:28px;font-weight:800}
 .si-sub{font-size:13px;color:var(--text3);margin-top:4px}
-
-/* ── INFO ROWS ── */
 .ibox{background:var(--surface);border:1px solid var(--border2);
   border-radius:var(--rsm);overflow:hidden;margin-bottom:14px}
 .irow{display:flex;justify-content:space-between;align-items:center;
@@ -289,18 +277,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .ival{font-size:13px;font-weight:600;font-family:var(--mono)}
 .ival.a{color:var(--amber)}.ival.g{color:var(--green)}
 
-/* ── QUEUE BADGE ── */
-.queue-badge{position:fixed;top:12px;right:12px;z-index:200;
-  background:var(--amber);color:#000;font-size:11px;font-weight:700;
-  padding:4px 10px;border-radius:20px;display:none;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-
-/* ── PENDING BANNER ── */
-.pending-banner{background:rgba(245,158,11,.1);border:1px solid var(--amber-bd);
-  border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;
-  font-size:12px;color:var(--amber2);display:flex;align-items:center;gap:8px}
-
-/* ── TOAST ── */
+/* TOAST */
 .toast{position:fixed;bottom:20px;left:50%;
   transform:translateX(-50%) translateY(12px);
   padding:10px 16px;border-radius:var(--rsm);font-size:13px;font-weight:600;
@@ -320,9 +297,6 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   <div class="sp-sub">Sistema de Tareo · SMCV</div>
   <div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div>
 </div>
-
-<!-- QUEUE BADGE -->
-<div class="queue-badge" id="queue-badge">⏳ Pendiente de envío</div>
 
 <!-- S1: SUPERVISOR -->
 <div id="s1" class="screen active">
@@ -348,11 +322,13 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 <div id="s2" class="screen">
   <div class="bar">
     <div class="bar-ico">📋</div>
-    <div><div class="bar-title" id="s2-titulo">Mis sesiones</div><div class="bar-sub" id="s2-sub">Hoy</div></div>
+    <div>
+      <div class="bar-title" id="s2-titulo">Mis sesiones</div>
+      <div class="bar-sub">Hoy</div>
+    </div>
     <button class="bar-btn" onclick="ir('s1')">← Cambiar</button>
   </div>
   <div class="body">
-    <div id="s2-pendientes"></div>
     <div id="s2-sesiones"></div>
     <div class="gap8"></div>
     <button class="btn btn-a btn-icon" onclick="irNuevaSesion()">
@@ -365,63 +341,83 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 <div id="s3" class="screen">
   <div class="bar">
     <div class="bar-ico">⚙️</div>
-    <div><div class="bar-title">Nueva sesión</div><div class="bar-sub">Selecciona OTM y horas</div></div>
+    <div><div class="bar-title">Nueva sesión</div><div class="bar-sub">OTM y horas del turno</div></div>
     <button class="bar-btn" onclick="ir('s2')">← Volver</button>
   </div>
   <div class="body">
     <div class="hh-box">
-      <div class="hh-lbl">Horas del turno</div>
+      <div class="hh-lbl">Horas del turno (por persona)</div>
       <div class="hh-row">
-        <button class="hh-btn" onclick="cambiarHH(-1)">−</button>
-        <div><div class="hh-val" id="hh-display">10</div><div class="hh-unit">horas por persona</div></div>
-        <button class="hh-btn" onclick="cambiarHH(+1)">+</button>
+        <button class="hh-btn" onclick="cambiarHH(-0.5)">−</button>
+        <div class="hh-val-wrap">
+          <div class="hh-val" id="hh-display" contenteditable="true"
+               inputmode="decimal"
+               onblur="validarHH(this)"
+               onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">9.5</div>
+          <div class="hh-unit">horas por persona</div>
+        </div>
+        <button class="hh-btn" onclick="cambiarHH(+0.5)">+</button>
       </div>
     </div>
     <div class="slabel">Seleccionar OTM</div>
     <div class="sw">
       <span class="sico">🔍</span>
-      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área..." oninput="filtOTM(this.value)" autocomplete="off">
+      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área..."
+             oninput="filtOTM(this.value)" autocomplete="off">
     </div>
     <div id="lista-otms"></div>
     <div class="gap8"></div>
-    <button class="btn btn-a" id="btn-crear-ses" onclick="crearSesion()" style="opacity:.4;pointer-events:none">
-      ARMAR LISTA DE TRABAJADORES →
+    <button class="btn btn-a" id="btn-crear-ses" onclick="crearSesion()"
+            style="opacity:.4;pointer-events:none">
+      AGREGAR TRABAJADORES →
     </button>
   </div>
 </div>
 
-<!-- S4: ARMAR LISTA -->
+<!-- S4: ARMAR LISTA + ENVIAR -->
 <div id="s4" class="screen">
   <div class="bar">
     <div class="bar-ico">👷</div>
-    <div><div class="bar-title" id="s4-titulo">Armar lista</div><div class="bar-sub" id="s4-sub">Busca y agrega trabajadores</div></div>
-    <button class="bar-btn" onclick="guardarYVolverS2()">← Guardar</button>
+    <div>
+      <div class="bar-title" id="s4-titulo">Lista</div>
+      <div class="bar-sub" id="s4-sub">Busca y agrega trabajadores</div>
+    </div>
+    <button class="bar-btn" onclick="volverS2()">← Volver</button>
   </div>
   <div class="body">
     <div class="sw">
       <span class="sico">🔍</span>
       <input class="si" id="q-trab" type="text" placeholder="Nombre, apellido o ID..."
-             oninput="buscarTrab(this.value)" autocomplete="off" autocorrect="off" autocapitalize="words">
+             oninput="buscarTrab(this.value)"
+             autocomplete="off" autocorrect="off" autocapitalize="words">
     </div>
     <div id="res-trab"></div>
-    <div class="slabel" id="lista-lbl">Lista actual</div>
+
+    <div class="slabel" style="margin-top:20px">Trabajadores agregados</div>
     <div class="count-bar">
-      <span class="count-lbl">Trabajadores en lista</span>
-      <span class="count-n" id="count-lista">0</span>
+      <span class="count-lbl">Total · HH a registrar</span>
+      <span class="count-n" id="count-resumen">0 · 0 HH</span>
     </div>
     <div id="lista-actual"></div>
+
     <div class="gap8"></div>
-    <button class="btn btn-gh btn-sm btn-icon" onclick="abrirQR('s4')">
-      <span>📷</span><span>Agregar por QR (excepción)</span>
+    <button class="btn btn-gh btn-sm btn-icon" onclick="abrirQR()">
+      <span>📷</span><span>Agregar por QR</span>
     </button>
     <div class="gap8"></div>
-    <button class="btn btn-a" id="btn-ir-campo" onclick="irACampo()" style="opacity:.4;pointer-events:none">
-      IR A CONFIRMAR EN CAMPO →
+  </div>
+
+  <!-- Footer sticky con ENVIAR -->
+  <div style="position:sticky;bottom:0;background:var(--void);
+              border-top:1px solid var(--border);padding:12px 16px">
+    <button class="btn btn-g btn-icon" id="btn-enviar"
+            onclick="enviar()" style="opacity:.4;pointer-events:none">
+      <span>📤</span><span id="btn-enviar-txt">ENVIAR TAREO</span>
     </button>
   </div>
 </div>
 
-<!-- S4b: QR ESCÁNER (excepción) -->
+<!-- S4b: QR ESCÁNER -->
 <div id="s4b" class="screen">
   <video id="video" class="scan-video" autoplay playsinline muted></video>
   <div class="scan-ui">
@@ -439,32 +435,8 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
       <div style="font-size:11px;color:var(--text3);margin-top:2px">Se detecta automáticamente</div>
     </div>
     <button class="btn btn-gh btn-sm" style="width:auto;padding:11px 14px"
-            onclick="stopCam();ir(S.returnScreen)">✕ Cerrar</button>
+            onclick="stopCam();ir('s4')">✕ Cerrar</button>
   </div>
-</div>
-
-<!-- S5: CONFIRMACIÓN EN CAMPO -->
-<div id="s5" class="screen">
-  <div class="bar">
-    <div class="bar-ico">✅</div>
-    <div><div class="bar-title" id="s5-titulo">Confirmación</div><div class="bar-sub" id="s5-sub">¿Quién está presente?</div></div>
-    <button class="bar-btn" onclick="ir('s4')">← Lista</button>
-  </div>
-  <div class="body">
-    <div id="s5-banner"></div>
-    <div class="count-bar">
-      <span class="count-lbl">Presentes · HH totales</span>
-      <span class="count-n" id="s5-count">0 · 0 HH</span>
-    </div>
-    <div id="campo-lista"></div>
-    <div style="height:80px"></div><!-- espacio para FAB -->
-  </div>
-  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
-    <button class="btn btn-g btn-icon" onclick="confirmarEnvio()">
-      <span>📤</span><span id="btn-enviar-txt">ENVIAR TAREO</span>
-    </button>
-  </div>
-  <div class="fab" id="fab-qr" onclick="abrirQR('s5')">📷</div>
 </div>
 
 <!-- S6: ENVIANDO -->
@@ -479,8 +451,8 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 <!-- S7: RESULTADO -->
 <div id="s7" class="screen">
   <div class="success-top">
-    <div class="si-icon" id="s7-icon">✅</div>
-    <div class="si-title" id="s7-title">TAREO ENVIADO</div>
+    <div class="si-icon">✅</div>
+    <div class="si-title">TAREO ENVIADO</div>
     <div class="si-sub" id="s7-sub">—</div>
   </div>
   <div class="body">
@@ -494,14 +466,15 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 
 <!-- HH PICKER OVERLAY -->
 <div class="overlay" id="picker-overlay" onclick="cerrarPicker(event)">
-  <div class="picker" id="picker-box">
-    <div class="picker-title">Horas trabajadas</div>
-    <div class="picker-sub" id="picker-sub">Elige las horas para este trabajador</div>
+  <div class="picker">
+    <div class="picker-title">Horas del trabajador</div>
+    <div class="picker-sub" id="picker-sub">Cambia las HH individuales</div>
     <div class="picker-grid" id="picker-grid"></div>
     <div class="picker-custom">
-      <input class="picker-inp" id="picker-inp" type="number" step="0.5" min="1" max="24"
+      <input class="picker-inp" id="picker-inp" type="number" step="0.5" min="0.5" max="24"
              placeholder="Otro valor...">
-      <button class="btn btn-a" style="width:auto;padding:12px 18px" onclick="aplicarPickerCustom()">OK</button>
+      <button class="btn btn-a" style="width:auto;padding:12px 18px"
+              onclick="aplicarPickerCustom()">OK</button>
     </div>
   </div>
 </div>
@@ -517,39 +490,34 @@ const AREA_CLS = {
   'SX-EW':'c-sxew','Mina':'c-mina','Lixviacion':'c-lixv','Lixviación':'c-lixv',
   'Aguas':'c-agua','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gsc'
 }
+const HH_PICKER_OPTS = [4, 6, 7, 8, 9, 9.5, 10, 11, 12]
 
 // ═══════════════════════════════════════════
 // ESTADO
 // ═══════════════════════════════════════════
 const S = {
   sup: null, sups: [], trabs: [], otms: [],
-  sesionId: null, otm: null, hhTurno: 10,
-  lista: [],        // [{id,nombre,cargo,presente,hhOverride,via}]
+  sesionId: null, otm: null, hhTurno: 9.5,
+  lista: [],        // [{id, nombre, cargo, hhOverride, via}]
   scan: false, stream: null, torch: false,
-  returnScreen: 's4',
-  pickerTrabId: null,
-  sendQueue: []
+  pickerTrabId: null
 }
 
 // ═══════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════
 window.addEventListener('load', async () => {
-  // Splash animación
   requestAnimationFrame(() => document.getElementById('sp-fill').style.width = '100%')
-
-  // Fecha y turno
   const now = new Date()
   const ds = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
   const ms = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
-  document.getElementById('h-fecha').textContent = `${ds[now.getDay()]} ${now.getDate()} ${ms[now.getMonth()]}`
+  document.getElementById('h-fecha').textContent =
+    `${ds[now.getDay()]} ${now.getDate()} ${ms[now.getMonth()]}`
   const h = now.getHours()
-  document.getElementById('h-turno').textContent = h < 6 ? 'Madrugada' : h < 12 ? 'Mañana' : h < 17 ? 'Tarde' : 'Noche'
-
+  document.getElementById('h-turno').textContent =
+    h < 6 ? 'Madrugada' : h < 12 ? 'Mañana' : h < 17 ? 'Tarde' : 'Noche'
   await loadData()
-  loadQueue()
-  window.addEventListener('online', flushQueue)
-  setTimeout(hideSplash, 1500)
+  setTimeout(hideSplash, 1400)
 })
 
 function hideSplash() {
@@ -568,13 +536,11 @@ async function loadData() {
     S.sups = rs; S.otms = ro; S.trabs = rt
     ls('kp_sups', rs); ls('kp_otms', ro); ls('kp_trabs', rt)
   } catch {
-    try {
-      S.sups = lsGet('kp_sups') || []
-      S.otms = lsGet('kp_otms') || []
-      S.trabs = lsGet('kp_trabs') || []
-      if (S.sups.length) toast('Sin conexión — usando caché', 'warn')
-      else toast('Sin datos — verifica la conexión', 'err')
-    } catch {}
+    S.sups = lsGet('kp_sups') || []
+    S.otms = lsGet('kp_otms') || []
+    S.trabs = lsGet('kp_trabs') || []
+    if (S.sups.length) toast('Sin conexión — usando caché', 'warn')
+    else toast('Sin datos — revisa la conexión', 'err')
   }
   renderSups()
 }
@@ -586,7 +552,6 @@ function ir(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
   document.getElementById(id).classList.add('active')
   window.scrollTo(0, 0)
-  document.getElementById('fab-qr').classList.toggle('visible', id === 's5')
 }
 
 // ═══════════════════════════════════════════
@@ -595,7 +560,7 @@ function ir(id) {
 function renderSups() {
   const el = document.getElementById('lista-sups')
   if (!S.sups.length) {
-    el.innerHTML = '<p style="text-align:center;padding:30px;color:var(--text3);font-size:13px">Sin supervisores cargados</p>'
+    el.innerHTML = '<p style="text-align:center;padding:30px;color:var(--text3);font-size:13px">Sin supervisores</p>'
     return
   }
   el.innerHTML = S.sups.map(s => `
@@ -606,8 +571,7 @@ function renderSups() {
         <span class="sup-id">${s.id}</span>
       </div>
       <span class="sup-arr">›</span>
-    </div>
-  `).join('')
+    </div>`).join('')
 }
 
 function elegirSup(id) {
@@ -619,64 +583,50 @@ function elegirSup(id) {
 // S2 — SESIONES DEL DÍA
 // ═══════════════════════════════════════════
 async function irS2() {
-  document.getElementById('s2-titulo').textContent = S.sup.nombre.split(' ').slice(0,2).join(' ')
-  document.getElementById('s2-sub').textContent = `Sesiones de hoy`
+  document.getElementById('s2-titulo').textContent =
+    S.sup.nombre.split(' ').slice(0, 2).join(' ')
   await cargarSesiones()
   ir('s2')
 }
 
 async function cargarSesiones() {
-  // Mostrar pendientes de la cola offline
-  const q = S.sendQueue.length
-  const pb = document.getElementById('s2-pendientes')
-  pb.innerHTML = q ? `<div class="pending-banner" style="justify-content:space-between">
-    <span>⏳ ${q} sesión${q>1?'es':''} pendiente${q>1?'s':''} de envío</span>
-    <button onclick="limpiarCola()" style="background:none;border:1px solid var(--amber-bd);color:var(--amber2);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;white-space:nowrap">✕ Limpiar</button>
-  </div>` : ''
-
+  const el = document.getElementById('s2-sesiones')
   let sesiones = []
   try {
     const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
     sesiones = await r.json()
-    ls('kp_ses_' + S.sup.id, sesiones)
   } catch {
-    sesiones = lsGet('kp_ses_' + S.sup.id) || []
+    el.innerHTML = '<p style="font-size:13px;color:var(--text3);margin-bottom:16px">Sin conexión — no se pueden cargar las sesiones</p>'
+    return
   }
-
-  const el = document.getElementById('s2-sesiones')
   if (!sesiones.length) {
     el.innerHTML = '<div class="slabel">Sin sesiones hoy</div><p style="font-size:13px;color:var(--text3);margin-bottom:16px">Crea tu primera sesión del día</p>'
     return
   }
-
   el.innerHTML = '<div class="slabel">Sesiones de hoy</div>' + sesiones.map(s => {
-    const esBorrador = s.estado === 'borrador'
+    const bor = s.estado === 'borrador'
     return `
-      <div class="ses-card ${s.estado}" onclick="${esBorrador ? `continuarSesion(${s.id})` : ''}">
+      <div class="ses-card ${s.estado}">
         <div class="ses-top">
           <span class="ses-otm">${s.otm_id}</span>
-          <span class="ses-badge ${esBorrador ? 'badge-bor' : 'badge-env'}">
-            ${esBorrador ? '📝 Borrador' : '✓ Enviada'}
+          <span class="ses-badge ${bor ? 'badge-bor' : 'badge-env'}">
+            ${bor ? '📝 Borrador' : '✓ Enviada'}
           </span>
         </div>
-        <div class="ses-desc">${s.descripcion || s.otm_id}</div>
-        <div class="ses-meta">${s.total || 0} trabajadores · ${s.hh_turno}h por persona · ${(s.presentes||0)} presentes</div>
-        ${esBorrador ? `
+        <div class="ses-desc">${s.otm_id}</div>
+        <div class="ses-meta">${s.total || 0} trabajadores · ${s.hh_turno}h por persona</div>
+        ${bor ? `
         <div class="ses-actions">
-          <button class="btn btn-a btn-sm" style="flex:1" onclick="event.stopPropagation();continuarSesion(${s.id})">
-            ✏️ Editar lista
-          </button>
-          <button class="btn btn-g btn-sm" style="flex:1" onclick="event.stopPropagation();irCampoDesdeHistorial(${s.id})">
-            ✅ Ir a campo
-          </button>
+          <button class="btn btn-a btn-sm" style="flex:1"
+                  onclick="continuarSesion(${s.id})">✏️ Continuar</button>
         </div>` : ''}
       </div>`
   }).join('')
 }
 
 function irNuevaSesion() {
-  S.sesionId = null; S.otm = null; S.lista = []; S.hhTurno = 10
-  document.getElementById('hh-display').textContent = '10'
+  S.sesionId = null; S.otm = null; S.lista = []; S.hhTurno = 9.5
+  document.getElementById('hh-display').textContent = '9.5'
   document.getElementById('q-otm').value = ''
   renderOTMs(S.otms)
   ir('s3')
@@ -686,8 +636,21 @@ function irNuevaSesion() {
 // S3 — CONFIGURAR SESIÓN
 // ═══════════════════════════════════════════
 function cambiarHH(delta) {
-  S.hhTurno = Math.min(24, Math.max(1, S.hhTurno + delta))
+  S.hhTurno = parseFloat(
+    Math.min(24, Math.max(0.5, S.hhTurno + delta)).toFixed(1)
+  )
   document.getElementById('hh-display').textContent = S.hhTurno
+}
+
+function validarHH(el) {
+  const v = parseFloat(el.textContent)
+  if (!v || v < 0.5 || v > 24) {
+    el.textContent = S.hhTurno
+    return
+  }
+  // redondear a múltiplo de 0.5
+  S.hhTurno = Math.round(v * 2) / 2
+  el.textContent = S.hhTurno
 }
 
 function renderOTMs(list) {
@@ -695,7 +658,7 @@ function renderOTMs(list) {
   el.innerHTML = list.map(o => {
     const cls = AREA_CLS[o.area] || 'c-gsc'
     return `
-      <div class="otm-item${S.otm?.id === o.id ? ' sel' : ''}" onclick="elegirOTM('${o.id}')" id="oi-${o.id}">
+      <div class="otm-item${S.otm?.id === o.id ? ' sel' : ''}" onclick="elegirOTM('${o.id}')">
         <div class="otm-num ${cls}">${o.id.slice(-4)}</div>
         <div style="flex:1;min-width:0">
           <div class="otm-desc">${o.descripcion}</div>
@@ -717,11 +680,7 @@ function filtOTM(q) {
 
 function elegirOTM(id) {
   S.otm = S.otms.find(o => o.id === id)
-  renderOTMs(S.otms.filter(o => {
-    const q = document.getElementById('q-otm').value
-    return q.length < 2 || o.id.toLowerCase().includes(q.toLowerCase()) ||
-           o.descripcion.toLowerCase().includes(q.toLowerCase())
-  }))
+  filtOTM(document.getElementById('q-otm').value)
   const btn = document.getElementById('btn-crear-ses')
   btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'
 }
@@ -731,7 +690,7 @@ async function crearSesion() {
   try {
     const r = await fetch(`${API}/api/sesion`, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         supervisor_id: S.sup.id,
         otm_id: S.otm.id,
@@ -740,56 +699,47 @@ async function crearSesion() {
         trabajadores: []
       })
     })
-    if (!r.ok) throw new Error('Server error ' + r.status)
+    if (!r.ok) throw new Error('Error ' + r.status)
     const d = await r.json()
-    if (!d.id) throw new Error('Sin ID de sesión')
+    if (!d.id) throw new Error('Sin ID')
     S.sesionId = d.id
-  } catch {
-    S.sesionId = 'local_' + Date.now()
-    toast('Sin conexión — sesión guardada localmente', 'warn')
+    abrirS4()
+  } catch (e) {
+    toast('Error al crear sesión: ' + e.message, 'err')
   }
+}
+
+async function continuarSesion(id) {
+  try {
+    const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
+    if (!r.ok) throw new Error('Error ' + r.status)
+    const sesiones = await r.json()
+    const s = sesiones.find(x => x.id === id)
+    if (!s) { toast('Sesión no encontrada', 'err'); return }
+    S.sesionId = id
+    S.otm = S.otms.find(o => o.id === s.otm_id) || { id: s.otm_id, descripcion: s.otm_id }
+    S.hhTurno = parseFloat(s.hh_turno)
+    S.lista = (s.trabajadores || []).map(t => ({
+      id: t.trab_id, nombre: t.nombre, cargo: t.cargo,
+      hhOverride: t.hh_override ? parseFloat(t.hh_override) : null,
+      via: t.agregado_via || 'busqueda'
+    }))
+    abrirS4()
+  } catch (e) { toast('Error cargando sesión: ' + e.message, 'err') }
+}
+
+function abrirS4() {
   document.getElementById('s4-titulo').textContent = S.otm.id
   document.getElementById('s4-sub').textContent = `${S.hhTurno}h por persona`
   document.getElementById('q-trab').value = ''
   document.getElementById('res-trab').innerHTML = ''
-  renderListaActual()
+  renderLista()
   ir('s4')
 }
 
-async function continuarSesion(id) {
-  // Carga sesión existente y continúa editando
-  try {
-    const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
-    const sesiones = await r.json()
-    const s = sesiones.find(x => x.id === id)
-    if (!s) { toast('No se encontró la sesión', 'err'); return }
-    S.sesionId = id
-    S.otm = S.otms.find(o => o.id === s.otm_id)
-    S.hhTurno = parseFloat(s.hh_turno)
-    // Restaurar desde localStorage si hay cambios sin guardar en servidor
-    const draft = lsGet('kp_draft_' + id)
-    if (draft?.lista?.length) {
-      S.lista = draft.lista
-      S.hhTurno = draft.hhTurno || parseFloat(s.hh_turno)
-    } else {
-      S.lista = (s.trabajadores || []).map(t => ({
-        id: t.trab_id, nombre: t.nombre, cargo: t.cargo,
-        presente: t.presente, hhOverride: t.hh_override ? parseFloat(t.hh_override) : null,
-        via: t.agregado_via || 'busqueda'
-      }))
-    }
-    document.getElementById('s4-titulo').textContent = S.otm?.id || 'Lista'
-    document.getElementById('s4-sub').textContent = `${S.hhTurno}h por persona`
-    document.getElementById('q-trab').value = ''
-    document.getElementById('res-trab').innerHTML = ''
-    renderListaActual()
-    ir('s4')
-  } catch { toast('Error cargando sesión', 'err') }
-}
-
-async function irCampoDesdeHistorial(id) {
-  await continuarSesion(id)
-  irACampo()
+function volverS2() {
+  ir('s2')
+  cargarSesiones()
 }
 
 // ═══════════════════════════════════════════
@@ -804,18 +754,22 @@ function buscarTrab(q) {
     t.cargo.toLowerCase().includes(q.toLowerCase()) ||
     t.id === q.padStart(3, '0')
   ).slice(0, 8)
-  if (!f.length) { el.innerHTML = '<p style="padding:12px;color:var(--text3);font-size:13px">Sin coincidencias</p>'; return }
+  if (!f.length) {
+    el.innerHTML = '<p style="padding:12px;color:var(--text3);font-size:13px">Sin coincidencias</p>'
+    return
+  }
   el.innerHTML = f.map(t => {
     const ya = enLista.has(t.id)
     return `
-      <div class="wrow${ya ? ' in-list' : ''}" onclick="${ya ? `quitarDeLista('${t.id}')` : `agregarTrab('${t.id}')`}">
+      <div class="wrow-res${ya ? ' ya' : ''}"
+           onclick="${ya ? `quitarDeLista('${t.id}')` : `agregarTrab('${t.id}')`}">
         <div class="wava">${ya ? '✓' : '👷'}</div>
         <div>
           <div class="wid">ID: ${t.id}</div>
           <div class="wnom">${t.nombre}</div>
           <div class="wcarg">${t.cargo}</div>
         </div>
-        <div class="wadd">${ya ? '✕' : '+'}</div>
+        <div class="wadd" style="color:${ya ? 'var(--red)' : 'var(--green)'}">${ya ? '✕' : '+'}</div>
       </div>`
   }).join('')
 }
@@ -823,69 +777,60 @@ function buscarTrab(q) {
 function agregarTrab(id) {
   const t = S.trabs.find(x => x.id === id)
   if (!t || S.lista.find(x => x.id === id)) return
-  S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, presente: true, hhOverride: null, via: 'busqueda' })
+  S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, hhOverride: null, via: 'busqueda' })
   vibrate()
-  saveLista()
-  renderListaActual()
+  renderLista()
   buscarTrab(document.getElementById('q-trab').value)
 }
 
 function quitarDeLista(id) {
   S.lista = S.lista.filter(x => x.id !== id)
-  saveLista()
-  renderListaActual()
+  renderLista()
   buscarTrab(document.getElementById('q-trab').value)
 }
 
-function saveLista() {
-  if (!S.sesionId) return
-  ls('kp_draft_' + S.sesionId, {
-    lista: S.lista, hhTurno: S.hhTurno,
-    otmId: S.otm?.id, supId: S.sup?.id
-  })
-}
-
-function guardarYVolverS2() {
-  saveLista()
-  cargarSesiones()
-  ir('s2')
-}
-
-function renderListaActual() {
+function renderLista() {
   const n = S.lista.length
-  document.getElementById('count-lista').textContent = n
-  const btn = document.getElementById('btn-ir-campo')
-  btn.style.opacity = n ? '1' : '.4'
-  btn.style.pointerEvents = n ? 'auto' : 'none'
+  const hhTotal = S.lista.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0)
+
+  document.getElementById('count-resumen').textContent =
+    `${n} · ${parseFloat(hhTotal.toFixed(1))} HH`
+
+  const btn = document.getElementById('btn-enviar')
+  const activo = n > 0
+  btn.style.opacity = activo ? '1' : '.4'
+  btn.style.pointerEvents = activo ? 'auto' : 'none'
+  document.getElementById('btn-enviar-txt').textContent =
+    activo ? `ENVIAR TAREO — ${n} PERS · ${parseFloat(hhTotal.toFixed(1))} HH` : 'ENVIAR TAREO'
+
   const el = document.getElementById('lista-actual')
-  el.innerHTML = !n
-    ? '<p style="text-align:center;padding:16px;color:var(--text3);font-size:13px">Agrega trabajadores con el buscador ↑</p>'
-    : S.lista.map(t => `
-        <div class="wrow in-list" onclick="quitarDeLista('${t.id}')">
-          <div class="wava">✓</div>
-          <div>
-            <div class="wid">ID: ${t.id}</div>
-            <div class="wnom">${t.nombre}</div>
-            <div class="wcarg">${t.cargo}</div>
-          </div>
-          <div class="wadd" style="color:var(--red)">✕</div>
-        </div>`).join('')
-}
-
-function irACampo() {
-  if (!S.lista.length) { toast('Agrega al menos un trabajador', 'err'); return }
-  renderCampo()
-  ir('s5')
+  if (!n) {
+    el.innerHTML = '<p style="text-align:center;padding:16px;color:var(--text3);font-size:13px">Usa el buscador para agregar trabajadores ↑</p>'
+    return
+  }
+  el.innerHTML = S.lista.map(t => {
+    const hh = t.hhOverride ?? S.hhTurno
+    return `
+      <div class="lrow">
+        <div class="wava">👷</div>
+        <div class="linfo">
+          <div class="wid">ID: ${t.id}${t.via === 'qr' ? ' · <span style="color:var(--blue-400,#60a5fa)">QR</span>' : ''}</div>
+          <div class="wnom">${t.nombre}</div>
+          <div class="wcarg">${t.cargo}</div>
+        </div>
+        <div class="lhh" onclick="abrirPicker('${t.id}')">
+          <div class="lhh-val">${hh}h</div>
+          <div class="lhh-lbl">cambiar</div>
+        </div>
+        <button class="ldel" onclick="quitarDeLista('${t.id}')">✕</button>
+      </div>`
+  }).join('')
 }
 
 // ═══════════════════════════════════════════
-// S4b — QR ESCÁNER (excepción)
+// QR ESCÁNER
 // ═══════════════════════════════════════════
-function abrirQR(screen) {
-  S.returnScreen = screen
-  ir('s4b')
-  startCam()
-}
+function abrirQR() { ir('s4b'); startCam() }
 
 function toggleTorch() {
   if (!S.stream) return
@@ -897,7 +842,7 @@ function toggleTorch() {
 
 let _scanTime = 0
 async function startCam() {
-  if (S.stream) return
+  if (S.stream) { S.scan = true; requestAnimationFrame(tick); return }
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
@@ -905,7 +850,7 @@ async function startCam() {
     S.stream = stream; S.scan = true
     document.getElementById('video').srcObject = stream
     requestAnimationFrame(tick)
-  } catch { toast('No se pudo acceder a la cámara', 'err'); ir(S.returnScreen) }
+  } catch { toast('No se pudo acceder a la cámara', 'err'); ir('s4') }
 }
 
 function stopCam() {
@@ -925,8 +870,8 @@ function tick() {
     c.height = v.videoHeight; c.width = v.videoWidth
     const ctx = c.getContext('2d')
     ctx.drawImage(v, 0, 0, c.width, c.height)
-    const img = ctx.getImageData(0, 0, c.width, c.height)
-    const qr = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' })
+    const qr = jsQR(ctx.getImageData(0, 0, c.width, c.height).data, c.width, c.height,
+                    { inversionAttempts: 'dontInvert' })
     if (qr) { procesarQR(qr.data.trim()); return }
   }
   requestAnimationFrame(tick)
@@ -942,75 +887,28 @@ function procesarQR(raw) {
     return
   }
   if (!S.lista.find(x => x.id === id)) {
-    S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, presente: true, hhOverride: null, via: 'qr' })
+    S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, hhOverride: null, via: 'qr' })
     toast(`✅ ${t.nombre.split(' ')[0]} agregado`, 'ok')
     vibrate()
-    saveLista()
-  } else { toast(`${t.nombre.split(' ')[0]} ya está en la lista`, 'warn') }
+  } else {
+    toast(`${t.nombre.split(' ')[0]} ya está en la lista`, 'warn')
+  }
   stopCam()
-  ir(S.returnScreen)
-  if (S.returnScreen === 's5') renderCampo()
-  else renderListaActual()
-}
-
-// ═══════════════════════════════════════════
-// S5 — CONFIRMACIÓN EN CAMPO
-// ═══════════════════════════════════════════
-function renderCampo() {
-  document.getElementById('s5-titulo').textContent = S.otm?.id || 'Confirmación'
-  document.getElementById('s5-sub').textContent = `${S.hhTurno}h por persona · ${S.lista.length} trabajadores`
-  actualizarCountCampo()
-  const el = document.getElementById('campo-lista')
-  el.innerHTML = S.lista.map(t => {
-    const hh = t.hhOverride ?? S.hhTurno
-    return `
-      <div class="crow${!t.presente ? ' ausente' : ''}" id="cr-${t.id}">
-        <div class="ctoggle" onclick="togglePresente('${t.id}')">${t.presente ? '✓' : '✗'}</div>
-        <div class="cinfo">
-          <div class="wid">ID: ${t.id}${t.via==='qr' ? ' · <span style="color:var(--blue)">QR</span>' : ''}</div>
-          <div class="wnom">${t.nombre}</div>
-          <div class="wcarg">${t.cargo}</div>
-        </div>
-        <div class="chh" onclick="abrirPicker('${t.id}')">
-          <div class="chh-val">${hh}h</div>
-          <div class="chh-lbl">toca p/cambiar</div>
-        </div>
-      </div>`
-  }).join('')
-}
-
-function togglePresente(id) {
-  const t = S.lista.find(x => x.id === id)
-  if (!t) return
-  t.presente = !t.presente
-  const el = document.getElementById(`cr-${id}`)
-  el.classList.toggle('ausente', !t.presente)
-  el.querySelector('.ctoggle').textContent = t.presente ? '✓' : '✗'
-  actualizarCountCampo()
-  vibrate(50)
-}
-
-function actualizarCountCampo() {
-  const presentes = S.lista.filter(t => t.presente)
-  const hhTotal = presentes.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0)
-  document.getElementById('s5-count').textContent = `${presentes.length} · ${hhTotal}HH`
-  document.getElementById('btn-enviar-txt').textContent =
-    `ENVIAR — ${presentes.length} PRESENTES · ${hhTotal}HH`
+  renderLista()
+  ir('s4')
 }
 
 // ═══════════════════════════════════════════
 // HH PICKER
 // ═══════════════════════════════════════════
-const HH_OPTS = [4, 6, 8, 9, 10, 11, 12, 14]
-
 function abrirPicker(id) {
   S.pickerTrabId = id
   const t = S.lista.find(x => x.id === id)
-  document.getElementById('picker-sub').textContent = t?.nombre.split(' ').slice(0,2).join(' ') || ''
+  document.getElementById('picker-sub').textContent =
+    t ? t.nombre.split(' ').slice(0, 2).join(' ') : ''
   document.getElementById('picker-inp').value = ''
-  const grid = document.getElementById('picker-grid')
   const actual = t?.hhOverride ?? S.hhTurno
-  grid.innerHTML = HH_OPTS.map(h => `
+  document.getElementById('picker-grid').innerHTML = HH_PICKER_OPTS.map(h => `
     <div class="picker-opt${h === actual ? ' sel' : ''}" onclick="aplicarPicker(${h})">
       <div class="picker-opt-val">${h}</div>
       <div class="picker-opt-lbl">horas</div>
@@ -1020,14 +918,14 @@ function abrirPicker(id) {
 
 function aplicarPicker(hh) {
   const t = S.lista.find(x => x.id === S.pickerTrabId)
-  if (t) { t.hhOverride = hh; renderCampo() }
-  cerrarPicker()
+  if (t) { t.hhOverride = hh; renderLista() }
+  document.getElementById('picker-overlay').classList.remove('open')
 }
 
 function aplicarPickerCustom() {
   const v = parseFloat(document.getElementById('picker-inp').value)
   if (!v || v < 0.5 || v > 24) { toast('Valor inválido (0.5–24)', 'err'); return }
-  aplicarPicker(v)
+  aplicarPicker(Math.round(v * 2) / 2)
 }
 
 function cerrarPicker(e) {
@@ -1038,162 +936,57 @@ function cerrarPicker(e) {
 // ═══════════════════════════════════════════
 // ENVIAR
 // ═══════════════════════════════════════════
-async function confirmarEnvio() {
-  const presentes = S.lista.filter(t => t.presente)
-  if (!presentes.length) { toast('No hay nadie presente', 'err'); return }
+async function enviar() {
+  if (!S.lista.length) return
+  const hhTotal = parseFloat(
+    S.lista.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0).toFixed(1)
+  )
   ir('s6')
-  document.getElementById('s6t').textContent = `Enviando ${presentes.length} trabajador${presentes.length > 1 ? 'es' : ''}...`
-  document.getElementById('s6s').textContent = `${S.otm?.id} · ${S.sup.nombre.split(' ')[0]}`
+  document.getElementById('s6t').textContent =
+    `Enviando ${S.lista.length} trabajador${S.lista.length > 1 ? 'es' : ''}...`
+  document.getElementById('s6s').textContent =
+    `${S.otm.id} · ${S.sup.nombre.split(' ')[0]}`
 
   const payload = S.lista.map(t => ({
-    trab_id: t.id, presente: t.presente,
-    hh_override: t.hhOverride, agregado_via: t.via
+    trab_id: t.id,
+    presente: true,
+    hh_override: t.hhOverride,
+    agregado_via: t.via
   }))
-
-  const presEnviados = S.lista.filter(t => t.presente).length
-  const hhTotal = S.lista.filter(t => t.presente).reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0)
-
-  // Si la sesión es local (offline), crear en servidor primero
-  if (String(S.sesionId).startsWith('local_')) {
-    try {
-      const r = await fetch(`${API}/api/sesion`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          supervisor_id: S.sup.id, otm_id: S.otm.id,
-          fecha: hoy(), hh_turno: S.hhTurno, trabajadores: []
-        })
-      })
-      if (!r.ok) throw new Error('Server error ' + r.status)
-      const d = await r.json()
-      if (!d.id) throw new Error('Sin ID de sesión')
-      S.sesionId = d.id
-    } catch {
-      addToQueue({ sesionId: S.sesionId, payload, presEnviados, hhTotal,
-      supervisor_id: S.sup?.id, otm_id: S.otm?.id, hhTurno: S.hhTurno })
-      mostrarResultadoPendiente(presEnviados, hhTotal)
-      return
-    }
-  }
 
   try {
     const r = await fetch(`${API}/api/sesion/${S.sesionId}/enviar`, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ trabajadores: payload })
     })
     const d = await r.json()
-    if (r.ok) mostrarResultado(d.enviados, hhTotal)
-    else { toast('Error al enviar: ' + (d.detail || ''), 'err'); ir('s5') }
-  } catch {
-    addToQueue({ sesionId: S.sesionId, payload, presEnviados, hhTotal,
-      supervisor_id: S.sup?.id, otm_id: S.otm?.id, hhTurno: S.hhTurno })
-    mostrarResultadoPendiente(presEnviados, hhTotal)
+    if (!r.ok) throw new Error(d.detail || 'Error ' + r.status)
+    mostrarResultado(d.enviados, hhTotal)
+  } catch (e) {
+    toast('Error al enviar: ' + e.message, 'err')
+    ir('s4')
   }
 }
 
 function mostrarResultado(enviados, hhTotal) {
-  document.getElementById('s7-icon').textContent = '✅'
-  document.getElementById('s7-title').textContent = 'TAREO ENVIADO'
   document.getElementById('s7-sub').textContent = `${enviados} registros creados`
   document.getElementById('s7-ibox').innerHTML = `
-    <div class="irow"><span class="ikey">OTM</span><span class="ival a">${S.otm?.id}</span></div>
+    <div class="irow"><span class="ikey">OTM</span><span class="ival a">${S.otm.id}</span></div>
     <div class="irow"><span class="ikey">Supervisor</span><span class="ival">${S.sup.nombre.split(' ').slice(0,2).join(' ')}</span></div>
-    <div class="irow"><span class="ikey">Trabajadores enviados</span><span class="ival g">${enviados}</span></div>
-    <div class="irow"><span class="ikey">HH totales registradas</span><span class="ival g">${hhTotal}</span></div>
-    <div class="irow"><span class="ikey">Fecha</span><span class="ival">${hoy()}</span></div>
-  `
-  vibrate([100,50,200])
-  // Limpiar el draft local de esta sesión
-  try { localStorage.removeItem('kp_draft_' + S.sesionId) } catch {}
+    <div class="irow"><span class="ikey">Trabajadores registrados</span><span class="ival g">${enviados}</span></div>
+    <div class="irow"><span class="ikey">HH totales</span><span class="ival g">${hhTotal}</span></div>
+    <div class="irow"><span class="ikey">Fecha</span><span class="ival">${hoy()}</span></div>`
+  vibrate([100, 50, 200])
   ir('s7')
-}
-
-function mostrarResultadoPendiente(presentes, hhTotal) {
-  document.getElementById('s7-icon').textContent = '⏳'
-  document.getElementById('s7-title').textContent = 'GUARDADO LOCALMENTE'
-  document.getElementById('s7-sub').textContent = 'Se enviará automáticamente cuando haya señal'
-  document.getElementById('s7-ibox').innerHTML = `
-    <div class="irow"><span class="ikey">OTM</span><span class="ival a">${S.otm?.id}</span></div>
-    <div class="irow"><span class="ikey">Trabajadores</span><span class="ival">${presentes}</span></div>
-    <div class="irow"><span class="ikey">HH totales</span><span class="ival">${hhTotal}</span></div>
-  `
-  ir('s7')
-}
-
-// ═══════════════════════════════════════════
-// COLA OFFLINE
-// ═══════════════════════════════════════════
-function addToQueue(item) {
-  S.sendQueue.push(item)
-  ls('kp_queue', S.sendQueue)
-  document.getElementById('queue-badge').style.display = 'block'
-  toast('Sin señal — se enviará cuando vuelva la conexión', 'warn')
-}
-
-function limpiarCola() {
-  S.sendQueue = []
-  ls('kp_queue', [])
-  document.getElementById('queue-badge').style.display = 'none'
-  cargarSesiones()
-  toast('Cola limpiada', 'ok')
-}
-
-function loadQueue() {
-  S.sendQueue = lsGet('kp_queue') || []
-  if (S.sendQueue.length) {
-    document.getElementById('queue-badge').style.display = 'block'
-    flushQueue()
-  }
-}
-
-async function flushQueue() {
-  if (!S.sendQueue.length) return
-  const pending = [...S.sendQueue]
-  S.sendQueue = []
-  for (const item of pending) {
-    try {
-      let sid = item.sesionId
-      if (String(sid).startsWith('local_')) {
-        // Validar que tenemos los datos mínimos para recrear la sesión
-      if (!item.supervisor_id || !item.otm_id) {
-        console.warn('Item de cola sin datos suficientes, descartando:', item)
-        continue
-      }
-      const r2 = await fetch(`${API}/api/sesion`, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          supervisor_id: item.supervisor_id,
-          otm_id: item.otm_id,
-          fecha: hoy(),
-          hh_turno: item.hhTurno || 10,
-          trabajadores: []
-        })
-      })
-        const d2 = await r2.json()
-        sid = d2.id
-      }
-      const r = await fetch(`${API}/api/sesion/${sid}/enviar`, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ trabajadores: item.payload })
-      })
-      if (!r.ok) S.sendQueue.push(item)
-    } catch { S.sendQueue.push(item) }
-  }
-  ls('kp_queue', S.sendQueue)
-  const badge = document.getElementById('queue-badge')
-  if (!S.sendQueue.length) {
-    badge.style.display = 'none'
-    if (pending.length) toast('✅ Tareos pendientes enviados', 'ok')
-  }
 }
 
 // ═══════════════════════════════════════════
 // NAVEGACIÓN EXTRA
 // ═══════════════════════════════════════════
 function nuevaSesion() {
-  S.sesionId = null; S.otm = null; S.lista = []; S.hhTurno = 10
-  document.getElementById('hh-display').textContent = '10'
+  S.sesionId = null; S.otm = null; S.lista = []; S.hhTurno = 9.5
+  document.getElementById('hh-display').textContent = '9.5'
   document.getElementById('q-otm').value = ''
   renderOTMs(S.otms)
   ir('s3')
