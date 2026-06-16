@@ -385,6 +385,11 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     <button class="bar-btn" onclick="volverS2()">← Volver</button>
   </div>
   <div class="body">
+    <div id="cua-btn-wrap" style="margin-bottom:10px;display:none">
+      <button class="btn btn-gh btn-sm btn-icon" id="btn-cua" onclick="cargarCuadrilla()">
+        <span>👥</span><span id="btn-cua-txt">Cargar mi cuadrilla</span>
+      </button>
+    </div>
     <div class="sw">
       <span class="sico">🔍</span>
       <input class="si" id="q-trab" type="text" placeholder="Nombre, apellido o ID..."
@@ -499,6 +504,7 @@ const S = {
   sup: null, sups: [], trabs: [], otms: [],
   sesionId: null, otm: null, hhTurno: 9.5,
   lista: [],        // [{id, nombre, cargo, hhOverride, via}]
+  cuadrilla: [],    // [{id, nombre, cargo}] – cuadrilla pre-establecida del supervisor
   scan: false, stream: null, torch: false,
   pickerTrabId: null
 }
@@ -576,7 +582,15 @@ function renderSups() {
 
 function elegirSup(id) {
   S.sup = S.sups.find(s => s.id === id)
+  cargarCuadrillaFetch()
   irS2()
+}
+
+async function cargarCuadrillaFetch() {
+  try {
+    const r = await fetch(`${API}/api/cuadrilla/${S.sup.id}`)
+    S.cuadrilla = r.ok ? await r.json() : []
+  } catch { S.cuadrilla = [] }
 }
 
 // ═══════════════════════════════════════════
@@ -733,6 +747,15 @@ function abrirS4() {
   document.getElementById('s4-sub').textContent = `${S.hhTurno}h por persona`
   document.getElementById('q-trab').value = ''
   document.getElementById('res-trab').innerHTML = ''
+  // Mostrar botón cuadrilla solo si hay miembros configurados
+  const cuaBtnWrap = document.getElementById('cua-btn-wrap')
+  if (S.cuadrilla.length) {
+    cuaBtnWrap.style.display = 'block'
+    document.getElementById('btn-cua-txt').textContent =
+      `Cargar mi cuadrilla (${S.cuadrilla.length} personas)`
+  } else {
+    cuaBtnWrap.style.display = 'none'
+  }
   renderLista()
   ir('s4')
 }
@@ -745,6 +768,30 @@ function volverS2() {
 // ═══════════════════════════════════════════
 // S4 — ARMAR LISTA
 // ═══════════════════════════════════════════
+function cargarCuadrilla() {
+  let agregados = 0
+  const enLista = new Set(S.lista.map(t => t.id))
+  for (const t of S.cuadrilla) {
+    if (!enLista.has(t.trab_id || t.id)) {
+      S.lista.push({
+        id: t.trab_id || t.id,
+        nombre: t.nombre,
+        cargo: t.cargo,
+        hhOverride: null,
+        via: 'cuadrilla'
+      })
+      agregados++
+    }
+  }
+  if (agregados) {
+    vibrate()
+    toast(`✅ ${agregados} trabajador${agregados > 1 ? 'es' : ''} de tu cuadrilla agregados`, 'ok')
+    renderLista()
+  } else {
+    toast('Todos los miembros ya están en la lista', 'warn')
+  }
+}
+
 function buscarTrab(q) {
   const el = document.getElementById('res-trab')
   if (q.length < 1) { el.innerHTML = ''; return }
