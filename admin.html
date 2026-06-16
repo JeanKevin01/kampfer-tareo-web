@@ -199,6 +199,7 @@ nav{
     <button class="tab" onclick="showPage('p-otms',this)">📋 OTMs</button>
     <button class="tab" onclick="showPage('p-qrs',this)">📷 QRs</button>
     <button class="tab" onclick="showPage('p-registros',this)">📊 Registros</button>
+    <button class="tab" onclick="showPage('p-cuadrillas',this)">👥 Cuadrillas</button>
   </div>
 </nav>
 
@@ -375,6 +376,40 @@ nav{
     </div>
   </div>
 
+</div>
+
+<!-- PAGE: CUADRILLAS -->
+<div id="p-cuadrillas" class="page">
+<div class="container">
+  <div class="sec-hdr">
+    <div class="sec-title">Cuadrillas <span>pre-establecidas</span></div>
+  </div>
+  <p class="card-info" style="margin-bottom:16px;font-size:13px;color:var(--text2);padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;line-height:1.7">
+    Configura qué trabajadores forman la cuadrilla de cada supervisor.
+    En la app de tareo, el supervisor verá el botón <strong>"👥 Cargar mi cuadrilla"</strong>
+    para agregar a todos sus trabajadores habituales de un solo toque.
+  </p>
+  <div class="form-grid" style="grid-template-columns:1fr 1fr;margin-bottom:16px">
+    <div class="field">
+      <label>Supervisor</label>
+      <select id="cua-sup" onchange="cargarCuadrillaAdmin()">
+        <option value="">— Seleccionar supervisor —</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Buscar trabajador para agregar</label>
+      <input type="text" id="cua-busq" placeholder="Nombre o ID..."
+             oninput="buscarParaCuadrilla(this.value)" autocomplete="off">
+    </div>
+  </div>
+  <div id="cua-busq-res" style="margin-bottom:16px"></div>
+  <div class="card-title" style="margin-bottom:12px">Miembros actuales</div>
+  <div class="tbl-wrap" id="cua-lista">
+    <p style="padding:20px;text-align:center;color:var(--text3);font-size:13px">
+      Selecciona un supervisor para ver su cuadrilla
+    </p>
+  </div>
+</div>
 </div>
 
 <!-- QR MODAL -->
@@ -859,6 +894,190 @@ function calcularHH() {
     cargarRegistros();
   })
   .catch(function() { toast('Error calculando HH', 'err'); });
+}
+
+// ═══════ CUADRILLAS ═══════
+var allSupervisores = [];
+
+function cargarSupervisoresParaCuadrilla() {
+  fetch(API + '/api/supervisores')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      allSupervisores = data;
+      var sel = document.getElementById('cua-sup');
+      sel.innerHTML = '<option value="">— Seleccionar supervisor —</option>' +
+        data.map(function(s) {
+          return '<option value="' + s.id + '">' + s.nombre + '</option>';
+        }).join('');
+    });
+}
+
+function cargarCuadrillaAdmin() {
+  var supId = document.getElementById('cua-sup').value;
+  if (!supId) return;
+  fetch(API + '/api/cuadrilla/' + supId)
+    .then(function(r) { return r.json(); })
+    .then(function(data) { renderCuadrillaAdmin(data, supId); });
+}
+
+function renderCuadrillaAdmin(members, supId) {
+  var el = document.getElementById('cua-lista');
+  if (!members.length) {
+    el.innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3);font-size:13px">Sin miembros aún — usa el buscador para agregar</p>';
+    return;
+  }
+  el.innerHTML = '<table class="tbl"><thead><tr>' +
+    '<th>ID</th><th>Nombre</th><th>Cargo</th><th style="text-align:right">Acción</th>' +
+    '</tr></thead><tbody>' +
+    members.map(function(t) {
+      return '<tr>' +
+        '<td><span class="tid">' + (t.trab_id || t.id) + '</span></td>' +
+        '<td class="tnom">' + t.nombre + '</td>' +
+        '<td class="tcarg">' + t.cargo + '</td>' +
+        '<td style="text-align:right">' +
+          '<button class="btn btn-red btn-sm" onclick="quitarDeCuadrilla(\'' + supId + '\',\'' + (t.trab_id || t.id) + '\')">✕ Quitar</button>' +
+        '</td></tr>';
+    }).join('') +
+    '</tbody></table>';
+}
+
+function buscarParaCuadrilla(q) {
+  var el = document.getElementById('cua-busq-res');
+  var supId = document.getElementById('cua-sup').value;
+  if (!supId) { el.innerHTML = '<p style="font-size:12px;color:var(--text3)">Selecciona un supervisor primero</p>'; return; }
+  if (q.length < 1) { el.innerHTML = ''; return; }
+  var f = allWorkers.filter(function(t) {
+    return t.activo && (
+      t.nombre.toLowerCase().includes(q.toLowerCase()) ||
+      t.id === q.padStart(3,'0')
+    );
+  }).slice(0, 6);
+  if (!f.length) { el.innerHTML = '<p style="font-size:12px;color:var(--text3)">Sin resultados</p>'; return; }
+  el.innerHTML = f.map(function(t) {
+    return '<div style="display:flex;align-items:center;gap:12px;padding:8px 12px;' +
+      'background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">' +
+      '<span class="tid">' + t.id + '</span>' +
+      '<div style="flex:1"><div class="tnom" style="font-size:13px">' + t.nombre + '</div>' +
+        '<div class="tcarg">' + t.cargo + '</div></div>' +
+      '<button class="btn btn-amber btn-sm" onclick="agregarACuadrilla(\'' + supId + '\',\'' + t.id + '\')">+ Agregar</button>' +
+      '</div>';
+  }).join('');
+}
+
+function agregarACuadrilla(supId, trabId) {
+  fetch(API + '/api/cuadrilla/' + supId + '/' + trabId, { method: 'POST' })
+    .then(function(r) {
+      if (r.ok) {
+        toast('Trabajador agregado a la cuadrilla', 'ok');
+        document.getElementById('cua-busq').value = '';
+        document.getElementById('cua-busq-res').innerHTML = '';
+        cargarCuadrillaAdmin();
+      } else toast('Error al agregar', 'err');
+    });
+}
+
+function quitarDeCuadrilla(supId, trabId) {
+  fetch(API + '/api/cuadrilla/' + supId + '/' + trabId, { method: 'DELETE' })
+    .then(function(r) {
+      if (r.ok) { toast('Quitado de la cuadrilla', 'ok'); cargarCuadrillaAdmin(); }
+      else toast('Error al quitar', 'err');
+    });
+}
+
+// ═══════ CUADRILLAS ═══════
+var allSupervisores = [];
+
+function cargarSupervisoresParaCuadrilla() {
+  fetch(API + '/api/supervisores')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      allSupervisores = data;
+      var sel = document.getElementById('cua-sup');
+      sel.innerHTML = '<option value="">— Seleccionar supervisor —</option>' +
+        data.map(function(s) {
+          return '<option value="' + s.id + '">' + s.nombre + '</option>';
+        }).join('');
+    });
+}
+
+function cargarCuadrillaAdmin() {
+  var supId = document.getElementById('cua-sup').value;
+  if (!supId) return;
+  fetch(API + '/api/cuadrilla/' + supId)
+    .then(function(r) { return r.json(); })
+    .then(function(data) { renderCuadrillaAdmin(data, supId); });
+}
+
+function renderCuadrillaAdmin(members, supId) {
+  var el = document.getElementById('cua-lista');
+  if (!members.length) {
+    el.innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3);font-size:13px">Sin miembros — usa el buscador para agregar trabajadores</p>';
+    return;
+  }
+  el.innerHTML = '<table class="tbl"><thead><tr>' +
+    '<th>ID</th><th>Nombre</th><th>Cargo</th><th style="text-align:right">Acción</th>' +
+    '</tr></thead><tbody>' +
+    members.map(function(t) {
+      var id = t.trab_id || t.id;
+      return '<tr>' +
+        '<td><span class="tid">' + id + '</span></td>' +
+        '<td><div class="tnom">' + t.nombre + '</div></td>' +
+        '<td><span class="tcarg">' + t.cargo + '</span></td>' +
+        '<td style="text-align:right">' +
+          '<button class="btn btn-red btn-sm" ' +
+            'onclick="quitarDeCuadrilla(\'' + supId + '\',\'' + id + '\')">✕ Quitar</button>' +
+        '</td></tr>';
+    }).join('') +
+    '</tbody></table>';
+}
+
+function buscarParaCuadrilla(q) {
+  var el = document.getElementById('cua-busq-res');
+  var supId = document.getElementById('cua-sup').value;
+  if (!supId) {
+    el.innerHTML = '<p style="font-size:12px;color:var(--text3)">Selecciona un supervisor primero</p>';
+    return;
+  }
+  if (q.length < 1) { el.innerHTML = ''; return; }
+  var f = allWorkers.filter(function(t) {
+    return t.activo && (
+      t.nombre.toLowerCase().includes(q.toLowerCase()) ||
+      t.id === q.padStart(3,'0') ||
+      t.cargo.toLowerCase().includes(q.toLowerCase())
+    );
+  }).slice(0, 6);
+  if (!f.length) { el.innerHTML = '<p style="font-size:12px;color:var(--text3)">Sin resultados</p>'; return; }
+  el.innerHTML = f.map(function(t) {
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;' +
+      'background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">' +
+      '<span class="tid" style="min-width:32px">' + t.id + '</span>' +
+      '<div style="flex:1"><div style="font-size:13px;font-weight:700">' + t.nombre + '</div>' +
+        '<div class="tcarg">' + t.cargo + '</div></div>' +
+      '<button class="btn btn-amber btn-sm" ' +
+        'onclick="agregarACuadrilla(\'' + supId + '\',\'' + t.id + '\')">+ Agregar</button>' +
+      '</div>';
+  }).join('');
+}
+
+function agregarACuadrilla(supId, trabId) {
+  fetch(API + '/api/cuadrilla/' + supId + '/' + trabId, { method: 'POST' })
+    .then(function(r) {
+      if (r.ok) {
+        toast('✅ Trabajador agregado a la cuadrilla', 'ok');
+        document.getElementById('cua-busq').value = '';
+        document.getElementById('cua-busq-res').innerHTML = '';
+        cargarCuadrillaAdmin();
+      } else toast('Error al agregar', 'err');
+    });
+}
+
+function quitarDeCuadrilla(supId, trabId) {
+  if (!confirm('¿Quitar este trabajador de la cuadrilla?')) return;
+  fetch(API + '/api/cuadrilla/' + supId + '/' + trabId, { method: 'DELETE' })
+    .then(function(r) {
+      if (r.ok) { toast('Quitado de la cuadrilla', 'ok'); cargarCuadrillaAdmin(); }
+      else toast('Error al quitar', 'err');
+    });
 }
 
 // ═══════ TOAST ═══════
