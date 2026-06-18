@@ -5,195 +5,230 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#060810">
 <title>Tareo · Kampfer</title>
 <link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --void:#060810;--surface:#141926;--raised:#1c2436;
-  --border:#252f45;--border2:#2e3a52;
-  --text:#e8edf5;--text2:#8a96ad;--text3:#4e5a72;
-  --amber:#f59e0b;--amber2:#fbbf24;
-  --amber-bg:rgba(245,158,11,.1);--amber-bd:rgba(245,158,11,.3);
-  --green:#10b981;--green-bg:rgba(16,185,129,.12);
-  --red:#ef4444;--red-bg:rgba(239,68,68,.12);
-  --blue:#60a5fa;--blue-bg:rgba(96,165,250,.12);
+  --void:#060810;--surf:#141926;--raised:#1c2436;
+  --b1:#252f45;--b2:#2e3a52;
+  --tx:#e8edf5;--tx2:#8a96ad;--tx3:#4e5a72;
+  --am:#f59e0b;--am2:#fbbf24;--am-bg:rgba(245,158,11,.1);--am-bd:rgba(245,158,11,.3);
+  --gn:#10b981;--gn-bg:rgba(16,185,129,.12);--gn-bd:rgba(16,185,129,.3);
+  --rd:#ef4444;--rd-bg:rgba(239,68,68,.12);
+  --bl:#60a5fa;--bl-bg:rgba(96,165,250,.12);
+  --r:14px;--rs:9px;
   --font:'Barlow',system-ui,sans-serif;
   --cond:'Barlow Condensed',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
-  --r:14px;--rsm:9px;
 }
-html,body{height:100%;background:var(--void);font-family:var(--font);color:var(--text);overflow-x:hidden}
+html,body{height:100%;background:var(--void);font-family:var(--font);color:var(--tx);overflow-x:hidden}
+
+/* ── Splash ── */
 #splash{position:fixed;inset:0;z-index:9999;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .4s}
 #splash.hide{opacity:0;pointer-events:none}
-.sp-logo{font-family:var(--cond);font-size:48px;font-weight:800;letter-spacing:6px;color:var(--amber)}
-.sp-sub{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)}
-.sp-bar{width:160px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px}
-.sp-fill{height:100%;background:var(--amber);width:0;transition:width 1.2s ease}
+.sp-logo{font-family:var(--cond);font-size:48px;font-weight:800;letter-spacing:6px;color:var(--am)}
+.sp-sub{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--tx3)}
+.sp-bar{width:160px;height:2px;background:var(--b1);border-radius:2px;overflow:hidden;margin-top:8px}
+.sp-fill{height:100%;background:var(--am);width:0;transition:width 1.2s ease}
+
+/* ── Screens ── */
 .screen{display:none;min-height:100svh;flex-direction:column}
 .screen.active{display:flex;animation:fu .2s ease}
 @keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:40}
-.bar-ico{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:var(--amber-bg);border:1px solid var(--amber-bd);display:flex;align-items:center;justify-content:center;font-size:16px}
+
+/* ── Topbar ── */
+.bar{background:var(--surf);border-bottom:1px solid var(--b1);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:40;flex-shrink:0}
+.bar-ico{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:var(--am-bg);border:1px solid var(--am-bd);display:flex;align-items:center;justify-content:center;font-size:16px}
 .bar-title{font-family:var(--cond);font-size:17px;font-weight:700;line-height:1.2}
-.bar-sub{font-size:11px;color:var(--text3);margin-top:1px}
-.bar-btn{margin-left:auto;background:none;border:1px solid var(--border2);color:var(--text2);font-size:12px;font-weight:600;padding:7px 12px;border-radius:8px;cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s;flex-shrink:0}
-.bar-btn:active{background:var(--raised);color:var(--text)}
-.hero{background:linear-gradient(160deg,#0d1525,#111827,#0a1220);padding:28px 16px 22px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-.hero-grid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(var(--amber) 1px,transparent 1px),linear-gradient(90deg,var(--amber) 1px,transparent 1px);background-size:30px 30px}
+.bar-sub{font-size:10px;color:var(--tx3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.bar-back{margin-left:auto;background:none;border:1px solid var(--b2);color:var(--tx2);font-size:12px;font-weight:600;padding:7px 12px;border-radius:8px;cursor:pointer;font-family:var(--font);transition:all .15s;flex-shrink:0}
+.bar-back:active{background:var(--raised);color:var(--tx)}
+
+/* ── Hero ── */
+.hero{background:linear-gradient(160deg,#0d1525,#111827,#0a1220);padding:24px 16px 20px;border-bottom:1px solid var(--b1);position:relative;overflow:hidden;flex-shrink:0}
+.hero-grid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(var(--am) 1px,transparent 1px),linear-gradient(90deg,var(--am) 1px,transparent 1px);background-size:30px 30px}
 .hero-inner{position:relative;z-index:1}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--amber-bg);border:1px solid var(--amber-bd);padding:4px 11px;border-radius:20px;margin-bottom:14px}
-.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 2s infinite}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--am-bg);border:1px solid var(--am-bd);padding:4px 11px;border-radius:20px;margin-bottom:12px}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--am);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.hero-tag-text{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber)}
-.hero-title{font-family:var(--cond);font-size:34px;font-weight:800;letter-spacing:-.5px;line-height:1;margin-bottom:4px}
-.hero-title em{color:var(--amber);font-style:normal}
-.hero-desc{font-size:13px;color:var(--text3)}
-.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-.hstat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 13px}
-.hstat-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3)}
-.hstat-val{font-family:var(--mono);font-size:14px;color:var(--text);margin-top:3px}
-.hstat-val.a{color:var(--amber)}
+.hero-tag-txt{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--am)}
+.hero-title{font-family:var(--cond);font-size:32px;font-weight:800;letter-spacing:-.5px;line-height:1;margin-bottom:4px}
+.hero-title em{color:var(--am);font-style:normal}
+.hero-desc{font-size:12px;color:var(--tx3)}
+.hrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.hstat{background:rgba(255,255,255,.04);border:1px solid var(--b1);border-radius:var(--rs);padding:10px 12px}
+.hstat-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)}
+.hstat-val{font-family:var(--mono);font-size:13px;color:var(--tx);margin-top:2px}
+.hstat-val.a{color:var(--am)}
+
+/* ── Scrollable body ── */
 .body{flex:1;padding:16px;overflow-y:auto}
-.slabel{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
-.slabel::after{content:'';flex:1;height:1px;background:var(--border)}
-/* Supervisor cards */
-.sup-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;margin-bottom:8px;position:relative;overflow:hidden}
-.sup-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border);transition:background .15s}
-.sup-card:active{border-color:var(--amber-bd);background:var(--raised)}
-.sup-card:active::before{background:var(--amber)}
-.sup-ava{width:42px;height:42px;border-radius:10px;flex-shrink:0;background:var(--raised);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.slabel{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx3);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.slabel::after{content:'';flex:1;height:1px;background:var(--b1)}
+
+/* ── Supervisor cards ── */
+.sup-card{background:var(--surf);border:1px solid var(--b1);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;margin-bottom:8px;position:relative;overflow:hidden}
+.sup-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--b1);transition:background .15s}
+.sup-card:active{border-color:var(--am-bd);background:var(--raised);}
+.sup-card:active::before{background:var(--am)}
+.sup-ava{width:42px;height:42px;border-radius:10px;flex-shrink:0;background:var(--raised);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:18px}
 .sup-name{font-size:14px;font-weight:700}
-.sup-id{display:inline-block;margin-top:3px;background:var(--raised);border:1px solid var(--border2);padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--text3)}
-.sup-arr{font-size:20px;color:var(--border2);margin-left:auto}
-/* OTM items */
-.otm-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:11px;margin-bottom:7px}
-.otm-item:active,.otm-item.sel{border-color:var(--amber);background:var(--amber-bg)}
-.otm-num{min-width:56px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0}
-.otm-desc{font-size:12px;font-weight:700;color:var(--text);line-height:1.3}
-.otm-meta{font-size:10px;color:var(--text3);margin-top:2px}
-.otm-chk{color:var(--amber);font-size:16px;display:none;flex-shrink:0;margin-left:auto}
+.sup-chip{display:inline-block;margin-top:3px;background:var(--raised);border:1px solid var(--b2);padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--tx3)}
+
+/* ── OTM items ── */
+.otm-item{background:var(--surf);border:1px solid var(--b1);border-radius:var(--rs);padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.otm-item:active,.otm-item.sel{border-color:var(--am);background:var(--am-bg)}
+.otm-badge{min-width:54px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0}
 .otm-item.sel .otm-chk{display:block}
-.c-sxew{background:rgba(59,130,246,.15);color:#60a5fa}
-.c-mina{background:rgba(16,185,129,.15);color:#34d399}
-.c-lixv{background:rgba(139,92,246,.15);color:#a78bfa}
-.c-agua{background:rgba(6,182,212,.15);color:#22d3ee}
-.c-c2{background:rgba(245,158,11,.15);color:var(--amber2)}
-.c-gsc{background:rgba(100,116,139,.15);color:#94a3b8}
-/* Partida items */
-.partida-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:11px;margin-bottom:7px}
-.partida-item:active,.partida-item.sel{border-color:var(--amber);background:var(--amber-bg)}
-.partida-item.sel .partida-chk{display:block}
-.partida-chk{color:var(--amber);font-size:16px;display:none;flex-shrink:0;margin-left:auto}
-.partida-badge{min-width:42px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;letter-spacing:.5px;flex-shrink:0;padding:0 6px}
-.partida-codigo{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:3px}
-.partida-desc{font-size:12px;font-weight:700;color:var(--text);line-height:1.3}
-.partida-meta{font-size:10px;color:var(--text3);margin-top:2px}
-/* Cuadrilla grupo cards */
-.cua-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:14px;margin-bottom:10px;position:relative}
-.cua-card.preset{border-color:var(--amber-bd)}
+.otm-chk{color:var(--am);font-size:15px;display:none;flex-shrink:0;margin-left:auto}
+.c-sx{background:rgba(59,130,246,.15);color:#60a5fa}
+.c-mn{background:rgba(16,185,129,.15);color:#34d399}
+.c-lx{background:rgba(139,92,246,.15);color:#a78bfa}
+.c-ag{background:rgba(6,182,212,.15);color:#22d3ee}
+.c-c2{background:rgba(245,158,11,.15);color:var(--am2)}
+.c-gs{background:rgba(100,116,139,.15);color:#94a3b8}
+
+/* ── Cuadrilla cards ── */
+.cua-card{background:var(--surf);border:1.5px solid var(--b1);border-radius:var(--r);padding:15px 16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.cua-card.preset{border-color:var(--am-bd)}
 .cua-card:active{transform:scale(.98);background:var(--raised)}
-.cua-card.preset:active{border-color:var(--amber)}
-.cua-ico{width:46px;height:46px;border-radius:11px;flex-shrink:0;font-size:20px;display:flex;align-items:center;justify-content:center}
-.cua-ico.amber{background:var(--amber-bg);border:1px solid var(--amber-bd)}
-.cua-ico.green{background:var(--green-bg);border:1px solid rgba(16,185,129,.25)}
-.cua-ico.blue{background:var(--blue-bg);border:1px solid rgba(96,165,250,.2)}
-.cua-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
-.cua-meta{font-size:11px;color:var(--text3)}
-.cua-count{font-family:var(--mono);font-size:11px;font-weight:600;background:var(--amber-bg);border:1px solid var(--amber-bd);color:var(--amber);padding:3px 9px;border-radius:20px;white-space:nowrap;margin-left:auto;flex-shrink:0}
-.cua-arr{font-size:20px;color:var(--text3);flex-shrink:0;margin-left:8px}
-/* Worker rows */
-.wrow-res{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 14px;display:flex;align-items:center;gap:11px;margin-bottom:6px;cursor:pointer;transition:all .15s}
-.wrow-res:active{border-color:var(--amber-bd);background:var(--raised)}
-.wrow-res.ya{border-color:rgba(16,185,129,.3);background:var(--green-bg)}
-.wava{width:38px;height:38px;border-radius:9px;flex-shrink:0;background:var(--raised);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px}
-.wid{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:2px}
-.wnom{font-size:13px;font-weight:700;color:var(--text)}
-.wcarg{font-size:10px;color:var(--text3);margin-top:1px}
-.wadd{margin-left:auto;font-size:20px;flex-shrink:0}
-.lrow{background:var(--surface);border:1px solid rgba(16,185,129,.25);border-radius:var(--rsm);padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.linfo{flex:1;min-width:0}
-.ldel{background:none;border:none;color:var(--text3);font-size:17px;cursor:pointer;padding:4px;border-radius:6px;transition:all .1s;flex-shrink:0;line-height:1}
-.ldel:active{color:var(--red);background:var(--red-bg)}
-.count-bar{background:var(--raised);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.count-n{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--amber)}
-.count-lbl{font-size:11px;color:var(--text3)}
+.cua-ico{width:44px;height:44px;border-radius:11px;flex-shrink:0;font-size:20px;display:flex;align-items:center;justify-content:center}
+.cua-ico.a{background:var(--am-bg);border:1px solid var(--am-bd)}
+.cua-ico.g{background:var(--gn-bg);border:1px solid var(--gn-bd)}
+.cua-ico.b{background:var(--bl-bg);border:1px solid rgba(96,165,250,.2)}
+.cua-title{font-size:14px;font-weight:700}
+.cua-meta{font-size:11px;color:var(--tx2)}
+.cua-count{font-family:var(--mono);font-size:11px;font-weight:600;background:var(--am-bg);border:1px solid var(--am-bd);color:var(--am);padding:3px 9px;border-radius:20px;white-space:nowrap;margin-left:auto;flex-shrink:0}
+
+/* ── Workers ── */
+.wi{background:var(--surf);border:1px solid var(--b1);border-radius:var(--rs);padding:11px 14px;display:flex;align-items:center;gap:10px;margin-bottom:6px;cursor:pointer;transition:all .15s}
+.wi:active{border-color:var(--am-bd);background:var(--raised)}
+.wi.ya{border-color:var(--gn-bd);background:var(--gn-bg)}
+.wav{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:var(--raised);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:15px}
+.wid{font-family:var(--mono);font-size:10px;color:var(--am);margin-bottom:2px}
+.wnm{font-size:13px;font-weight:700}
+.wcg{font-size:10px;color:var(--tx3)}
+.lrow{background:var(--surf);border:1px solid var(--gn-bd);border-radius:var(--rs);padding:9px 12px;display:flex;align-items:center;gap:10px;margin-bottom:5px}
+.ldel{background:none;border:none;color:var(--tx3);font-size:16px;cursor:pointer;padding:4px;border-radius:6px;flex-shrink:0;line-height:1;transition:color .1s}
+.ldel:active{color:var(--rd)}
+
+/* ── S5 Partida cards ── */
+.part-card{background:var(--surf);border:1.5px solid var(--b1);border-radius:var(--r);margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.part-card.has-workers{border-color:rgba(16,185,129,.3)}
+.part-head{padding:13px 14px;display:flex;align-items:center;gap:10px}
+.part-badge{padding:2px 7px;border-radius:5px;font-size:9px;font-weight:800;flex-shrink:0;letter-spacing:.5px}
+.part-code{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--am)}
+.part-desc{font-size:12px;font-weight:600;color:var(--tx);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.part-unit{font-size:10px;color:var(--tx3);flex-shrink:0}
+.part-actions{padding:0 14px 12px;display:flex;gap:8px;flex-wrap:wrap}
+.pa-btn{padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;border:1px solid;cursor:pointer;font-family:var(--font);transition:all .15s;display:flex;align-items:center;gap:6px}
+.pa-btn:active{transform:scale(.96)}
+.pa-all{background:var(--gn-bg);border-color:var(--gn-bd);color:var(--gn)}
+.pa-all:disabled{opacity:.3;pointer-events:none}
+.pa-sel{background:var(--am-bg);border-color:var(--am-bd);color:var(--am)}
+.part-workers{padding:0 14px 12px;display:flex;flex-direction:column;gap:5px}
+.pw{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--raised);border-radius:8px;border:1px solid var(--b2)}
+.pw-name{font-size:12px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pw-hh{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.pw-inp{width:62px;background:var(--surf);border:1px solid var(--b2);border-radius:6px;padding:5px 6px;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--tx);text-align:center;outline:none;transition:border-color .15s}
+.pw-inp:focus{border-color:var(--am)}
+.pw-inp.warn{border-color:var(--rd);color:var(--rd)}
+.pw-hh-lbl{font-family:var(--mono);font-size:11px;color:var(--tx3)}
+.pw-del{background:none;border:none;font-size:15px;color:var(--tx3);cursor:pointer;padding:3px;border-radius:5px;flex-shrink:0;line-height:1;transition:color .1s}
+.pw-del:active{color:var(--rd)}
+.pw-split{font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid rgba(96,165,250,.25);flex-shrink:0}
+
+/* ── Sin asignar counter ── */
+.unassigned-bar{position:sticky;top:0;z-index:20;padding:10px 16px;background:var(--void);border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ua-label{font-size:12px;font-weight:600;color:var(--tx2)}
+.ua-pill{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:var(--mono)}
+.ua-pill.pend{background:rgba(245,158,11,.15);border:1px solid var(--am-bd);color:var(--am)}
+.ua-pill.done{background:var(--gn-bg);border:1px solid var(--gn-bd);color:var(--gn)}
+
+/* ── Selector modal ── */
+#s5-sel{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
+#s5-sel.open{display:flex}
+.sel-box{background:var(--surf);border:1px solid var(--b2);border-radius:20px 20px 0 0;padding:0;width:100%;max-width:480px;max-height:80svh;display:flex;flex-direction:column}
+.sel-head{padding:18px 20px 14px;border-bottom:1px solid var(--b1);flex-shrink:0}
+.sel-title{font-family:var(--cond);font-size:16px;font-weight:800}
+.sel-sub{font-size:11px;color:var(--tx3);margin-top:3px}
+.sel-list{overflow-y:auto;padding:8px 12px;flex:1}
+.sel-row{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:9px;cursor:pointer;transition:background .1s;margin-bottom:3px}
+.sel-row:active{background:var(--raised)}
+.sel-row.en-partida{opacity:.5;pointer-events:none}
+.sel-row.split-warn{border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.05)}
+.sel-cb{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--b2);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--raised);transition:all .15s}
+.sel-cb.chk{background:var(--am);border-color:var(--am)}
+.sel-foot{padding:14px 16px;border-top:1px solid var(--b1);display:flex;gap:10px;flex-shrink:0}
+
+/* ── Search ── */
 .sw{position:relative;margin-bottom:12px}
-.si{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);padding:12px 14px 12px 40px;font-size:15px;color:var(--text);font-family:var(--font);outline:none;transition:border .15s}
-.si::placeholder{color:var(--text3)}
-.si:focus{border-color:var(--amber)}
-.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
-/* Nueva cuadrilla input */
-.nueva-input-wrap{background:var(--raised);border:1.5px dashed var(--border2);border-radius:var(--r);padding:16px;margin-bottom:10px}
-.nueva-inp{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;transition:border .15s;margin-top:8px}
-.nueva-inp:focus{border-color:var(--amber)}
-.nueva-inp::placeholder{color:var(--text3)}
-/* Scanner */
-#s5b{position:fixed!important;inset:0;z-index:50;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center}
-#s5b.active{display:flex}
-.scan-video{width:100%;max-height:70svh;object-fit:cover}
+.si{width:100%;background:var(--surf);border:1px solid var(--b2);border-radius:var(--rs);padding:12px 14px 12px 40px;font-size:15px;color:var(--tx);font-family:var(--font);outline:none;transition:border .15s}
+.si::placeholder{color:var(--tx3)}
+.si:focus{border-color:var(--am)}
+.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:15px}
+
+/* ── Buttons ── */
+.btn{width:100%;padding:15px;border-radius:var(--rs);border:none;font-size:14px;font-weight:700;font-family:var(--font);letter-spacing:.3px;text-transform:uppercase;cursor:pointer;transition:all .15s}
+.btn:active{transform:scale(.97)}
+.btn-a{background:var(--am);color:#000}
+.btn-g{background:var(--gn);color:#fff}
+.btn-h{background:transparent;border:1px solid var(--b2);color:var(--tx2)}
+.btn-h:active{background:var(--raised);color:var(--tx)}
+.btn-icon{display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-sm{padding:11px;font-size:12px}
+.gap{height:8px}
+
+/* ── Scanner ── */
+#s4b{position:fixed!important;inset:0;z-index:50;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center}
+#s4b.active{display:flex}
+.scan-v{width:100%;max-height:70svh;object-fit:cover}
 .scan-ui{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.scan-frame{position:relative;width:200px;height:200px}
-.sc{position:absolute;width:24px;height:24px;border-color:var(--amber);border-style:solid}
+.scan-f{position:relative;width:200px;height:200px}
+.sc{position:absolute;width:24px;height:24px;border-color:var(--am);border-style:solid}
 .sc.tl{top:0;left:0;border-width:3px 0 0 3px;border-radius:4px 0 0 0}
 .sc.tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 4px 0 0}
 .sc.bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 4px}
 .sc.br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 4px 0}
-.scan-ln{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent);animation:scanln 2s ease-in-out infinite}
-@keyframes scanln{0%,100%{top:8%}50%{top:92%}}
-.scan-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(6,8,16,.95);border-top:1px solid var(--border2);padding:16px;display:flex;gap:10px;align-items:center}
-.torch-btn{width:50px;height:50px;border-radius:12px;border:1px solid var(--border2);background:var(--raised);color:var(--text);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-.torch-btn.on{background:var(--amber-bg);border-color:var(--amber-bd)}
-/* Buttons */
-.btn{width:100%;padding:16px;border-radius:var(--rsm);border:none;font-size:14px;font-weight:700;font-family:var(--font);letter-spacing:.3px;text-transform:uppercase;cursor:pointer;transition:all .15s}
-.btn:active{transform:scale(.97)}
-.btn-a{background:var(--amber);color:#000;box-shadow:0 4px 16px rgba(245,158,11,.2)}
-.btn-a:active{background:var(--amber2)}
-.btn-g{background:var(--green);color:#fff;box-shadow:0 4px 16px rgba(16,185,129,.15)}
-.btn-gh{background:transparent;border:1px solid var(--border2);color:var(--text2)}
-.btn-gh:active{background:var(--raised);color:var(--text)}
-.btn-sm{padding:11px;font-size:12px}
-.btn-icon{display:flex;align-items:center;justify-content:center;gap:8px}
-.gap8{height:8px}
-/* Loading / success */
+.scan-ln{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--am),transparent);animation:scl 2s ease-in-out infinite}
+@keyframes scl{0%,100%{top:8%}50%{top:92%}}
+.scan-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(6,8,16,.95);border-top:1px solid var(--b2);padding:16px;display:flex;gap:10px;align-items:center}
+.torch-btn{width:48px;height:48px;border-radius:12px;border:1px solid var(--b2);background:var(--raised);color:var(--tx);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.torch-btn.on{background:var(--am-bg);border-color:var(--am-bd)}
+
+/* ── S6/S7 ── */
 .loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px}
-.spinner{width:36px;height:36px;border:2px solid var(--border2);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite}
+.spinner{width:36px;height:36px;border:2px solid var(--b2);border-top-color:var(--am);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.ltitle{font-family:var(--cond);font-size:16px;font-weight:700}
-.lsub{font-size:12px;color:var(--text3);text-align:center}
-.success-top{background:linear-gradient(135deg,#0a1a0f,#0d2015);border-bottom:1px solid rgba(16,185,129,.2);padding:30px 16px;text-align:center}
-.si-icon{font-size:52px;margin-bottom:10px}
-.si-title{font-family:var(--cond);font-size:28px;font-weight:800}
-.si-sub{font-size:13px;color:var(--text3);margin-top:4px}
-.ibox{background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);overflow:hidden;margin-bottom:14px}
-.irow{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border)}
+.ok-top{background:linear-gradient(135deg,#0a1a0f,#0d2015);border-bottom:1px solid rgba(16,185,129,.2);padding:28px 16px;text-align:center}
+.ibox{background:var(--surf);border:1px solid var(--b2);border-radius:var(--rs);overflow:hidden;margin-bottom:14px}
+.irow{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--b1)}
 .irow:last-child{border:none}
-.ikey{font-size:11px;color:var(--text3)}
-.ival{font-size:13px;font-weight:600;font-family:var(--mono)}
-.ival.a{color:var(--amber)}.ival.g{color:var(--green)}
-/* Guardar cuadrilla modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
-.modal-overlay.open{display:flex}
-.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px}
-.modal-title{font-family:var(--cond);font-size:16px;font-weight:800;margin-bottom:4px}
-.modal-sub{font-size:12px;color:var(--text3);margin-bottom:16px}
-/* Toast */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(12px);padding:10px 16px;border-radius:var(--rsm);font-size:13px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:all .25s;white-space:nowrap;max-width:88vw;backdrop-filter:blur(12px);border:1px solid}
+.ik{font-size:11px;color:var(--tx3)}
+.iv{font-size:13px;font-weight:600;font-family:var(--mono)}
+.iv.a{color:var(--am)}.iv.g{color:var(--gn)}
+
+/* ── Modal guardar cuadrilla ── */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex}
+.modal-box{background:var(--surf);border:1px solid var(--b2);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(12px);padding:10px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:all .25s;white-space:nowrap;max-width:88vw;backdrop-filter:blur(12px);border:1px solid}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.tok{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.3);color:var(--green)}
-.terr{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:var(--red)}
-.twarn{background:rgba(245,158,11,.12);border-color:var(--amber-bd);color:var(--amber2)}
-/* Partida seleccionada (paso 3 guardado) */
-.partida-sel-bar{background:rgba(245,158,11,.08);border:1px solid var(--amber-bd);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
-.partida-sel-code{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--amber)}
-.partida-sel-desc{font-size:12px;color:var(--text2);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* Sesiones enviadas hoy */
-.ses-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border)}
-.ses-row:last-child{border:none}
+.tok{background:rgba(16,185,129,.15);border-color:var(--gn-bd);color:var(--gn)}
+.terr{background:var(--rd-bg);border-color:rgba(239,68,68,.3);color:var(--rd)}
+.twarn{background:var(--am-bg);border-color:var(--am-bd);color:var(--am2)}
+
+/* Nueva cuadrilla input */
+.nueva-w{background:var(--raised);border:1.5px dashed var(--b2);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.nueva-inp{width:100%;background:var(--surf);border:1px solid var(--b2);border-radius:var(--rs);padding:11px 14px;font-size:14px;color:var(--tx);font-family:var(--font);outline:none;transition:border .15s;margin-top:8px}
+.nueva-inp:focus{border-color:var(--am)}
+.nueva-inp::placeholder{color:var(--tx3)}
 </style>
 </head>
 <body>
@@ -201,21 +236,21 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 <!-- SPLASH -->
 <div id="splash">
   <div class="sp-logo">KAMPFER</div>
-  <div class="sp-sub">Sistema de Tareo · SMCV</div>
+  <div class="sp-sub">Tareo · SMCV · Sistema Activo</div>
   <div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div>
 </div>
 
-<!-- ── S1: SUPERVISOR ───────────────────────────────────── -->
+<!-- S1: SUPERVISOR -->
 <div id="s1" class="screen active">
   <div class="hero">
     <div class="hero-grid"></div>
     <div class="hero-inner">
-      <div class="hero-tag"><div class="hero-dot"></div><span class="hero-tag-text">Sistema Activo · SMCV</span></div>
+      <div class="hero-tag"><div class="hero-dot"></div><span class="hero-tag-txt">Sistema Activo · SMCV</span></div>
       <div class="hero-title">TAREO <em>DIARIO</em></div>
-      <div class="hero-desc">Control de HH y partidas por trabajador</div>
-      <div class="hero-row">
+      <div class="hero-desc">Control HH por trabajador y partida</div>
+      <div class="hrow">
         <div class="hstat"><div class="hstat-lbl">Fecha</div><div class="hstat-val a" id="h-fecha">—</div></div>
-        <div class="hstat"><div class="hstat-lbl">Turno</div><div class="hstat-val" id="h-turno">—</div></div>
+        <div class="hstat"><div class="hstat-lbl">Jornada</div><div class="hstat-val" id="h-hh">—</div></div>
       </div>
     </div>
   </div>
@@ -225,133 +260,90 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   </div>
 </div>
 
-<!-- ── S2: OTM ACTIVA ──────────────────────────────────── -->
+<!-- S2: OTM -->
 <div id="s2" class="screen">
   <div class="bar">
     <div class="bar-ico">📋</div>
     <div>
       <div class="bar-title" id="s2-sup">—</div>
-      <div class="bar-sub" id="s2-fecha">—</div>
+      <div class="bar-sub">Elige tu OTM de hoy</div>
     </div>
-    <button class="bar-btn" onclick="ir('s1')">← Cambiar</button>
+    <button class="bar-back" onclick="ir('s1')">← Sup.</button>
   </div>
   <div class="body">
-    <div class="slabel">¿Qué OTM trabajarás hoy?</div>
     <div class="sw"><span class="sico">🔍</span>
-      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área..."
-             oninput="filtOTM(this.value)" autocomplete="off">
+      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área…" oninput="filtOTM(this.value)" autocomplete="off">
     </div>
     <div id="lista-otms"></div>
-    <div id="s2-enviadas" style="margin-top:8px"></div>
+    <div id="s2-sesiones"></div>
     <div style="height:80px"></div>
   </div>
-  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
-    <button class="btn btn-a btn-icon" id="btn-s2" onclick="irAPartida()"
-            style="opacity:.4;pointer-events:none">
-      <span>›</span><span id="btn-s2-txt">ELEGIR PARTIDA</span>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+    <button class="btn btn-a btn-icon" id="btn-s2" onclick="irACuadrilla()" style="opacity:.4;pointer-events:none">
+      <span>›</span><span id="btn-s2-txt">ELEGIR CUADRILLA</span>
     </button>
   </div>
 </div>
 
-<!-- ── S3: PARTIDA DE LA OTM ────────────────────────────── -->
+<!-- S3: CUADRILLA TÍPICA (por OTM) -->
 <div id="s3" class="screen">
-  <div class="bar">
-    <div class="bar-ico">🔩</div>
-    <div>
-      <div class="bar-title" id="s3-otm">—</div>
-      <div class="bar-sub">Elige la partida de hoy</div>
-    </div>
-    <button class="bar-btn" onclick="ir('s2')">← OTM</button>
-  </div>
-  <div class="body">
-    <div class="sw"><span class="sico">🔍</span>
-      <input class="si" id="q-partida" type="text" placeholder="Buscar partida..."
-             oninput="filtPartidas(this.value)" autocomplete="off">
-    </div>
-    <div id="lista-partidas"></div>
-    <div style="height:80px"></div>
-  </div>
-  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
-    <button class="btn btn-a btn-icon" id="btn-s3" onclick="irACuadrilla()"
-            style="opacity:.4;pointer-events:none">
-      <span>›</span><span id="btn-s3-txt">ELEGIR CUADRILLA</span>
-    </button>
-  </div>
-</div>
-
-<!-- ── S4: CUADRILLA ────────────────────────────────────── -->
-<div id="s4" class="screen">
   <div class="bar">
     <div class="bar-ico">👥</div>
     <div>
-      <div class="bar-title" id="s4-sup">—</div>
-      <div class="bar-sub" id="s4-partida-lbl">—</div>
+      <div class="bar-title" id="s3-otm">—</div>
+      <div class="bar-sub" id="s3-sub">Elige tu cuadrilla</div>
     </div>
-    <button class="bar-btn" onclick="ir('s3')">← Partida</button>
+    <button class="bar-back" onclick="ir('s2')">← OTM</button>
   </div>
   <div class="body">
-    <div class="slabel">¿Qué cuadrilla trabaja hoy?</div>
-    <div id="lista-cuadrillas"></div>
+    <div class="slabel">Cuadrillas guardadas</div>
+    <div id="lista-cuadrillas-otm"></div>
     <div class="slabel">O crea una nueva</div>
-    <div class="nueva-input-wrap">
-      <div style="font-size:12px;font-weight:600;color:var(--text2)">Nueva cuadrilla</div>
-      <input class="nueva-inp" id="nueva-cua-nombre" type="text" placeholder="Ej: Cuadrilla fierreros tarde..."
-             oninput="actualizarBtnNueva(this.value)">
+    <div class="nueva-w">
+      <div style="font-size:12px;font-weight:600;color:var(--tx2)">Nueva cuadrilla para esta OTM</div>
+      <input class="nueva-inp" id="nueva-nombre" type="text" placeholder="Ej: Cuadrilla excavación…" oninput="actualizarBtnNueva(this.value)">
     </div>
-    <button class="btn btn-gh btn-sm btn-icon" id="btn-nueva-cua"
-            onclick="iniciarNuevaCuadrilla()" style="opacity:.4;pointer-events:none">
-      <span>+</span><span>EMPEZAR LISTA VACÍA</span>
+    <button class="btn btn-h btn-sm btn-icon" id="btn-nueva" onclick="iniciarNueva()" style="opacity:.4;pointer-events:none">
+      <span>+</span><span>EMPEZAR CON LISTA VACÍA</span>
     </button>
   </div>
 </div>
 
-<!-- ── S5: EDITAR LISTA DE TRABAJADORES ─────────────────── -->
-<div id="s5" class="screen">
+<!-- S4: EDITAR LISTA DE TRABAJADORES -->
+<div id="s4" class="screen">
   <div class="bar">
     <div class="bar-ico">👷</div>
     <div>
-      <div class="bar-title" id="s5-titulo">Lista de trabajadores</div>
-      <div class="bar-sub" id="s5-sub">Agrega o retira personal</div>
+      <div class="bar-title" id="s4-titulo">Lista de trabajadores</div>
+      <div class="bar-sub" id="s4-sub">Agrega o retira personal</div>
     </div>
-    <button class="bar-btn" onclick="ir('s4')">← Cuadrilla</button>
+    <button class="bar-back" onclick="ir('s3')">← Cuadrilla</button>
   </div>
   <div class="body">
-    <!-- Resumen OTM + Partida -->
-    <div class="partida-sel-bar" id="s5-resumen" style="display:none">
-      <span class="partida-sel-code" id="s5-otm-tag">—</span>
-      <span class="partida-sel-desc" id="s5-partida-tag">—</span>
-    </div>
-
     <div class="sw"><span class="sico">🔍</span>
-      <input class="si" id="q-trab" type="text" placeholder="Buscar por nombre o ID..."
-             oninput="buscarTrab(this.value)"
-             autocomplete="off" autocorrect="off" autocapitalize="words">
+      <input class="si" id="q-trab" type="text" placeholder="Buscar nombre o ID…"
+             oninput="buscarTrab(this.value)" autocomplete="off">
     </div>
     <div id="res-trab"></div>
-    <div class="slabel" style="margin-top:20px">Trabajadores en lista</div>
-    <div class="count-bar">
-      <span class="count-lbl">Total</span>
-      <span class="count-n" id="count-lista">0 personas</span>
-    </div>
+    <div class="slabel" style="margin-top:20px">En la cuadrilla</div>
     <div id="lista-actual"></div>
-    <div class="gap8"></div>
-    <button class="btn btn-gh btn-sm btn-icon" onclick="abrirQR()">
+    <div class="gap"></div>
+    <button class="btn btn-h btn-sm btn-icon" onclick="abrirQR()">
       <span>📷</span><span>Agregar por QR</span>
     </button>
     <div style="height:90px"></div>
   </div>
-  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
-    <button class="btn btn-g btn-icon" id="btn-enviar" onclick="enviar()"
-            style="opacity:.4;pointer-events:none">
-      <span>📤</span><span id="btn-enviar-txt">ENVIAR TAREO</span>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+    <button class="btn btn-a btn-icon" id="btn-s4" onclick="irAPartidas()" style="opacity:.4;pointer-events:none">
+      <span>›</span><span id="btn-s4-txt">ASIGNAR A PARTIDAS</span>
     </button>
   </div>
 </div>
 
-<!-- ── S5b: QR SCANNER ──────────────────────────────────── -->
-<div id="s5b" class="screen">
-  <video id="video" class="scan-video" autoplay playsinline muted></video>
-  <div class="scan-ui"><div class="scan-frame">
+<!-- S4b: SCANNER QR -->
+<div id="s4b" class="screen">
+  <video id="video" class="scan-v" autoplay playsinline muted></video>
+  <div class="scan-ui"><div class="scan-f">
     <div class="sc tl"></div><div class="sc tr"></div>
     <div class="sc bl"></div><div class="sc br"></div>
     <div class="scan-ln"></div>
@@ -361,670 +353,887 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     <button class="torch-btn" id="torch-btn" onclick="toggleTorch()">🔦</button>
     <div style="flex:1;text-align:center">
       <div style="font-size:13px;font-weight:600">Apunta al QR del trabajador</div>
-      <div style="font-size:11px;color:var(--text3);margin-top:2px">Se detecta automáticamente</div>
+      <div style="font-size:11px;color:var(--tx3)">Se detecta automáticamente</div>
     </div>
-    <button class="btn btn-gh btn-sm" style="width:auto;padding:11px 14px"
-            onclick="stopCam();ir('s5')">✕ Cerrar</button>
+    <button class="btn btn-h btn-sm" style="width:auto;padding:10px 14px" onclick="stopCam();ir('s4')">✕</button>
   </div>
 </div>
 
-<!-- ── S6: ENVIANDO ─────────────────────────────────────── -->
+<!-- S5: DISTRIBUCIÓN A PARTIDAS -->
+<div id="s5" class="screen">
+  <div class="bar">
+    <div class="bar-ico">🔩</div>
+    <div>
+      <div class="bar-title" id="s5-otm">—</div>
+      <div class="bar-sub" id="s5-sub">¿Quién trabaja en qué partida?</div>
+    </div>
+    <button class="bar-back" onclick="ir('s4')">← Lista</button>
+  </div>
+  <!-- Sin asignar counter -->
+  <div class="unassigned-bar">
+    <span class="ua-label" id="ua-label">Sin asignar</span>
+    <span class="ua-pill pend" id="ua-pill">0 personas</span>
+  </div>
+  <div class="body" id="s5-body">
+    <!-- Partida cards generadas dinámicamente -->
+    <div style="height:80px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+    <button class="btn btn-g btn-icon" id="btn-enviar" onclick="enviar()" style="opacity:.4;pointer-events:none">
+      <span>📤</span><span id="btn-env-txt">ENVIAR TAREO</span>
+    </button>
+  </div>
+</div>
+
+<!-- S5-SEL: SELECTOR DE TRABAJADORES (bottom sheet) -->
+<div id="s5-sel">
+  <div class="sel-box">
+    <div class="sel-head">
+      <div class="sel-title" id="sel-title">Agregar a partida</div>
+      <div class="sel-sub" id="sel-sub">Selecciona los trabajadores</div>
+    </div>
+    <div class="sel-list" id="sel-list"></div>
+    <div class="sel-foot">
+      <button class="btn btn-h btn-sm" style="flex:1" onclick="cerrarSel()">Cancelar</button>
+      <button class="btn btn-a btn-sm btn-icon" style="flex:2" id="btn-sel-ok" onclick="confirmarSel()">
+        <span>✓</span><span id="btn-sel-txt">Agregar</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- S6: ENVIANDO -->
 <div id="s6" class="screen">
   <div class="loading">
     <div class="spinner"></div>
-    <div class="ltitle" id="s6t">Enviando tareo...</div>
-    <div class="lsub" id="s6s">Guardando en la base de datos</div>
+    <div style="font-family:var(--cond);font-size:16px;font-weight:700" id="s6t">Enviando tareo…</div>
+    <div style="font-size:12px;color:var(--tx3)" id="s6s">Guardando en la base de datos</div>
   </div>
 </div>
 
-<!-- ── S7: RESULTADO ────────────────────────────────────── -->
+<!-- S7: RESULTADO -->
 <div id="s7" class="screen">
-  <div class="success-top">
-    <div class="si-icon">✅</div>
-    <div class="si-title">TAREO ENVIADO</div>
-    <div class="si-sub" id="s7-sub">—</div>
+  <div class="ok-top">
+    <div style="font-size:52px;margin-bottom:10px">✅</div>
+    <div style="font-family:var(--cond);font-size:28px;font-weight:800">TAREO ENVIADO</div>
+    <div style="font-size:13px;color:var(--tx3);margin-top:4px" id="s7-sub">—</div>
   </div>
   <div class="body">
-    <div id="s7-ibox" class="ibox"></div>
-    <div class="gap8"></div>
-    <button class="btn btn-a" onclick="irNuevoRegistro()">+ NUEVA PARTIDA / OTM</button>
-    <div class="gap8"></div>
-    <button class="btn btn-gh btn-sm" onclick="irInicio()">← Cambiar de supervisor</button>
+    <div class="ibox" id="s7-ibox"></div>
+    <div class="gap"></div>
+    <button class="btn btn-a" onclick="irNuevo()">+ NUEVA OTM / PARTIDA</button>
+    <div class="gap"></div>
+    <button class="btn btn-h btn-sm" onclick="irInicio()">← Cambiar supervisor</button>
   </div>
 </div>
 
 <!-- Modal guardar cuadrilla -->
-<div class="modal-overlay" id="modal-guardar" onclick="cerrarModal(event)">
+<div class="modal-ov" id="modal-grd" onclick="cerrarModalGrd(event)">
   <div class="modal-box">
-    <div class="modal-title">¿Guardar esta cuadrilla?</div>
-    <div class="modal-sub" id="modal-sub">Guárdala para usarla mañana con un solo toque</div>
-    <input class="nueva-inp" id="modal-nombre" type="text" placeholder="Nombre de la cuadrilla..."
-           style="margin-bottom:12px">
-    <button class="btn btn-a btn-sm btn-icon" style="margin-bottom:8px" onclick="guardarNuevaCuadrilla()">
+    <div style="font-family:var(--cond);font-size:16px;font-weight:800;margin-bottom:4px">¿Guardar cuadrilla?</div>
+    <div style="font-size:12px;color:var(--tx3);margin-bottom:16px" id="modal-grd-sub">Guárdala para usarla mañana</div>
+    <input class="nueva-inp" id="modal-nombre" type="text" placeholder="Nombre de la cuadrilla…" style="margin-bottom:12px">
+    <button class="btn btn-a btn-sm btn-icon" style="margin-bottom:8px" onclick="guardarCuadrilla()">
       <span>💾</span><span>GUARDAR</span>
     </button>
-    <button class="btn btn-gh btn-sm" onclick="cerrarModalBtn()">No gracias</button>
+    <button class="btn btn-h btn-sm" onclick="cerrarModalGrdBtn()">No gracias</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // CONFIG
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 const API = 'https://api.apps1.astraera.space'
-const AREA_CLS = {
-  'SX-EW':'c-sxew','Mina':'c-mina','Lixviacion':'c-lixv','Lixviación':'c-lixv',
-  'Aguas':'c-agua','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gsc'
+const AREA_CLR = {
+  'SX-EW':'c-sx','Mina':'c-mn','Lixviacion':'c-lx','Lixviación':'c-lx',
+  'Aguas':'c-ag','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gs'
 }
-const FASE_COLORS = {
-  'CIV':'#fb923c','FAB':'#818cf8','MEC':'#60a5fa','ELE':'#f59e0b',
-  'TUB':'#22d3ee','INS':'#a78bfa','EST':'#34d399','AND':'#4ade80',
-  'APY':'#94a3b8','ING':'#f472b6','MON':'#e879f9'
+const FASE_CLR = {
+  CIV:'#fb923c',FAB:'#818cf8',MEC:'#60a5fa',ELE:'#f59e0b',
+  TUB:'#22d3ee',INS:'#a78bfa',EST:'#34d399',AND:'#4ade80',
+  APY:'#94a3b8',ING:'#f472b6',MON:'#e879f9'
 }
+// HH por día de semana (0=lun…6=dom)
+const HH_DOW = {0:9.5,1:9.5,2:10.0,3:9.5,4:9.5,5:0,6:0}
+function hhHoy(){ const d=new Date().getDay(); return HH_DOW[d===0?6:d-1]||9.5 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // ESTADO
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 const S = {
-  sup: null, sups: [], otms: [], trabs: [],
-  cuadrilla_grupos: [],
-  otm:       null,
-  partida:   null,
-  partidas:  [],
-  lista:     [],
-  sesionesHoy: [],
-  scan: false, stream: null, torch: false,
-  nuevaCuadrillaNombre: ''
+  // Datos globales
+  sups:[], otms:[], trabs:[],
+  // Plantillas de cuadrilla para sup+OTM actual
+  plantillas:{},    // {nombre:[{trabajador_id,nombre,cargo}]}
+  partidas:[],      // partidas hoja de la OTM
+  // Seleccionados
+  sup:null, otm:null,
+  // Workers de la sesión
+  lista:[],         // [{id,nombre,cargo,via}]
+  nuevaNombre:'',
+  hhDia: 9.5,
+  // Asignaciones a partidas
+  // assignments: {partida_id:[trab_id,...]}
+  asig:{},
+  // HH override para workers en 2+ partidas
+  // hhMap: {`${trab_id}__${partida_id}`: hh}
+  hhMap:{},
+  // Selector modal
+  selPid:null, selChk:new Set(),
+  // Scanner
+  scan:false, stream:null, torch:false
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// HELPERS ASIGNACIONES
+// ═══════════════════════════════════════════════════════════════
+function getWorkerPartidas(tid){
+  return Object.entries(S.asig)
+    .filter(([,list])=>list.includes(tid))
+    .map(([pid])=>parseInt(pid))
+}
+function getUnassigned(){
+  const all=new Set();
+  Object.values(S.asig).forEach(l=>l.forEach(t=>all.add(t)))
+  return S.lista.filter(t=>!all.has(t.id))
+}
+function getHH(tid,pid){
+  const k=`${tid}__${pid}`
+  if(S.hhMap[k]!==undefined) return S.hhMap[k]
+  const n=getWorkerPartidas(tid).length
+  if(n<=1) return S.hhDia
+  return Math.round(S.hhDia/n*2)/2
+}
+function recalcHH(tid){
+  const parts=getWorkerPartidas(tid)
+  if(!parts.length) return
+  // Solo recalcula los que no tienen override manual establecido distinto al split
+  const hhEach=Math.round(S.hhDia/parts.length*4)/4
+  parts.forEach(pid=>{
+    const k=`${tid}__${pid}`
+    if(S.hhMap[k]===undefined) S.hhMap[k]=hhEach
+  })
+}
+function addToPartida(tid,pid){
+  pid=parseInt(pid)
+  if(!S.asig[pid]) S.asig[pid]=[]
+  if(!S.asig[pid].includes(tid)){
+    S.asig[pid].push(tid)
+    recalcHH(tid)
+  }
+}
+function removeFromPartida(tid,pid){
+  pid=parseInt(pid)
+  if(!S.asig[pid]) return
+  S.asig[pid]=S.asig[pid].filter(t=>t!==tid)
+  if(!S.asig[pid].length) delete S.asig[pid]
+  delete S.hhMap[`${tid}__${pid}`]
+  // Recalc remaining partidas for this worker
+  const remaining=getWorkerPartidas(tid)
+  if(remaining.length===1){
+    // Only 1 left — full HH, no override needed
+    delete S.hhMap[`${tid}__${remaining[0]}`]
+  } else {
+    recalcHH(tid)
+  }
+}
+function setHHOverride(tid,pid,val){
+  S.hhMap[`${tid}__${pid}`]=parseFloat(val)||0
+}
+function allAssigned(){
+  return getUnassigned().length===0 && S.lista.length>0
+}
+function totalHHWorker(tid){
+  return getWorkerPartidas(tid).reduce((s,pid)=>s+getHH(tid,pid),0)
+}
+function workerHHOk(tid){
+  const parts=getWorkerPartidas(tid)
+  if(parts.length<=1) return true
+  return Math.abs(totalHHWorker(tid)-S.hhDia)<0.15
+}
+
+// ═══════════════════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════
-window.addEventListener('load', async () => {
-  requestAnimationFrame(() => document.getElementById('sp-fill').style.width = '100%')
-  const now = new Date()
-  const DS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
-  const MS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
-  document.getElementById('h-fecha').textContent =
-    `${DS[now.getDay()]} ${now.getDate()} ${MS[now.getMonth()]}`
-  const h = now.getHours()
-  document.getElementById('h-turno').textContent =
-    h < 6 ? 'Madrugada' : h < 12 ? 'Mañana' : h < 17 ? 'Tarde' : 'Noche'
-  await cargarDatosIniciales()
-  setTimeout(hideSplash, 1400)
+// ═══════════════════════════════════════════════════════════════
+window.addEventListener('load',async()=>{
+  requestAnimationFrame(()=>document.getElementById('sp-fill').style.width='100%')
+  const now=new Date()
+  const DS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
+  const MS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+  document.getElementById('h-fecha').textContent=`${DS[now.getDay()]} ${now.getDate()} ${MS[now.getMonth()]}`
+  S.hhDia=hhHoy()
+  document.getElementById('h-hh').textContent=`${S.hhDia} HH`
+  await cargarDatos()
+  setTimeout(hideSplash,1400)
 })
-
-function hideSplash() {
-  const sp = document.getElementById('splash')
+function hideSplash(){
+  const sp=document.getElementById('splash')
   sp.classList.add('hide')
-  setTimeout(() => sp.style.display = 'none', 400)
+  setTimeout(()=>sp.style.display='none',400)
 }
-
-async function cargarDatosIniciales() {
-  try {
-    const [rs, ro, rt] = await Promise.all([
-      fetch(`${API}/api/supervisores`).then(r => r.json()),
-      fetch(`${API}/api/otms?activas=true`).then(r => r.json()),
-      fetch(`${API}/api/trabajadores`).then(r => r.json()),
+async function cargarDatos(){
+  try{
+    const [rs,ro,rt]=await Promise.all([
+      fetch(`${API}/api/supervisores`).then(r=>r.json()),
+      fetch(`${API}/api/otms?activas=true`).then(r=>r.json()),
+      fetch(`${API}/api/trabajadores`).then(r=>r.json())
     ])
-    S.sups = rs; S.otms = ro; S.trabs = rt
-    ls('kp_sups', rs); ls('kp_otms', ro); ls('kp_trabs', rt)
-  } catch {
-    S.sups  = lsGet('kp_sups')  || []
-    S.otms  = lsGet('kp_otms')  || []
-    S.trabs = lsGet('kp_trabs') || []
-    if (S.sups.length) toast('Sin conexión — usando caché', 'warn')
-    else toast('Sin datos — verifica la conexión', 'err')
+    S.sups=rs;S.otms=ro;S.trabs=rt
+    ls('kp_s',rs);ls('kp_o',ro);ls('kp_t',rt)
+  }catch{
+    S.sups=lsG('kp_s')||[];S.otms=lsG('kp_o')||[];S.trabs=lsG('kp_t')||[]
+    if(S.sups.length) toast('Sin conexión — usando caché','warn')
+    else toast('Sin datos — verifica la conexión','err')
   }
   renderSups()
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // NAVEGACIÓN
-// ═══════════════════════════════════════════
-function ir(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+// ═══════════════════════════════════════════════════════════════
+function ir(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
   document.getElementById(id).classList.add('active')
   window.scrollTo(0,0)
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // S1 — SUPERVISOR
-// ═══════════════════════════════════════════
-function renderSups() {
-  const el = document.getElementById('lista-sups')
-  if (!S.sups.length) {
-    el.innerHTML = '<p style="text-align:center;padding:30px;color:var(--text3);font-size:13px">Sin supervisores cargados</p>'
-    return
-  }
-  el.innerHTML = S.sups.map(s => `
+// ═══════════════════════════════════════════════════════════════
+function renderSups(){
+  const el=document.getElementById('lista-sups')
+  el.innerHTML=S.sups.map(s=>`
     <div class="sup-card" onclick="elegirSup('${s.id}')">
       <div class="sup-ava">👷</div>
-      <div>
+      <div style="flex:1">
         <div class="sup-name">${s.nombre}</div>
-        <span class="sup-id">${s.id}</span>
+        <span class="sup-chip">${s.id}</span>
       </div>
-      <span class="sup-arr">›</span>
+      <span style="font-size:20px;color:var(--tx3)">›</span>
     </div>`).join('')
 }
-
-async function elegirSup(id) {
-  S.sup     = S.sups.find(s => s.id === id)
-  S.otm     = null
-  S.partida = null
-  S.lista   = []
-
-  const now = new Date()
-  const DS  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
-  const MS  = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
-  const fechaStr = `${DS[now.getDay()]} ${now.getDate()} ${MS[now.getMonth()]}`
-
-  document.getElementById('s2-sup').textContent  = S.sup.nombre.split(' ').slice(0,2).join(' ')
-  document.getElementById('s2-fecha').textContent = fechaStr
-
-  // Resetear S2
-  document.getElementById('q-otm').value = ''
-  S.otm = null
-  actualizarBtnS2()
-  renderOTMs(S.otms)
+async function elegirSup(id){
+  S.sup=S.sups.find(s=>s.id===id)
+  S.otm=null; S.partidas=[]; S.asig={}; S.hhMap={}; S.lista=[]
+  document.getElementById('s2-sup').textContent=S.sup.nombre.split(' ').slice(0,2).join(' ')
+  document.getElementById('q-otm').value=''
+  filtOTM(''); actualizarBtnS2(false)
+  cargarSesionesHoy()
   ir('s2')
-
-  // Cargar cuadrillas y sesiones en paralelo
-  await Promise.all([cargarCuadrillas(), cargarSesionesHoy()])
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // S2 — OTM
-// ═══════════════════════════════════════════
-function renderOTMs(list) {
-  const el = document.getElementById('lista-otms')
-  el.innerHTML = list.map(o => {
-    const cls = AREA_CLS[o.area] || 'c-gsc'
+// ═══════════════════════════════════════════════════════════════
+function renderOTMs(list){
+  const el=document.getElementById('lista-otms')
+  el.innerHTML=list.map(o=>{
+    const cls=AREA_CLR[o.area]||'c-gs'
     return `
-      <div class="otm-item${S.otm?.id === o.id ? ' sel' : ''}" onclick="elegirOTM('${o.id}')">
-        <div class="otm-num ${cls}">${o.id.slice(-4)}</div>
+      <div class="otm-item${S.otm?.id===o.id?' sel':''}" onclick="elegirOTM('${o.id}')">
+        <div class="otm-badge ${cls}">${o.id.slice(-4)}</div>
         <div style="flex:1;min-width:0">
-          <div class="otm-desc">${o.descripcion}</div>
-          <div class="otm-meta">${o.id} · ${o.area || '—'}</div>
+          <div style="font-size:12px;font-weight:700">${o.descripcion}</div>
+          <div style="font-size:10px;color:var(--tx3)">${o.id} · ${o.area||'—'}</div>
         </div>
         <span class="otm-chk">✓</span>
       </div>`
   }).join('')
 }
-
-function filtOTM(q) {
-  const f = q.length < 2 ? S.otms : S.otms.filter(o =>
-    o.id.toLowerCase().includes(q.toLowerCase()) ||
-    o.descripcion.toLowerCase().includes(q.toLowerCase()) ||
+function filtOTM(q){
+  const f=q.length<2?S.otms:S.otms.filter(o=>
+    o.id.toLowerCase().includes(q.toLowerCase())||
+    o.descripcion.toLowerCase().includes(q.toLowerCase())||
     (o.area||'').toLowerCase().includes(q.toLowerCase())
   )
   renderOTMs(f)
 }
-
-async function elegirOTM(id) {
-  S.otm     = S.otms.find(o => o.id === id)
-  S.partida = null
+async function elegirOTM(id){
+  S.otm=S.otms.find(o=>o.id===id)
+  S.asig={}; S.hhMap={}
   filtOTM(document.getElementById('q-otm').value)
-  actualizarBtnS2()
-  // Pre-cargar partidas
-  await cargarPartidasOTM(id)
+  actualizarBtnS2(true)
+  // Cargar plantillas de cuadrilla para esta OTM + partidas en paralelo
+  await Promise.all([cargarPlantillasOTM(),cargarPartidasOTM()])
 }
-
-function actualizarBtnS2() {
-  const btn = document.getElementById('btn-s2')
-  const ok  = !!S.otm
-  btn.style.opacity       = ok ? '1' : '.4'
-  btn.style.pointerEvents = ok ? 'auto' : 'none'
-  document.getElementById('btn-s2-txt').textContent =
-    ok ? `ELEGIR PARTIDA — ${S.otm.id.slice(-4)}` : 'ELEGIR PARTIDA'
+function actualizarBtnS2(ok){
+  const btn=document.getElementById('btn-s2')
+  btn.style.opacity=ok?'1':'.4'
+  btn.style.pointerEvents=ok?'auto':'none'
+  document.getElementById('btn-s2-txt').textContent=
+    ok?`ELEGIR CUADRILLA — ${S.otm.id.slice(-4)}`:'ELEGIR CUADRILLA'
 }
-
-async function cargarPartidasOTM(otm_id) {
-  try {
-    const r = await fetch(`${API}/api/partidas-otm/${encodeURIComponent(otm_id)}`)
-    S.partidas = r.ok ? await r.json() : []
-    ls(`kp_partidas_${otm_id}`, S.partidas)
-  } catch {
-    S.partidas = lsGet(`kp_partidas_${otm_id}`) || []
+async function cargarPlantillasOTM(){
+  try{
+    const r=await fetch(`${API}/ev/cuadrillas-plantilla?supervisor_id=${S.sup.id}&otm_id=${encodeURIComponent(S.otm.id)}`)
+    S.plantillas=r.ok?await r.json():{}
+    ls(`kp_pla_${S.sup.id}_${S.otm.id}`,S.plantillas)
+  }catch{
+    S.plantillas=lsG(`kp_pla_${S.sup.id}_${S.otm.id}`)||{}
   }
 }
-
-function irAPartida() {
-  if (!S.otm) return
-  document.getElementById('s3-otm').textContent = S.otm.id + ' · ' + S.otm.descripcion.slice(0,30)
-  document.getElementById('q-partida').value = ''
-  S.partida = null
-  actualizarBtnS3()
-  renderPartidas(S.partidas)
+async function cargarPartidasOTM(){
+  try{
+    const r=await fetch(`${API}/api/partidas-otm/${encodeURIComponent(S.otm.id)}`)
+    S.partidas=r.ok?await r.json():[]
+    ls(`kp_par_${S.otm.id}`,S.partidas)
+  }catch{
+    S.partidas=lsG(`kp_par_${S.otm.id}`)||[]
+  }
+}
+async function cargarSesionesHoy(){
+  const el=document.getElementById('s2-sesiones')
+  try{
+    const r=await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
+    if(!r.ok){el.innerHTML='';return}
+    const todas=await r.json()
+    const env=todas.filter(s=>s.estado==='enviada')
+    if(!env.length){el.innerHTML='';return}
+    const hhTot=env.reduce((s,x)=>s+(x.total||0)*parseFloat(x.hh_turno),0).toFixed(1)
+    el.innerHTML=`
+      <div class="slabel">Ya enviado hoy · ${hhTot} HH</div>
+      <div style="background:var(--surf);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);overflow:hidden;margin-bottom:8px">
+        ${env.map(s=>`
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--b1)">
+            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--am);min-width:80px">${s.otm_id}</span>
+            <span style="flex:1;font-size:11px;color:var(--tx3)">${s.total||0} personas</span>
+            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--gn)">✓ ${((s.total||0)*parseFloat(s.hh_turno)).toFixed(1)} HH</span>
+          </div>`).join('')}
+      </div>`
+  }catch{el.innerHTML=''}
+}
+function irACuadrilla(){
+  if(!S.otm) return
+  document.getElementById('s3-otm').textContent=`${S.otm.id} · ${S.otm.descripcion.slice(0,25)}`
+  document.getElementById('s3-sub').textContent=`Cuadrillas para ${S.otm.id}`
+  document.getElementById('nueva-nombre').value=''
+  actualizarBtnNueva('')
+  renderCuadrillasOTM()
   ir('s3')
 }
 
-async function cargarSesionesHoy() {
-  const el = document.getElementById('s2-enviadas')
-  try {
-    const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
-    if (!r.ok) { el.innerHTML = ''; S.sesionesHoy = []; return }
-    const todas   = await r.json()
-    S.sesionesHoy = todas
-    const enviadas = todas.filter(s => s.estado === 'enviada')
-    if (!enviadas.length) { el.innerHTML = ''; return }
-    const hhTotal = enviadas.reduce((sum, s) => sum + (s.total||0) * parseFloat(s.hh_turno), 0).toFixed(1)
-    el.innerHTML = `
-      <div class="slabel">Enviado hoy · ${hhTotal} HH totales</div>
-      <div style="background:var(--surface);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);overflow:hidden;margin-bottom:8px">
-        ${enviadas.map(s => `
-          <div class="ses-row">
-            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--amber);min-width:80px">${s.otm_id}</span>
-            <span style="flex:1;font-size:11px;color:var(--text3)">${s.total||0} trabajadores</span>
-            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)">✓ ${((s.total||0)*parseFloat(s.hh_turno)).toFixed(1)} HH</span>
-          </div>`).join('')}
-      </div>`
-  } catch { el.innerHTML = ''; S.sesionesHoy = [] }
-}
-
-// ═══════════════════════════════════════════
-// S3 — PARTIDA
-// ═══════════════════════════════════════════
-function renderPartidas(list) {
-  const el = document.getElementById('lista-partidas')
-  if (!list.length) {
-    el.innerHTML = '<p style="padding:20px;color:var(--text3);font-size:13px;text-align:center">Esta OTM no tiene partidas registradas. Importa las partidas desde el panel.</p>'
+// ═══════════════════════════════════════════════════════════════
+// S3 — CUADRILLA (por OTM)
+// ═══════════════════════════════════════════════════════════════
+function renderCuadrillasOTM(){
+  const el=document.getElementById('lista-cuadrillas-otm')
+  const entries=Object.entries(S.plantillas)
+  if(!entries.length){
+    el.innerHTML=`<p style="padding:12px;color:var(--tx3);font-size:12px">No hay cuadrillas guardadas para ${S.otm.id}. Crea la primera ↓</p>`
     return
   }
-  el.innerHTML = list.map(p => {
-    const color = FASE_COLORS[p.fase] || '#94a3b8'
-    const sel   = S.partida?.id === p.id
-    return `
-      <div class="partida-item${sel ? ' sel' : ''}" onclick="elegirPartida(${p.id})">
-        <div class="partida-badge" style="background:${color}20;border:1px solid ${color}50;color:${color}">
-          ${(p.fase||'?').slice(0,4)}
-        </div>
-        <div style="flex:1;min-width:0">
-          <div class="partida-codigo">${p.codigo}</div>
-          <div class="partida-desc">${p.descripcion}</div>
-          <div class="partida-meta">${p.unidad} · HH pres: ${(p.hh_presup||0).toFixed(0)}</div>
-        </div>
-        <span class="partida-chk">✓</span>
-      </div>`
-  }).join('')
-}
-
-function filtPartidas(q) {
-  const f = q.length < 1 ? S.partidas : S.partidas.filter(p =>
-    p.codigo.toLowerCase().includes(q.toLowerCase()) ||
-    p.descripcion.toLowerCase().includes(q.toLowerCase()) ||
-    (p.fase||'').toLowerCase().includes(q.toLowerCase())
-  )
-  renderPartidas(f)
-}
-
-function elegirPartida(id) {
-  S.partida = S.partidas.find(p => p.id === id)
-  filtPartidas(document.getElementById('q-partida').value)
-  actualizarBtnS3()
-}
-
-function actualizarBtnS3() {
-  const btn = document.getElementById('btn-s3')
-  const ok  = !!S.partida
-  btn.style.opacity       = ok ? '1' : '.4'
-  btn.style.pointerEvents = ok ? 'auto' : 'none'
-  document.getElementById('btn-s3-txt').textContent =
-    ok ? `ELEGIR CUADRILLA — ${S.partida.codigo}` : 'ELEGIR CUADRILLA'
-}
-
-// ═══════════════════════════════════════════
-// S4 — CUADRILLA
-// ═══════════════════════════════════════════
-async function cargarCuadrillas() {
-  try {
-    const r = await fetch(`${API}/api/cuadrillas/${S.sup.id}`)
-    S.cuadrilla_grupos = r.ok ? await r.json() : []
-    ls(`kp_grupos_${S.sup.id}`, S.cuadrilla_grupos)
-  } catch {
-    S.cuadrilla_grupos = lsGet(`kp_grupos_${S.sup.id}`) || []
-  }
-}
-
-function irACuadrilla() {
-  if (!S.partida) return
-  document.getElementById('s4-sup').textContent      = S.sup.nombre.split(' ').slice(0,2).join(' ')
-  document.getElementById('s4-partida-lbl').textContent =
-    `${S.otm.id} · ${S.partida.codigo} — ${S.partida.descripcion.slice(0,28)}`
-  document.getElementById('nueva-cua-nombre').value = ''
-  actualizarBtnNueva('')
-  renderCuadrillas()
-  ir('s4')
-}
-
-function renderCuadrillas() {
-  const el = document.getElementById('lista-cuadrillas')
-  if (!S.cuadrilla_grupos.length) {
-    el.innerHTML = '<p style="padding:12px;color:var(--text3);font-size:12px">Aún no tienes cuadrillas guardadas. Crea la primera ↓</p>'
-    return
-  }
-  el.innerHTML = S.cuadrilla_grupos.map((g, i) => {
-    const icoClass = i === 0 ? 'amber' : i === 1 ? 'green' : 'blue'
-    const emoji    = i === 0 ? '👥' : i === 1 ? '🏗️' : '⚙️'
-    return `
-      <div class="cua-card preset" onclick="usarGrupo(${g.id})">
-        <div class="cua-ico ${icoClass}">${emoji}</div>
-        <div style="flex:1;min-width:0">
-          <div class="cua-title">${g.nombre}</div>
-          <div class="cua-meta">${g.total} trabajador${g.total!==1?'es':''} pre-configurado${g.total!==1?'s':''}</div>
-        </div>
-        <span class="cua-count">${g.total}</span>
-        <span class="cua-arr">›</span>
-      </div>`
-  }).join('')
-}
-
-function usarGrupo(grupo_id) {
-  const g = S.cuadrilla_grupos.find(x => x.id === grupo_id)
-  if (!g || !g.miembros?.length) { toast('Este grupo está vacío', 'warn'); return }
-  S.lista = g.miembros.map(m => ({
-    id: m.trab_id, nombre: m.nombre, cargo: m.cargo, via: 'cuadrilla'
-  }))
-  S.nuevaCuadrillaNombre = ''
-  vibrate()
-  abrirS5(g.nombre, `${g.miembros.length} miembros cargados`)
-}
-
-function iniciarNuevaCuadrilla() {
-  const nombre = document.getElementById('nueva-cua-nombre').value.trim()
-  if (!nombre) return
-  S.lista                = []
-  S.nuevaCuadrillaNombre = nombre
-  abrirS5('Nueva cuadrilla', 'Lista vacía — agrega trabajadores')
-}
-
-function actualizarBtnNueva(val) {
-  const btn  = document.getElementById('btn-nueva-cua')
-  const ok   = val.trim().length > 0
-  btn.style.opacity       = ok ? '1' : '.4'
-  btn.style.pointerEvents = ok ? 'auto' : 'none'
-}
-
-// ═══════════════════════════════════════════
-// S5 — EDITAR LISTA
-// ═══════════════════════════════════════════
-function abrirS5(titulo, sub) {
-  document.getElementById('s5-titulo').textContent  = titulo || 'Lista de trabajadores'
-  document.getElementById('s5-sub').textContent     = sub    || ''
-  document.getElementById('q-trab').value           = ''
-  document.getElementById('res-trab').innerHTML     = ''
-  // Resumen OTM + partida
-  const rsm = document.getElementById('s5-resumen')
-  if (S.otm && S.partida) {
-    rsm.style.display = 'flex'
-    document.getElementById('s5-otm-tag').textContent     = S.otm.id
-    document.getElementById('s5-partida-tag').textContent =
-      `${S.partida.codigo} · ${S.partida.descripcion}`
-  } else {
-    rsm.style.display = 'none'
-  }
-  renderLista()
-  ir('s5')
-}
-
-function buscarTrab(q) {
-  const el     = document.getElementById('res-trab')
-  if (q.length < 1) { el.innerHTML = ''; return }
-  const enLista = new Set(S.lista.map(t => t.id))
-  const f = S.trabs.filter(t =>
-    t.nombre.toLowerCase().includes(q.toLowerCase()) ||
-    t.cargo.toLowerCase().includes(q.toLowerCase()) ||
-    t.id === q.padStart(3,'0')
-  ).slice(0,8)
-  if (!f.length) {
-    el.innerHTML = '<p style="padding:12px;color:var(--text3);font-size:13px">Sin coincidencias</p>'
-    return
-  }
-  el.innerHTML = f.map(t => {
-    const ya = enLista.has(t.id)
-    return `
-      <div class="wrow-res${ya?' ya':''}"
-           onclick="${ya?`quitarDeLista('${t.id}')`:`agregarTrab('${t.id}')`}">
-        <div class="wava">${ya?'✓':'👷'}</div>
-        <div>
-          <div class="wid">ID: ${t.id}</div>
-          <div class="wnom">${t.nombre}</div>
-          <div class="wcarg">${t.cargo}</div>
-        </div>
-        <div class="wadd" style="color:${ya?'var(--red)':'var(--green)'}">${ya?'✕':'+'}</div>
-      </div>`
-  }).join('')
-}
-
-function agregarTrab(id) {
-  const t = S.trabs.find(x => x.id === id)
-  if (!t || S.lista.find(x => x.id === id)) return
-  S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, via: 'busqueda' })
-  vibrate()
-  renderLista()
-  buscarTrab(document.getElementById('q-trab').value)
-}
-
-function quitarDeLista(id) {
-  S.lista = S.lista.filter(x => x.id !== id)
-  renderLista()
-  buscarTrab(document.getElementById('q-trab').value)
-}
-
-function renderLista() {
-  const n   = S.lista.length
-  document.getElementById('count-lista').textContent = `${n} persona${n!==1?'s':''}`
-  const btn = document.getElementById('btn-enviar')
-  btn.style.opacity       = n ? '1' : '.4'
-  btn.style.pointerEvents = n ? 'auto' : 'none'
-  document.getElementById('btn-enviar-txt').textContent =
-    n ? `ENVIAR — ${n} PERS · HH AUTO` : 'ENVIAR TAREO'
-  const el = document.getElementById('lista-actual')
-  if (!n) {
-    el.innerHTML = '<p style="text-align:center;padding:16px;color:var(--text3);font-size:13px">Usa el buscador para agregar trabajadores ↑</p>'
-    return
-  }
-  el.innerHTML = S.lista.map(t => `
-    <div class="lrow">
-      <div class="wava">👷</div>
-      <div class="linfo">
-        <div class="wid">ID: ${t.id}${t.via==='qr'?' · <span style="color:#60a5fa">QR</span>':''}</div>
-        <div class="wnom">${t.nombre}</div>
-        <div class="wcarg">${t.cargo}</div>
+  const iconos=['a','g','b','a','g']
+  const emojis=['👥','🏗️','⚙️','🔧','👷']
+  el.innerHTML=entries.map(([nombre,miembros],i)=>`
+    <div class="cua-card preset" onclick="usarPlantilla('${encodeURIComponent(nombre)}')">
+      <div class="cua-ico ${iconos[i%5]}">${emojis[i%5]}</div>
+      <div style="flex:1;min-width:0">
+        <div class="cua-title">${nombre}</div>
+        <div class="cua-meta">${miembros.length} trabajador${miembros.length!==1?'es':''} guardado${miembros.length!==1?'s':''}</div>
       </div>
-      <button class="ldel" onclick="quitarDeLista('${t.id}')">✕</button>
+      <span class="cua-count">${miembros.length}</span>
+      <span style="font-size:20px;color:var(--tx3);flex-shrink:0;margin-left:8px">›</span>
     </div>`).join('')
 }
-
-// ═══════════════════════════════════════════
-// QR SCANNER
-// ═══════════════════════════════════════════
-function abrirQR() { ir('s5b'); startCam() }
-
-function toggleTorch() {
-  if (!S.stream) return
-  S.torch = !S.torch
-  document.getElementById('torch-btn').classList.toggle('on', S.torch)
-  try { S.stream.getVideoTracks()[0].applyConstraints({ advanced: [{ torch: S.torch }] }) } catch {}
+function usarPlantilla(nombreEnc){
+  const nombre=decodeURIComponent(nombreEnc)
+  const miembros=S.plantillas[nombre]||[]
+  if(!miembros.length){toast('Esta cuadrilla está vacía','warn');return}
+  S.lista=miembros.map(m=>({id:m.trabajador_id,nombre:m.nombre,cargo:m.cargo,via:'plantilla'}))
+  S.nuevaNombre=''
+  vibrate()
+  abrirS4(nombre,`${miembros.length} miembros cargados`)
+}
+function iniciarNueva(){
+  const n=document.getElementById('nueva-nombre').value.trim()
+  if(!n) return
+  S.lista=[];S.nuevaNombre=n
+  abrirS4('Nueva cuadrilla','Lista vacía — agrega trabajadores')
+}
+function actualizarBtnNueva(v){
+  const btn=document.getElementById('btn-nueva')
+  const ok=v.trim().length>0
+  btn.style.opacity=ok?'1':'.4'
+  btn.style.pointerEvents=ok?'auto':'none'
 }
 
-let _scanTime = 0
-async function startCam() {
-  if (S.stream) { S.scan = true; requestAnimationFrame(tick); return }
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode:'environment', width:{ideal:1280}, height:{ideal:720} }
-    })
-    S.stream = stream; S.scan = true
-    document.getElementById('video').srcObject = stream
-    requestAnimationFrame(tick)
-  } catch { toast('No se pudo acceder a la cámara','err'); ir('s5') }
+// ═══════════════════════════════════════════════════════════════
+// S4 — EDITAR LISTA
+// ═══════════════════════════════════════════════════════════════
+function abrirS4(titulo,sub){
+  document.getElementById('s4-titulo').textContent=titulo||'Lista de trabajadores'
+  document.getElementById('s4-sub').textContent=sub||''
+  document.getElementById('q-trab').value=''
+  document.getElementById('res-trab').innerHTML=''
+  renderListaS4()
+  ir('s4')
 }
-
-function stopCam() {
-  S.scan = false; S.torch = false
-  document.getElementById('torch-btn').classList.remove('on')
-  if (S.stream) { S.stream.getTracks().forEach(t => t.stop()); S.stream = null }
+function buscarTrab(q){
+  const el=document.getElementById('res-trab')
+  if(q.length<1){el.innerHTML='';return}
+  const enLista=new Set(S.lista.map(t=>t.id))
+  const f=S.trabs.filter(t=>
+    t.nombre.toLowerCase().includes(q.toLowerCase())||
+    t.cargo.toLowerCase().includes(q.toLowerCase())||
+    t.id===q.padStart(3,'0')
+  ).slice(0,8)
+  if(!f.length){el.innerHTML='<p style="padding:12px;color:var(--tx3);font-size:13px">Sin resultados</p>';return}
+  el.innerHTML=f.map(t=>{
+    const ya=enLista.has(t.id)
+    return `
+      <div class="wi${ya?' ya':''}" onclick="${ya?`quitarTrab('${t.id}')`:`agregarTrab('${t.id}')`}">
+        <div class="wav">${ya?'✓':'👷'}</div>
+        <div>
+          <div class="wid">${t.id}</div>
+          <div class="wnm">${t.nombre}</div>
+          <div class="wcg">${t.cargo}</div>
+        </div>
+        <div style="margin-left:auto;font-size:20px;color:${ya?'var(--rd)':'var(--gn)'}">${ya?'✕':'+'}</div>
+      </div>`
+  }).join('')
 }
-
-function tick() {
-  if (!S.scan) return
-  const now2 = Date.now()
-  if (now2 - _scanTime < 100) { requestAnimationFrame(tick); return }
-  _scanTime = now2
-  const v = document.getElementById('video')
-  const c = document.getElementById('canvas')
-  if (v.readyState === v.HAVE_ENOUGH_DATA) {
-    c.height = v.videoHeight; c.width = v.videoWidth
-    const ctx = c.getContext('2d'); ctx.drawImage(v,0,0,c.width,c.height)
-    const qr = jsQR(ctx.getImageData(0,0,c.width,c.height).data,c.width,c.height,
-                    { inversionAttempts:'dontInvert' })
-    if (qr) { procesarQR(qr.data.trim()); return }
-  }
-  requestAnimationFrame(tick)
+function agregarTrab(id){
+  const t=S.trabs.find(x=>x.id===id)
+  if(!t||S.lista.find(x=>x.id===id)) return
+  S.lista.push({id:t.id,nombre:t.nombre,cargo:t.cargo,via:'busqueda'})
+  vibrate(); renderListaS4()
+  buscarTrab(document.getElementById('q-trab').value)
 }
-
-function procesarQR(raw) {
-  S.scan = false
-  const id = raw.padStart(3,'0')
-  const t  = S.trabs.find(x => x.id === id)
-  if (!t) {
-    toast(`QR no reconocido: ${raw}`, 'err')
-    setTimeout(() => { S.scan = true; requestAnimationFrame(tick) }, 2000)
+function quitarTrab(id){
+  S.lista=S.lista.filter(x=>x.id!==id)
+  // También quitar de asignaciones si las hay
+  Object.keys(S.asig).forEach(pid=>{
+    S.asig[pid]=S.asig[pid].filter(t=>t!==id)
+    if(!S.asig[pid].length) delete S.asig[pid]
+  })
+  Object.keys(S.hhMap).forEach(k=>{
+    if(k.startsWith(`${id}__`)) delete S.hhMap[k]
+  })
+  renderListaS4()
+  buscarTrab(document.getElementById('q-trab').value)
+}
+function renderListaS4(){
+  const n=S.lista.length
+  const btn=document.getElementById('btn-s4')
+  btn.style.opacity=n?'1':'.4'
+  btn.style.pointerEvents=n?'auto':'none'
+  document.getElementById('btn-s4-txt').textContent=n?`ASIGNAR A PARTIDAS — ${n} PERS`:'ASIGNAR A PARTIDAS'
+  const el=document.getElementById('lista-actual')
+  if(!n){
+    el.innerHTML='<p style="text-align:center;padding:16px;color:var(--tx3);font-size:13px">Agrega trabajadores con el buscador ↑</p>'
     return
   }
-  if (!S.lista.find(x => x.id === id)) {
-    S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, via: 'qr' })
-    toast(`✅ ${t.nombre.split(' ')[0]} agregado`, 'ok')
-    vibrate()
-  } else { toast(`${t.nombre.split(' ')[0]} ya está en la lista`, 'warn') }
-  stopCam()
-  renderLista()
+  el.innerHTML=S.lista.map(t=>`
+    <div class="lrow">
+      <div class="wav">👷</div>
+      <div style="flex:1;min-width:0">
+        <div class="wid">${t.id}${t.via==='qr'?' · <span style="color:var(--bl)">QR</span>':''}</div>
+        <div class="wnm">${t.nombre}</div>
+        <div class="wcg">${t.cargo}</div>
+      </div>
+      <button class="ldel" onclick="quitarTrab('${t.id}')">✕</button>
+    </div>`).join('')
+}
+function irAPartidas(){
+  if(!S.lista.length) return
+  if(!S.partidas.length){
+    toast('Esta OTM no tiene partidas importadas','err')
+    return
+  }
+  S.asig={}; S.hhMap={}
+  document.getElementById('s5-otm').textContent=`${S.otm.id} · ${S.otm.descripcion.slice(0,25)}`
+  document.getElementById('s5-sub').textContent=`${S.lista.length} trabajadores · ${S.hhDia} HH/persona`
+  renderS5()
   ir('s5')
 }
 
-// ═══════════════════════════════════════════
-// ENVIAR
-// ═══════════════════════════════════════════
-async function enviar() {
-  if (!S.lista.length) return
-  ir('s6')
-  document.getElementById('s6t').textContent =
-    `Enviando ${S.lista.length} trabajador${S.lista.length>1?'es':''}...`
-  document.getElementById('s6s').textContent =
-    `${S.otm?.id||'—'} · ${S.partida?.codigo||'—'}`
+// ═══════════════════════════════════════════════════════════════
+// S5 — DISTRIBUCIÓN A PARTIDAS
+// ═══════════════════════════════════════════════════════════════
+function renderS5(){
+  actualizarUnassigned()
+  const body=document.getElementById('s5-body')
+  const cards=S.partidas.map(p=>buildPartidaCard(p)).join('')
+  body.innerHTML=cards+'<div style="height:80px"></div>'
+  actualizarBtnEnviar()
+}
 
-  const now  = new Date()
-  const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
-  const payload = {
-    supervisor_id: S.sup.id,
-    otm_id:       S.otm?.id,
-    fecha,
-    trabajadores: S.lista.map(t => ({
-      trab_id:    t.id,
-      partida_id: S.partida?.id || null,
-      via:        t.via
-    }))
-  }
-  try {
-    const r = await fetch(`${API}/api/sesion/enviar-con-partidas`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+function buildPartidaCard(p){
+  const pid=p.id
+  const workers=S.asig[pid]||[]
+  const clr=FASE_CLR[p.fase]||'#94a3b8'
+  const hasW=workers.length>0
+  const unasig=getUnassigned()
+  const allInThis=unasig.length===0 && !hasW  // disabled if no one left
+
+  let workersHtml=''
+  if(hasW){
+    workersHtml=`<div class="part-workers">`
+    workers.forEach(tid=>{
+      const t=S.lista.find(x=>x.id===tid)
+      if(!t) return
+      const nParts=getWorkerPartidas(tid).length
+      const hh=getHH(tid,pid)
+      const isMulti=nParts>1
+      const hhOk=isMulti?workerHHOk(tid):true
+      workersHtml+=`
+        <div class="pw">
+          <span style="font-size:15px">👷</span>
+          <span class="pw-name">${t.nombre.split(' ').slice(0,2).join(' ')}</span>
+          ${isMulti?`<span class="pw-split">÷${nParts}</span>`:''}
+          <div class="pw-hh">
+            ${isMulti
+              ?`<input class="pw-inp${hhOk?'':' warn'}" type="number" step="0.5" min="0.5" max="${S.hhDia}"
+                  value="${hh}" oninput="onHHInput('${tid}',${pid},this.value)" onblur="onHHBlur('${tid}',${pid})"
+                  style="width:58px">`
+              :`<span class="pw-hh-lbl">${hh.toFixed(1)} HH</span>`
+            }
+          </div>
+          <button class="pw-del" onclick="quitarDePartida('${tid}',${pid})">✕</button>
+        </div>`
     })
-    const d = await r.json()
-    if (!r.ok) throw new Error(d.detail || 'Error ' + r.status)
-    // Si la cuadrilla era nueva, preguntar si guardar
-    if (S.nuevaCuadrillaNombre && S.lista.length) {
-      document.getElementById('modal-nombre').value = S.nuevaCuadrillaNombre
-      document.getElementById('modal-sub').textContent =
-        `"${S.nuevaCuadrillaNombre}" con ${S.lista.length} personas`
-      document.getElementById('modal-guardar').classList.add('open')
+    workersHtml+=`</div>`
+  }
+
+  return `
+    <div class="part-card${hasW?' has-workers':''}" id="pc-${pid}">
+      <div class="part-head">
+        <span class="part-badge" style="background:${clr}20;border:1px solid ${clr}40;color:${clr}">${p.fase}${p.sub_fase?'.'+p.sub_fase:''}</span>
+        <span class="part-code">${p.codigo}</span>
+        <span class="part-desc">${p.descripcion}</span>
+        <span class="part-unit">${p.unidad}</span>
+      </div>
+      <div class="part-actions">
+        <button class="pa-btn pa-all" onclick="todoAPartida(${pid})" ${getUnassigned().length===0&&!workers.length?'disabled':''}>
+          👥 Todos (${getUnassigned().length})
+        </button>
+        <button class="pa-btn pa-sel" onclick="abrirSel(${pid})">✎ Seleccionar</button>
+      </div>
+      ${workersHtml}
+    </div>`
+}
+
+function actualizarUnassigned(){
+  const n=getUnassigned().length
+  const lbl=document.getElementById('ua-label')
+  const pill=document.getElementById('ua-pill')
+  if(n===0){
+    lbl.textContent='Todos asignados'
+    pill.textContent='✓ Listo'
+    pill.className='ua-pill done'
+  } else {
+    const names=getUnassigned().map(t=>t.nombre.split(' ')[0]).join(', ')
+    lbl.textContent=`Sin asignar: ${names}`
+    pill.textContent=`${n} persona${n!==1?'s':''}`
+    pill.className='ua-pill pend'
+  }
+}
+
+function actualizarBtnEnviar(){
+  const ok=allAssigned()
+  const btn=document.getElementById('btn-enviar')
+  btn.style.opacity=ok?'1':'.4'
+  btn.style.pointerEvents=ok?'auto':'none'
+  const n=S.lista.length
+  document.getElementById('btn-env-txt').textContent=
+    ok?`ENVIAR — ${n} PERS · ${S.hhDia} HH`:`ENVIAR TAREO`
+}
+
+function todoAPartida(pid){
+  pid=parseInt(pid)
+  const unasig=getUnassigned()
+  if(!unasig.length){toast('No hay personas sin asignar','warn');return}
+  unasig.forEach(t=>addToPartida(t.id,pid))
+  vibrate()
+  renderS5()
+}
+
+function quitarDePartida(tid,pid){
+  removeFromPartida(tid,pid)
+  renderS5()
+}
+
+function onHHInput(tid,pid,val){
+  setHHOverride(tid,pid,val)
+  // Update just the total indicator without full re-render
+  const k=`${tid}__${pid}`
+  const inp=document.querySelector(`[oninput="onHHInput('${tid}',${pid},this.value)"]`)
+  if(inp){
+    const ok=workerHHOk(tid)
+    inp.classList.toggle('warn',!ok)
+  }
+}
+
+function onHHBlur(tid,pid){
+  // After editing HH in one partida, re-render to keep things consistent
+  renderS5()
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SELECTOR MODAL (bottom sheet)
+// ═══════════════════════════════════════════════════════════════
+function abrirSel(pid){
+  S.selPid=parseInt(pid)
+  S.selChk=new Set()
+  const p=S.partidas.find(x=>x.id===pid)
+  document.getElementById('sel-title').textContent=`Agregar a ${p?.codigo||pid}`
+  document.getElementById('sel-sub').textContent=p?.descripcion||''
+  renderSelList()
+  document.getElementById('s5-sel').classList.add('open')
+}
+
+function renderSelList(){
+  const pid=S.selPid
+  const alreadyHere=new Set(S.asig[pid]||[])
+  const allAsig=new Set();
+  Object.entries(S.asig).forEach(([p2,list])=>{
+    if(parseInt(p2)!==pid) list.forEach(t=>allAsig.add(t))
+  })
+  const el=document.getElementById('sel-list')
+  el.innerHTML=S.lista.map(t=>{
+    const inThis=alreadyHere.has(t.id)
+    const inOther=allAsig.has(t.id)
+    const chk=S.selChk.has(t.id)||inThis
+    if(inThis) return `
+      <div class="sel-row en-partida">
+        <div class="sel-cb chk">✓</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">${t.nombre}</div>
+          <div style="font-size:10px;color:var(--tx3)">${t.cargo} · Ya en esta partida</div>
+        </div>
+      </div>`
+    return `
+      <div class="sel-row${inOther?' split-warn':''}" onclick="toggleSelChk('${t.id}')">
+        <div class="sel-cb${chk?' chk':''}">${chk?'✓':''}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">${t.nombre}</div>
+          <div style="font-size:10px;color:${inOther?'#60a5fa':'var(--tx3)'}">
+            ${t.cargo}${inOther?' · ⚡ En otra partida (HH se dividirá)':''}
+          </div>
+        </div>
+      </div>`
+  }).join('')
+  actualizarBtnSel()
+}
+
+function toggleSelChk(tid){
+  if(S.selChk.has(tid)) S.selChk.delete(tid)
+  else S.selChk.add(tid)
+  renderSelList()
+}
+
+function actualizarBtnSel(){
+  const n=S.selChk.size
+  const btn=document.getElementById('btn-sel-ok')
+  btn.style.opacity=n?'1':'.4'
+  btn.style.pointerEvents=n?'auto':'none'
+  document.getElementById('btn-sel-txt').textContent=n?`Agregar ${n} persona${n!==1?'s':''}`:'Agregar'
+}
+
+function confirmarSel(){
+  S.selChk.forEach(tid=>addToPartida(tid,S.selPid))
+  cerrarSel()
+  vibrate()
+  renderS5()
+}
+
+function cerrarSel(){
+  document.getElementById('s5-sel').classList.remove('open')
+  S.selPid=null; S.selChk=new Set()
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENVIAR
+// ═══════════════════════════════════════════════════════════════
+async function enviar(){
+  if(!allAssigned()) return
+  ir('s6')
+  document.getElementById('s6t').textContent=`Enviando ${S.lista.length} trabajador${S.lista.length>1?'es':''}…`
+  document.getElementById('s6s').textContent=`${S.otm?.id} · ${S.partidas.length} partidas`
+
+  const now=new Date()
+  const fecha=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
+
+  // Build payload: each worker with array of {partida_id, hh}
+  const trabajadores=S.lista.map(t=>{
+    const parts=getWorkerPartidas(t.id)
+    const asignaciones=parts.map(pid=>({
+      partida_id:pid,
+      hh:getHH(t.id,pid)
+    }))
+    return {trab_id:t.id, asignaciones, via:t.via}
+  })
+
+  const payload={
+    supervisor_id:S.sup.id,
+    otm_id:S.otm.id,
+    fecha,
+    trabajadores
+  }
+
+  try{
+    const r=await fetch(`${API}/api/sesion/enviar-con-partidas`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    })
+    const d=await r.json()
+    if(!r.ok) throw new Error(d.detail||'Error '+r.status)
+
+    // Si cuadrilla era nueva, ofrecer guardar
+    if(S.nuevaNombre&&S.lista.length){
+      document.getElementById('modal-nombre').value=S.nuevaNombre
+      document.getElementById('modal-grd-sub').textContent=
+        `"${S.nuevaNombre}" · ${S.lista.length} personas · ${S.otm.id}`
+      document.getElementById('modal-grd').classList.add('open')
     }
-    mostrarResultado(d.enviados, d.hh_dia)
-  } catch (e) {
-    toast('Error al enviar: ' + e.message, 'err')
+    mostrarResultado(d.enviados,d.hh_dia)
+  }catch(e){
+    toast('Error al enviar: '+e.message,'err')
     ir('s5')
   }
 }
 
-function mostrarResultado(enviados, hhDia) {
-  document.getElementById('s7-sub').textContent = `${enviados} registros creados`
-  document.getElementById('s7-ibox').innerHTML = `
-    <div class="irow"><span class="ikey">OTM</span><span class="ival a">${S.otm?.id||'—'}</span></div>
-    <div class="irow"><span class="ikey">Partida</span><span class="ival a">${S.partida?.codigo||'—'}</span></div>
-    <div class="irow"><span class="ikey">Supervisor</span><span class="ival">${S.sup.nombre.split(' ').slice(0,2).join(' ')}</span></div>
-    <div class="irow"><span class="ikey">Trabajadores</span><span class="ival g">${enviados}</span></div>
-    <div class="irow"><span class="ikey">HH por persona</span><span class="ival g">${hhDia}</span></div>
-    <div class="irow"><span class="ikey">Fecha</span><span class="ival">${new Date().toLocaleDateString('es-PE')}</span></div>`
+function mostrarResultado(enviados,hhDia){
+  // Build summary of partidas
+  const parts=Object.entries(S.asig).map(([pid,list])=>{
+    const p=S.partidas.find(x=>x.id===parseInt(pid))
+    return `${p?.codigo||pid}: ${list.length} pers`
+  }).join(' · ')
+
+  document.getElementById('s7-sub').textContent=`${enviados} registros creados`
+  document.getElementById('s7-ibox').innerHTML=`
+    <div class="irow"><span class="ik">OTM</span><span class="iv a">${S.otm?.id}</span></div>
+    <div class="irow"><span class="ik">Partidas</span><span class="iv a" style="font-size:11px">${parts}</span></div>
+    <div class="irow"><span class="ik">Supervisor</span><span class="iv">${S.sup.nombre.split(' ').slice(0,2).join(' ')}</span></div>
+    <div class="irow"><span class="ik">Trabajadores</span><span class="iv g">${enviados}</span></div>
+    <div class="irow"><span class="ik">HH promedio/persona</span><span class="iv g">${hhDia}</span></div>
+    <div class="irow"><span class="ik">Fecha</span><span class="iv">${new Date().toLocaleDateString('es-PE')}</span></div>`
   vibrate([100,50,200])
   ir('s7')
 }
 
-// ═══════════════════════════════════════════
-// GUARDAR NUEVA CUADRILLA
-// ═══════════════════════════════════════════
-async function guardarNuevaCuadrilla() {
-  const nombre = document.getElementById('modal-nombre').value.trim()
-  if (!nombre) { toast('Escribe un nombre', 'warn'); return }
-  try {
-    const r = await fetch(`${API}/api/cuadrillas/${S.sup.id}`, {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({ nombre, trab_ids: S.lista.map(t => t.id) })
+// ═══════════════════════════════════════════════════════════════
+// GUARDAR CUADRILLA PARA ESTA OTM
+// ═══════════════════════════════════════════════════════════════
+async function guardarCuadrilla(){
+  const nombre=document.getElementById('modal-nombre').value.trim()
+  if(!nombre){toast('Escribe un nombre','warn');return}
+  try{
+    const r=await fetch(`${API}/ev/cuadrillas-plantilla`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        supervisor_id:S.sup.id,
+        otm_id:S.otm.id,
+        nombre,
+        trabajadores:S.lista.map(t=>t.id)
+      })
     })
-    if (!r.ok) throw new Error()
-    toast(`✅ "${nombre}" guardada`, 'ok')
-    // Actualizar caché
-    await cargarCuadrillas()
-  } catch {
-    toast('No se pudo guardar. Inténtalo desde el panel.', 'err')
+    if(!r.ok) throw new Error()
+    toast(`✅ "${nombre}" guardada para ${S.otm.id}`,'ok')
+    await cargarPlantillasOTM()
+  }catch{
+    toast('No se pudo guardar','err')
   }
-  document.getElementById('modal-guardar').classList.remove('open')
-  S.nuevaCuadrillaNombre = ''
+  document.getElementById('modal-grd').classList.remove('open')
+  S.nuevaNombre=''
+}
+function cerrarModalGrd(e){
+  if(e&&e.target!==document.getElementById('modal-grd')) return
+  document.getElementById('modal-grd').classList.remove('open')
+}
+function cerrarModalGrdBtn(){
+  document.getElementById('modal-grd').classList.remove('open')
 }
 
-function cerrarModal(e) {
-  if (e && e.target !== document.getElementById('modal-guardar')) return
-  document.getElementById('modal-guardar').classList.remove('open')
-}
-function cerrarModalBtn() {
-  document.getElementById('modal-guardar').classList.remove('open')
-}
-
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // NAVEGACIÓN EXTRA
-// ═══════════════════════════════════════════
-function irNuevoRegistro() {
-  S.partida = null; S.lista = []; S.otm = null; S.nuevaCuadrillaNombre = ''
-  document.getElementById('q-otm').value = ''
-  actualizarBtnS2()
-  renderOTMs(S.otms)
-  cargarSesionesHoy()
+// ═══════════════════════════════════════════════════════════════
+function irNuevo(){
+  S.otm=null;S.asig={};S.hhMap={};S.lista=[];S.nuevaNombre=''
+  document.getElementById('q-otm').value=''
+  actualizarBtnS2(false); filtOTM(''); cargarSesionesHoy()
   ir('s2')
 }
-
-function irInicio() {
-  S.sup = null; S.otm = null; S.partida = null; S.lista = []; S.cuadrilla_grupos = []
+function irInicio(){
+  S.sup=null;S.otm=null;S.asig={};S.hhMap={};S.lista=[];S.plantillas={}
   ir('s1')
 }
 
-// ═══════════════════════════════════════════
-// UTILS
-// ═══════════════════════════════════════════
-function vibrate(p=80) { navigator.vibrate?.(p) }
-function ls(k,v) { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
-function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)) } catch { return null } }
+// ═══════════════════════════════════════════════════════════════
+// QR SCANNER
+// ═══════════════════════════════════════════════════════════════
+function abrirQR(){ir('s4b');startCam()}
+function toggleTorch(){
+  if(!S.stream) return
+  S.torch=!S.torch
+  document.getElementById('torch-btn').classList.toggle('on',S.torch)
+  try{S.stream.getVideoTracks()[0].applyConstraints({advanced:[{torch:S.torch}]})}catch{}
+}
+let _st=0
+async function startCam(){
+  if(S.stream){S.scan=true;requestAnimationFrame(tick);return}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}})
+    S.stream=stream;S.scan=true
+    document.getElementById('video').srcObject=stream
+    requestAnimationFrame(tick)
+  }catch{toast('No se pudo acceder a la cámara','err');ir('s4')}
+}
+function stopCam(){
+  S.scan=false;S.torch=false
+  document.getElementById('torch-btn').classList.remove('on')
+  if(S.stream){S.stream.getTracks().forEach(t=>t.stop());S.stream=null}
+}
+function tick(){
+  if(!S.scan) return
+  const n=Date.now()
+  if(n-_st<100){requestAnimationFrame(tick);return}
+  _st=n
+  const v=document.getElementById('video')
+  const c=document.getElementById('canvas')
+  if(v.readyState===v.HAVE_ENOUGH_DATA){
+    c.height=v.videoHeight;c.width=v.videoWidth
+    const ctx=c.getContext('2d');ctx.drawImage(v,0,0,c.width,c.height)
+    const qr=jsQR(ctx.getImageData(0,0,c.width,c.height).data,c.width,c.height,{inversionAttempts:'dontInvert'})
+    if(qr){procesarQR(qr.data.trim());return}
+  }
+  requestAnimationFrame(tick)
+}
+function procesarQR(raw){
+  S.scan=false
+  const id=raw.padStart(3,'0')
+  const t=S.trabs.find(x=>x.id===id)
+  if(!t){
+    toast(`QR no reconocido: ${raw}`,'err')
+    setTimeout(()=>{S.scan=true;requestAnimationFrame(tick)},2000)
+    return
+  }
+  if(!S.lista.find(x=>x.id===id)){
+    S.lista.push({id:t.id,nombre:t.nombre,cargo:t.cargo,via:'qr'})
+    toast(`✅ ${t.nombre.split(' ')[0]} agregado`,'ok')
+    vibrate()
+  }else{toast(`${t.nombre.split(' ')[0]} ya está en la lista`,'warn')}
+  stopCam(); renderListaS4(); ir('s4')
+}
 
+// ═══════════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════════
+function vibrate(p=80){navigator.vibrate?.(p)}
+function ls(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function lsG(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
 let _tt
-function toast(msg, tipo='ok') {
-  const t = document.getElementById('toast')
-  t.textContent = msg
-  t.className   = `toast t${tipo} show`
+function toast(msg,tipo='ok'){
+  const t=document.getElementById('toast')
+  t.textContent=msg
+  t.className=`toast t${tipo} show`
   clearTimeout(_tt)
-  _tt = setTimeout(() => t.classList.remove('show'), 3500)
+  _tt=setTimeout(()=>t.classList.remove('show'),3500)
 }
 </script>
 </body>
