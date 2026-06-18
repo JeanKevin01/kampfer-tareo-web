@@ -21,51 +21,32 @@
   --amber-bg:rgba(245,158,11,.1);--amber-bd:rgba(245,158,11,.3);
   --green:#10b981;--green-bg:rgba(16,185,129,.12);
   --red:#ef4444;--red-bg:rgba(239,68,68,.12);
+  --blue:#60a5fa;--blue-bg:rgba(96,165,250,.12);
   --font:'Barlow',system-ui,sans-serif;
   --cond:'Barlow Condensed',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
   --r:14px;--rsm:9px;
 }
 html,body{height:100%;background:var(--void);font-family:var(--font);color:var(--text);overflow-x:hidden}
-
-/* SPLASH */
-#splash{position:fixed;inset:0;z-index:9999;background:var(--void);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
-  transition:opacity .4s}
+#splash{position:fixed;inset:0;z-index:9999;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .4s}
 #splash.hide{opacity:0;pointer-events:none}
 .sp-logo{font-family:var(--cond);font-size:48px;font-weight:800;letter-spacing:6px;color:var(--amber)}
 .sp-sub{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)}
 .sp-bar{width:160px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px}
 .sp-fill{height:100%;background:var(--amber);width:0;transition:width 1.2s ease}
-
-/* SCREENS */
 .screen{display:none;min-height:100svh;flex-direction:column}
 .screen.active{display:flex;animation:fu .2s ease}
 @keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-/* BAR */
-.bar{background:var(--surface);border-bottom:1px solid var(--border);
-  padding:12px 16px;display:flex;align-items:center;gap:10px;
-  position:sticky;top:0;z-index:40}
-.bar-ico{width:36px;height:36px;border-radius:10px;flex-shrink:0;
-  background:var(--amber-bg);border:1px solid var(--amber-bd);
-  display:flex;align-items:center;justify-content:center;font-size:16px}
+.bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:40}
+.bar-ico{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:var(--amber-bg);border:1px solid var(--amber-bd);display:flex;align-items:center;justify-content:center;font-size:16px}
 .bar-title{font-family:var(--cond);font-size:17px;font-weight:700;line-height:1.2}
 .bar-sub{font-size:11px;color:var(--text3);margin-top:1px}
-.bar-btn{margin-left:auto;background:none;border:1px solid var(--border2);
-  color:var(--text2);font-size:12px;font-weight:600;padding:7px 12px;border-radius:8px;
-  cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s;flex-shrink:0}
+.bar-btn{margin-left:auto;background:none;border:1px solid var(--border2);color:var(--text2);font-size:12px;font-weight:600;padding:7px 12px;border-radius:8px;cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s;flex-shrink:0}
 .bar-btn:active{background:var(--raised);color:var(--text)}
-
-/* HERO */
-.hero{background:linear-gradient(160deg,#0d1525,#111827,#0a1220);
-  padding:28px 16px 22px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-.hero-grid{position:absolute;inset:0;opacity:.03;
-  background-image:linear-gradient(var(--amber) 1px,transparent 1px),
-  linear-gradient(90deg,var(--amber) 1px,transparent 1px);background-size:30px 30px}
+.hero{background:linear-gradient(160deg,#0d1525,#111827,#0a1220);padding:28px 16px 22px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(var(--amber) 1px,transparent 1px),linear-gradient(90deg,var(--amber) 1px,transparent 1px);background-size:30px 30px}
 .hero-inner{position:relative;z-index:1}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--amber-bg);
-  border:1px solid var(--amber-bd);padding:4px 11px;border-radius:20px;margin-bottom:14px}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--amber-bg);border:1px solid var(--amber-bd);padding:4px 11px;border-radius:20px;margin-bottom:14px}
 .hero-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hero-tag-text{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber)}
@@ -77,109 +58,22 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .hstat-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3)}
 .hstat-val{font-family:var(--mono);font-size:14px;color:var(--text);margin-top:3px}
 .hstat-val.a{color:var(--amber)}
-
-/* BODY */
 .body{flex:1;padding:16px;overflow-y:auto}
-
-/* SECTION LABEL */
-.slabel{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--text3);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.slabel{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
 .slabel::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* S1: Supervisor cards */
-.sup-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-  padding:14px 16px;cursor:pointer;transition:all .15s;
-  display:flex;align-items:center;gap:12px;margin-bottom:8px;position:relative;overflow:hidden}
-.sup-card::before{content:'';position:absolute;left:0;top:0;bottom:0;
-  width:3px;background:var(--border);transition:background .15s}
+/* Supervisor cards */
+.sup-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;margin-bottom:8px;position:relative;overflow:hidden}
+.sup-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border);transition:background .15s}
 .sup-card:active{border-color:var(--amber-bd);background:var(--raised)}
 .sup-card:active::before{background:var(--amber)}
-.sup-ava{width:42px;height:42px;border-radius:10px;flex-shrink:0;
-  background:var(--raised);border:1px solid var(--border2);
-  display:flex;align-items:center;justify-content:center;font-size:18px}
+.sup-ava{width:42px;height:42px;border-radius:10px;flex-shrink:0;background:var(--raised);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px}
 .sup-name{font-size:14px;font-weight:700}
-.sup-id{display:inline-block;margin-top:3px;background:var(--raised);
-  border:1px solid var(--border2);padding:2px 7px;border-radius:4px;
-  font-family:var(--mono);font-size:10px;color:var(--text3)}
+.sup-id{display:inline-block;margin-top:3px;background:var(--raised);border:1px solid var(--border2);padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--text3)}
 .sup-arr{font-size:20px;color:var(--border2);margin-left:auto}
-
-/* S2: Cuadrilla cards */
-.cua-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);
-  padding:18px 16px;cursor:pointer;transition:all .15s;
-  display:flex;align-items:center;gap:14px;margin-bottom:12px;position:relative}
-.cua-card.preset{border-color:var(--amber-bd)}
-.cua-card:active{transform:scale(.98);background:var(--raised)}
-.cua-card.preset:active{border-color:var(--amber)}
-.cua-card.disabled{opacity:.45;cursor:default;pointer-events:none}
-.cua-ico{width:48px;height:48px;border-radius:12px;flex-shrink:0;font-size:22px;
-  display:flex;align-items:center;justify-content:center}
-.cua-ico.amber{background:var(--amber-bg);border:1px solid var(--amber-bd)}
-.cua-ico.green{background:var(--green-bg);border:1px solid rgba(16,185,129,.25)}
-.cua-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
-.cua-meta{font-size:12px;color:var(--text3)}
-.cua-count{font-family:var(--mono);font-size:11px;font-weight:600;
-  background:var(--amber-bg);border:1px solid var(--amber-bd);
-  color:var(--amber);padding:3px 9px;border-radius:20px;white-space:nowrap}
-.cua-arr{font-size:22px;color:var(--text3);margin-left:auto;flex-shrink:0}
-
-/* S2: sesiones enviadas hoy */
-.ses-mini{background:var(--surface);border:1px solid rgba(16,185,129,.2);
-  border-radius:var(--rsm);padding:10px 14px;margin-bottom:7px;
-  display:flex;align-items:center;justify-content:space-between}
-.ses-mini-otm{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--amber)}
-.ses-mini-meta{font-size:11px;color:var(--text3)}
-.ses-mini-hh{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green)}
-
-/* S3: Worker search results */
-.wrow-res{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);
-  padding:11px 14px;display:flex;align-items:center;gap:11px;margin-bottom:6px;
-  cursor:pointer;transition:all .15s}
-.wrow-res:active{border-color:var(--amber-bd);background:var(--raised)}
-.wrow-res.ya{border-color:rgba(16,185,129,.3);background:var(--green-bg)}
-.wava{width:38px;height:38px;border-radius:9px;flex-shrink:0;background:var(--raised);
-  border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px}
-.wid{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:2px}
-.wnom{font-size:13px;font-weight:700;color:var(--text)}
-.wcarg{font-size:10px;color:var(--text3);margin-top:1px}
-.wadd{margin-left:auto;font-size:20px;flex-shrink:0}
-
-/* S3: Lista de trabajadores */
-.lrow{background:var(--surface);border:1px solid rgba(16,185,129,.25);
-  border-radius:var(--rsm);padding:10px 12px;
-  display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.linfo{flex:1;min-width:0}
-.lhh{flex-shrink:0;background:var(--raised);border:1px solid var(--border2);
-  border-radius:7px;padding:5px 10px;cursor:pointer;transition:all .15s}
-.lhh:active{border-color:var(--amber-bd);background:var(--amber-bg)}
-.lhh-val{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--amber);text-align:center}
-.lhh-lbl{font-size:9px;color:var(--text3);text-align:center;margin-top:1px}
-.ldel{background:none;border:none;color:var(--text3);font-size:17px;
-  cursor:pointer;padding:4px;border-radius:6px;transition:all .1s;flex-shrink:0;line-height:1}
-.ldel:active{color:var(--red);background:var(--red-bg)}
-
-/* COUNT BAR */
-.count-bar{background:var(--raised);border:1px solid var(--border);border-radius:var(--rsm);
-  padding:11px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.count-n{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--amber)}
-.count-lbl{font-size:11px;color:var(--text3)}
-
-/* SEARCH */
-.sw{position:relative;margin-bottom:12px}
-.si{width:100%;background:var(--surface);border:1px solid var(--border2);
-  border-radius:var(--rsm);padding:12px 14px 12px 40px;
-  font-size:15px;color:var(--text);font-family:var(--font);outline:none;transition:border .15s}
-.si::placeholder{color:var(--text3)}
-.si:focus{border-color:var(--amber)}
-.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
-
-/* S4: OTM items */
-.otm-item{background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--rsm);padding:12px 14px;cursor:pointer;
-  transition:all .15s;display:flex;align-items:center;gap:11px;margin-bottom:7px}
+/* OTM items */
+.otm-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:11px;margin-bottom:7px}
 .otm-item:active,.otm-item.sel{border-color:var(--amber);background:var(--amber-bg)}
-.otm-num{min-width:56px;height:32px;border-radius:7px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0}
+.otm-num{min-width:56px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0}
 .otm-desc{font-size:12px;font-weight:700;color:var(--text);line-height:1.3}
 .otm-meta{font-size:10px;color:var(--text3);margin-top:2px}
 .otm-chk{color:var(--amber);font-size:16px;display:none;flex-shrink:0;margin-left:auto}
@@ -190,28 +84,57 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .c-agua{background:rgba(6,182,212,.15);color:#22d3ee}
 .c-c2{background:rgba(245,158,11,.15);color:var(--amber2)}
 .c-gsc{background:rgba(100,116,139,.15);color:#94a3b8}
-
-/* HH STEPPER */
-.hh-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);
-  padding:16px;margin-bottom:16px}
-.hh-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--text3);margin-bottom:12px}
-.hh-row{display:flex;align-items:center;justify-content:center;gap:16px}
-.hh-btn{width:52px;height:52px;border-radius:12px;border:1px solid var(--border2);
-  background:var(--raised);color:var(--text);font-size:24px;font-weight:300;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
-.hh-btn:active{background:var(--amber-bg);border-color:var(--amber-bd)}
-.hh-val-wrap{display:flex;flex-direction:column;align-items:center}
-.hh-val{font-family:var(--mono);font-size:38px;font-weight:500;color:var(--amber);
-  min-width:90px;text-align:center;cursor:pointer;
-  border-bottom:2px solid var(--amber-bd);padding-bottom:2px}
-.hh-val:focus{outline:none;border-color:var(--amber)}
-.hh-unit{font-size:11px;color:var(--text3);margin-top:6px}
-
-/* SCANNER */
-#s3b{position:fixed!important;inset:0;z-index:50;background:#000;
-  display:none;flex-direction:column;align-items:center;justify-content:center}
-#s3b.active{display:flex}
+/* Partida items */
+.partida-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:11px;margin-bottom:7px}
+.partida-item:active,.partida-item.sel{border-color:var(--amber);background:var(--amber-bg)}
+.partida-item.sel .partida-chk{display:block}
+.partida-chk{color:var(--amber);font-size:16px;display:none;flex-shrink:0;margin-left:auto}
+.partida-badge{min-width:42px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;letter-spacing:.5px;flex-shrink:0;padding:0 6px}
+.partida-codigo{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:3px}
+.partida-desc{font-size:12px;font-weight:700;color:var(--text);line-height:1.3}
+.partida-meta{font-size:10px;color:var(--text3);margin-top:2px}
+/* Cuadrilla grupo cards */
+.cua-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:14px;margin-bottom:10px;position:relative}
+.cua-card.preset{border-color:var(--amber-bd)}
+.cua-card:active{transform:scale(.98);background:var(--raised)}
+.cua-card.preset:active{border-color:var(--amber)}
+.cua-ico{width:46px;height:46px;border-radius:11px;flex-shrink:0;font-size:20px;display:flex;align-items:center;justify-content:center}
+.cua-ico.amber{background:var(--amber-bg);border:1px solid var(--amber-bd)}
+.cua-ico.green{background:var(--green-bg);border:1px solid rgba(16,185,129,.25)}
+.cua-ico.blue{background:var(--blue-bg);border:1px solid rgba(96,165,250,.2)}
+.cua-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.cua-meta{font-size:11px;color:var(--text3)}
+.cua-count{font-family:var(--mono);font-size:11px;font-weight:600;background:var(--amber-bg);border:1px solid var(--amber-bd);color:var(--amber);padding:3px 9px;border-radius:20px;white-space:nowrap;margin-left:auto;flex-shrink:0}
+.cua-arr{font-size:20px;color:var(--text3);flex-shrink:0;margin-left:8px}
+/* Worker rows */
+.wrow-res{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 14px;display:flex;align-items:center;gap:11px;margin-bottom:6px;cursor:pointer;transition:all .15s}
+.wrow-res:active{border-color:var(--amber-bd);background:var(--raised)}
+.wrow-res.ya{border-color:rgba(16,185,129,.3);background:var(--green-bg)}
+.wava{width:38px;height:38px;border-radius:9px;flex-shrink:0;background:var(--raised);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px}
+.wid{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:2px}
+.wnom{font-size:13px;font-weight:700;color:var(--text)}
+.wcarg{font-size:10px;color:var(--text3);margin-top:1px}
+.wadd{margin-left:auto;font-size:20px;flex-shrink:0}
+.lrow{background:var(--surface);border:1px solid rgba(16,185,129,.25);border-radius:var(--rsm);padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.linfo{flex:1;min-width:0}
+.ldel{background:none;border:none;color:var(--text3);font-size:17px;cursor:pointer;padding:4px;border-radius:6px;transition:all .1s;flex-shrink:0;line-height:1}
+.ldel:active{color:var(--red);background:var(--red-bg)}
+.count-bar{background:var(--raised);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.count-n{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--amber)}
+.count-lbl{font-size:11px;color:var(--text3)}
+.sw{position:relative;margin-bottom:12px}
+.si{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);padding:12px 14px 12px 40px;font-size:15px;color:var(--text);font-family:var(--font);outline:none;transition:border .15s}
+.si::placeholder{color:var(--text3)}
+.si:focus{border-color:var(--amber)}
+.sico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
+/* Nueva cuadrilla input */
+.nueva-input-wrap{background:var(--raised);border:1.5px dashed var(--border2);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.nueva-inp{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;transition:border .15s;margin-top:8px}
+.nueva-inp:focus{border-color:var(--amber)}
+.nueva-inp::placeholder{color:var(--text3)}
+/* Scanner */
+#s5b{position:fixed!important;inset:0;z-index:50;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center}
+#s5b.active{display:flex}
 .scan-video{width:100%;max-height:70svh;object-fit:cover}
 .scan-ui{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .scan-frame{position:relative;width:200px;height:200px}
@@ -220,42 +143,13 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .sc.tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 4px 0 0}
 .sc.bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 4px}
 .sc.br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 4px 0}
-.scan-ln{position:absolute;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--amber),transparent);
-  animation:scanln 2s ease-in-out infinite}
+.scan-ln{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent);animation:scanln 2s ease-in-out infinite}
 @keyframes scanln{0%,100%{top:8%}50%{top:92%}}
-.scan-bar{position:fixed;bottom:0;left:0;right:0;
-  background:rgba(6,8,16,.95);border-top:1px solid var(--border2);
-  padding:16px;display:flex;gap:10px;align-items:center}
-.torch-btn{width:50px;height:50px;border-radius:12px;border:1px solid var(--border2);
-  background:var(--raised);color:var(--text);font-size:22px;cursor:pointer;
-  display:flex;align-items:center;justify-content:middle;flex-shrink:0;transition:all .15s}
+.scan-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(6,8,16,.95);border-top:1px solid var(--border2);padding:16px;display:flex;gap:10px;align-items:center}
+.torch-btn{width:50px;height:50px;border-radius:12px;border:1px solid var(--border2);background:var(--raised);color:var(--text);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
 .torch-btn.on{background:var(--amber-bg);border-color:var(--amber-bd)}
-
-/* HH PICKER */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;
-  display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
-.overlay.open{display:flex}
-.picker{background:var(--surface);border:1px solid var(--border2);
-  border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px}
-.picker-title{font-family:var(--cond);font-size:16px;font-weight:800;margin-bottom:4px}
-.picker-sub{font-size:12px;color:var(--text3);margin-bottom:18px}
-.picker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-.picker-opt{background:var(--raised);border:1px solid var(--border2);border-radius:var(--rsm);
-  padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s}
-.picker-opt:active,.picker-opt.sel{background:var(--amber-bg);border-color:var(--amber-bd)}
-.picker-opt-val{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--amber)}
-.picker-opt-lbl{font-size:9px;color:var(--text3);margin-top:2px}
-.picker-custom{display:flex;gap:8px;align-items:center;margin-top:8px}
-.picker-inp{flex:1;background:var(--raised);border:1px solid var(--border2);
-  border-radius:var(--rsm);padding:12px;font-size:16px;color:var(--text);
-  font-family:var(--mono);text-align:center;outline:none}
-.picker-inp:focus{border-color:var(--amber)}
-
-/* BUTTONS */
-.btn{width:100%;padding:16px;border-radius:var(--rsm);border:none;
-  font-size:14px;font-weight:700;font-family:var(--font);
-  letter-spacing:.3px;text-transform:uppercase;cursor:pointer;transition:all .15s}
+/* Buttons */
+.btn{width:100%;padding:16px;border-radius:var(--rsm);border:none;font-size:14px;font-weight:700;font-family:var(--font);letter-spacing:.3px;text-transform:uppercase;cursor:pointer;transition:all .15s}
 .btn:active{transform:scale(.97)}
 .btn-a{background:var(--amber);color:#000;box-shadow:0 4px 16px rgba(245,158,11,.2)}
 .btn-a:active{background:var(--amber2)}
@@ -265,38 +159,41 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .btn-sm{padding:11px;font-size:12px}
 .btn-icon{display:flex;align-items:center;justify-content:center;gap:8px}
 .gap8{height:8px}
-
-/* LOADING / SUCCESS */
+/* Loading / success */
 .loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px}
-.spinner{width:36px;height:36px;border:2px solid var(--border2);border-top-color:var(--amber);
-  border-radius:50%;animation:spin .7s linear infinite}
+.spinner{width:36px;height:36px;border:2px solid var(--border2);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ltitle{font-family:var(--cond);font-size:16px;font-weight:700}
 .lsub{font-size:12px;color:var(--text3);text-align:center}
-.success-top{background:linear-gradient(135deg,#0a1a0f,#0d2015);
-  border-bottom:1px solid rgba(16,185,129,.2);padding:30px 16px;text-align:center}
+.success-top{background:linear-gradient(135deg,#0a1a0f,#0d2015);border-bottom:1px solid rgba(16,185,129,.2);padding:30px 16px;text-align:center}
 .si-icon{font-size:52px;margin-bottom:10px}
 .si-title{font-family:var(--cond);font-size:28px;font-weight:800}
 .si-sub{font-size:13px;color:var(--text3);margin-top:4px}
-.ibox{background:var(--surface);border:1px solid var(--border2);
-  border-radius:var(--rsm);overflow:hidden;margin-bottom:14px}
-.irow{display:flex;justify-content:space-between;align-items:center;
-  padding:11px 14px;border-bottom:1px solid var(--border)}
+.ibox{background:var(--surface);border:1px solid var(--border2);border-radius:var(--rsm);overflow:hidden;margin-bottom:14px}
+.irow{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border)}
 .irow:last-child{border:none}
 .ikey{font-size:11px;color:var(--text3)}
 .ival{font-size:13px;font-weight:600;font-family:var(--mono)}
 .ival.a{color:var(--amber)}.ival.g{color:var(--green)}
-
-/* TOAST */
-.toast{position:fixed;bottom:20px;left:50%;
-  transform:translateX(-50%) translateY(12px);
-  padding:10px 16px;border-radius:var(--rsm);font-size:13px;font-weight:600;
-  z-index:9999;opacity:0;pointer-events:none;transition:all .25s;
-  white-space:nowrap;max-width:88vw;backdrop-filter:blur(12px);border:1px solid}
+/* Guardar cuadrilla modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px}
+.modal-title{font-family:var(--cond);font-size:16px;font-weight:800;margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--text3);margin-bottom:16px}
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(12px);padding:10px 16px;border-radius:var(--rsm);font-size:13px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:all .25s;white-space:nowrap;max-width:88vw;backdrop-filter:blur(12px);border:1px solid}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .tok{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.3);color:var(--green)}
 .terr{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:var(--red)}
 .twarn{background:rgba(245,158,11,.12);border-color:var(--amber-bd);color:var(--amber2)}
+/* Partida seleccionada (paso 3 guardado) */
+.partida-sel-bar{background:rgba(245,158,11,.08);border:1px solid var(--amber-bd);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.partida-sel-code{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--amber)}
+.partida-sel-desc{font-size:12px;color:var(--text2);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Sesiones enviadas hoy */
+.ses-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.ses-row:last-child{border:none}
 </style>
 </head>
 <body>
@@ -308,14 +205,14 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   <div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div>
 </div>
 
-<!-- S1: SUPERVISOR -->
+<!-- ── S1: SUPERVISOR ───────────────────────────────────── -->
 <div id="s1" class="screen active">
   <div class="hero">
     <div class="hero-grid"></div>
     <div class="hero-inner">
       <div class="hero-tag"><div class="hero-dot"></div><span class="hero-tag-text">Sistema Activo · SMCV</span></div>
       <div class="hero-title">TAREO <em>DIARIO</em></div>
-      <div class="hero-desc">Control de Horas Hombre por OTM</div>
+      <div class="hero-desc">Control de HH y partidas por trabajador</div>
       <div class="hero-row">
         <div class="hstat"><div class="hstat-lbl">Fecha</div><div class="hstat-val a" id="h-fecha">—</div></div>
         <div class="hstat"><div class="hstat-lbl">Turno</div><div class="hstat-val" id="h-turno">—</div></div>
@@ -328,10 +225,10 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   </div>
 </div>
 
-<!-- S2: MI CUADRILLA -->
+<!-- ── S2: OTM ACTIVA ──────────────────────────────────── -->
 <div id="s2" class="screen">
   <div class="bar">
-    <div class="bar-ico">👥</div>
+    <div class="bar-ico">📋</div>
     <div>
       <div class="bar-title" id="s2-sup">—</div>
       <div class="bar-sub" id="s2-fecha">—</div>
@@ -339,84 +236,126 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     <button class="bar-btn" onclick="ir('s1')">← Cambiar</button>
   </div>
   <div class="body">
-    <div class="slabel">Selecciona tu cuadrilla</div>
-
-    <!-- Card: cuadrilla pre-configurada -->
-    <div class="cua-card preset" id="cua-card-preset" onclick="usarCuadrilla()">
-      <div class="cua-ico amber">👥</div>
-      <div style="flex:1;min-width:0">
-        <div class="cua-title">Mi cuadrilla habitual</div>
-        <div class="cua-meta" id="cua-meta-preset">Cargando...</div>
-      </div>
-      <span class="cua-count" id="cua-count-preset">—</span>
-      <span class="cua-arr">›</span>
+    <div class="slabel">¿Qué OTM trabajarás hoy?</div>
+    <div class="sw"><span class="sico">🔍</span>
+      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área..."
+             oninput="filtOTM(this.value)" autocomplete="off">
     </div>
-
-    <!-- Card: nueva cuadrilla -->
-    <div class="cua-card" onclick="nuevaCuadrilla()">
-      <div class="cua-ico green" style="font-size:26px;font-weight:300">+</div>
-      <div>
-        <div class="cua-title">Nueva cuadrilla</div>
-        <div class="cua-meta">Empezar con lista vacía</div>
-      </div>
-      <span class="cua-arr" style="color:var(--green)">›</span>
-    </div>
-
-    <!-- Sesiones enviadas hoy -->
+    <div id="lista-otms"></div>
     <div id="s2-enviadas" style="margin-top:8px"></div>
+    <div style="height:80px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
+    <button class="btn btn-a btn-icon" id="btn-s2" onclick="irAPartida()"
+            style="opacity:.4;pointer-events:none">
+      <span>›</span><span id="btn-s2-txt">ELEGIR PARTIDA</span>
+    </button>
   </div>
 </div>
 
-<!-- S3: EDITAR LISTA -->
+<!-- ── S3: PARTIDA DE LA OTM ────────────────────────────── -->
 <div id="s3" class="screen">
+  <div class="bar">
+    <div class="bar-ico">🔩</div>
+    <div>
+      <div class="bar-title" id="s3-otm">—</div>
+      <div class="bar-sub">Elige la partida de hoy</div>
+    </div>
+    <button class="bar-btn" onclick="ir('s2')">← OTM</button>
+  </div>
+  <div class="body">
+    <div class="sw"><span class="sico">🔍</span>
+      <input class="si" id="q-partida" type="text" placeholder="Buscar partida..."
+             oninput="filtPartidas(this.value)" autocomplete="off">
+    </div>
+    <div id="lista-partidas"></div>
+    <div style="height:80px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
+    <button class="btn btn-a btn-icon" id="btn-s3" onclick="irACuadrilla()"
+            style="opacity:.4;pointer-events:none">
+      <span>›</span><span id="btn-s3-txt">ELEGIR CUADRILLA</span>
+    </button>
+  </div>
+</div>
+
+<!-- ── S4: CUADRILLA ────────────────────────────────────── -->
+<div id="s4" class="screen">
+  <div class="bar">
+    <div class="bar-ico">👥</div>
+    <div>
+      <div class="bar-title" id="s4-sup">—</div>
+      <div class="bar-sub" id="s4-partida-lbl">—</div>
+    </div>
+    <button class="bar-btn" onclick="ir('s3')">← Partida</button>
+  </div>
+  <div class="body">
+    <div class="slabel">¿Qué cuadrilla trabaja hoy?</div>
+    <div id="lista-cuadrillas"></div>
+    <div class="slabel">O crea una nueva</div>
+    <div class="nueva-input-wrap">
+      <div style="font-size:12px;font-weight:600;color:var(--text2)">Nueva cuadrilla</div>
+      <input class="nueva-inp" id="nueva-cua-nombre" type="text" placeholder="Ej: Cuadrilla fierreros tarde..."
+             oninput="actualizarBtnNueva(this.value)">
+    </div>
+    <button class="btn btn-gh btn-sm btn-icon" id="btn-nueva-cua"
+            onclick="iniciarNuevaCuadrilla()" style="opacity:.4;pointer-events:none">
+      <span>+</span><span>EMPEZAR LISTA VACÍA</span>
+    </button>
+  </div>
+</div>
+
+<!-- ── S5: EDITAR LISTA DE TRABAJADORES ─────────────────── -->
+<div id="s5" class="screen">
   <div class="bar">
     <div class="bar-ico">👷</div>
     <div>
-      <div class="bar-title" id="s3-titulo">Lista de trabajadores</div>
-      <div class="bar-sub" id="s3-sub">Agrega o retira personal</div>
+      <div class="bar-title" id="s5-titulo">Lista de trabajadores</div>
+      <div class="bar-sub" id="s5-sub">Agrega o retira personal</div>
     </div>
-    <button class="bar-btn" onclick="ir('s2')">← Volver</button>
+    <button class="bar-btn" onclick="ir('s4')">← Cuadrilla</button>
   </div>
   <div class="body">
-    <div class="sw">
-      <span class="sico">🔍</span>
+    <!-- Resumen OTM + Partida -->
+    <div class="partida-sel-bar" id="s5-resumen" style="display:none">
+      <span class="partida-sel-code" id="s5-otm-tag">—</span>
+      <span class="partida-sel-desc" id="s5-partida-tag">—</span>
+    </div>
+
+    <div class="sw"><span class="sico">🔍</span>
       <input class="si" id="q-trab" type="text" placeholder="Buscar por nombre o ID..."
              oninput="buscarTrab(this.value)"
              autocomplete="off" autocorrect="off" autocapitalize="words">
     </div>
     <div id="res-trab"></div>
-
     <div class="slabel" style="margin-top:20px">Trabajadores en lista</div>
     <div class="count-bar">
       <span class="count-lbl">Total</span>
       <span class="count-n" id="count-lista">0 personas</span>
     </div>
     <div id="lista-actual"></div>
-
     <div class="gap8"></div>
     <button class="btn btn-gh btn-sm btn-icon" onclick="abrirQR()">
       <span>📷</span><span>Agregar por QR</span>
     </button>
-    <div class="gap8"></div>
+    <div style="height:90px"></div>
   </div>
   <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
-    <button class="btn btn-a btn-icon" id="btn-sig" onclick="irAOTM()"
+    <button class="btn btn-g btn-icon" id="btn-enviar" onclick="enviar()"
             style="opacity:.4;pointer-events:none">
-      <span>›</span><span id="btn-sig-txt">ELEGIR OTM</span>
+      <span>📤</span><span id="btn-enviar-txt">ENVIAR TAREO</span>
     </button>
   </div>
 </div>
 
-<!-- S3b: QR SCANNER -->
-<div id="s3b" class="screen">
+<!-- ── S5b: QR SCANNER ──────────────────────────────────── -->
+<div id="s5b" class="screen">
   <video id="video" class="scan-video" autoplay playsinline muted></video>
-  <div class="scan-ui">
-    <div class="scan-frame">
-      <div class="sc tl"></div><div class="sc tr"></div>
-      <div class="sc bl"></div><div class="sc br"></div>
-      <div class="scan-ln"></div>
-    </div>
-  </div>
+  <div class="scan-ui"><div class="scan-frame">
+    <div class="sc tl"></div><div class="sc tr"></div>
+    <div class="sc bl"></div><div class="sc br"></div>
+    <div class="scan-ln"></div>
+  </div></div>
   <canvas id="canvas" style="display:none"></canvas>
   <div class="scan-bar">
     <button class="torch-btn" id="torch-btn" onclick="toggleTorch()">🔦</button>
@@ -425,54 +364,11 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
       <div style="font-size:11px;color:var(--text3);margin-top:2px">Se detecta automáticamente</div>
     </div>
     <button class="btn btn-gh btn-sm" style="width:auto;padding:11px 14px"
-            onclick="stopCam();ir('s3')">✕ Cerrar</button>
+            onclick="stopCam();ir('s5')">✕ Cerrar</button>
   </div>
 </div>
 
-<!-- S4: OTM + HH + ENVIAR -->
-<div id="s4" class="screen">
-  <div class="bar">
-    <div class="bar-ico">📋</div>
-    <div>
-      <div class="bar-title" id="s4-titulo">Seleccionar OTM</div>
-      <div class="bar-sub" id="s4-sub">Define la actividad y las horas</div>
-    </div>
-    <button class="bar-btn" onclick="ir('s3')">← Lista</button>
-  </div>
-  <div class="body">
-    <div class="hh-box">
-      <div class="hh-lbl">Horas del turno (por persona)</div>
-      <div class="hh-row">
-        <button class="hh-btn" onclick="cambiarHH(-0.5)">−</button>
-        <div class="hh-val-wrap">
-          <div class="hh-val" id="hh-display" contenteditable="true" inputmode="decimal"
-               onblur="validarHH(this)"
-               onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">9.5</div>
-          <div class="hh-unit">horas por persona</div>
-        </div>
-        <button class="hh-btn" onclick="cambiarHH(+0.5)">+</button>
-      </div>
-    </div>
-
-    <div id="dup-aviso" style="display:none;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--amber2)"></div>
-    <div class="slabel">OTM activa</div>
-    <div class="sw">
-      <span class="sico">🔍</span>
-      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área..."
-             oninput="filtOTM(this.value)" autocomplete="off">
-    </div>
-    <div id="lista-otms"></div>
-    <div style="height:90px"></div>
-  </div>
-  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--border);padding:12px 16px">
-    <button class="btn btn-g btn-icon" id="btn-enviar"
-            onclick="enviar()" style="opacity:.4;pointer-events:none">
-      <span>📤</span><span id="btn-enviar-txt">ENVIAR TAREO</span>
-    </button>
-  </div>
-</div>
-
-<!-- S6: ENVIANDO -->
+<!-- ── S6: ENVIANDO ─────────────────────────────────────── -->
 <div id="s6" class="screen">
   <div class="loading">
     <div class="spinner"></div>
@@ -481,7 +377,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   </div>
 </div>
 
-<!-- S7: RESULTADO -->
+<!-- ── S7: RESULTADO ────────────────────────────────────── -->
 <div id="s7" class="screen">
   <div class="success-top">
     <div class="si-icon">✅</div>
@@ -491,24 +387,23 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   <div class="body">
     <div id="s7-ibox" class="ibox"></div>
     <div class="gap8"></div>
-    <button class="btn btn-a" onclick="irNuevoRegistro()">+ NUEVO REGISTRO</button>
+    <button class="btn btn-a" onclick="irNuevoRegistro()">+ NUEVA PARTIDA / OTM</button>
     <div class="gap8"></div>
     <button class="btn btn-gh btn-sm" onclick="irInicio()">← Cambiar de supervisor</button>
   </div>
 </div>
 
-<!-- HH PICKER OVERLAY -->
-<div class="overlay" id="picker-overlay" onclick="cerrarPicker(event)">
-  <div class="picker">
-    <div class="picker-title">Horas del trabajador</div>
-    <div class="picker-sub" id="picker-sub">Cambia las HH individuales</div>
-    <div class="picker-grid" id="picker-grid"></div>
-    <div class="picker-custom">
-      <input class="picker-inp" id="picker-inp" type="number" step="0.5" min="0.5" max="24"
-             placeholder="Otro valor...">
-      <button class="btn btn-a" style="width:auto;padding:12px 18px"
-              onclick="aplicarPickerCustom()">OK</button>
-    </div>
+<!-- Modal guardar cuadrilla -->
+<div class="modal-overlay" id="modal-guardar" onclick="cerrarModal(event)">
+  <div class="modal-box">
+    <div class="modal-title">¿Guardar esta cuadrilla?</div>
+    <div class="modal-sub" id="modal-sub">Guárdala para usarla mañana con un solo toque</div>
+    <input class="nueva-inp" id="modal-nombre" type="text" placeholder="Nombre de la cuadrilla..."
+           style="margin-bottom:12px">
+    <button class="btn btn-a btn-sm btn-icon" style="margin-bottom:8px" onclick="guardarNuevaCuadrilla()">
+      <span>💾</span><span>GUARDAR</span>
+    </button>
+    <button class="btn btn-gh btn-sm" onclick="cerrarModalBtn()">No gracias</button>
   </div>
 </div>
 
@@ -523,20 +418,25 @@ const AREA_CLS = {
   'SX-EW':'c-sxew','Mina':'c-mina','Lixviacion':'c-lixv','Lixviación':'c-lixv',
   'Aguas':'c-agua','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gsc'
 }
-const HH_OPTS = [4, 6, 7, 8, 9, 9.5, 10, 11, 12]
+const FASE_COLORS = {
+  'CIV':'#fb923c','FAB':'#818cf8','MEC':'#60a5fa','ELE':'#f59e0b',
+  'TUB':'#22d3ee','INS':'#a78bfa','EST':'#34d399','AND':'#4ade80',
+  'APY':'#94a3b8','ING':'#f472b6','MON':'#e879f9'
+}
 
 // ═══════════════════════════════════════════
 // ESTADO
 // ═══════════════════════════════════════════
 const S = {
-  sup: null, sups: [], trabs: [], otms: [],
-  cuadrilla: [],    // [{trab_id, nombre, cargo}] cargada de /api/cuadrilla
-  lista: [],        // [{id, nombre, cargo, hhOverride, via}] sesión actual
-  otm: null,
-  hhTurno: 9.5,
-  sesionesHoy: [],  // sesiones enviadas hoy — para detectar duplicados
+  sup: null, sups: [], otms: [], trabs: [],
+  cuadrilla_grupos: [],
+  otm:       null,
+  partida:   null,
+  partidas:  [],
+  lista:     [],
+  sesionesHoy: [],
   scan: false, stream: null, torch: false,
-  pickerTrabId: null
+  nuevaCuadrillaNombre: ''
 }
 
 // ═══════════════════════════════════════════
@@ -545,14 +445,14 @@ const S = {
 window.addEventListener('load', async () => {
   requestAnimationFrame(() => document.getElementById('sp-fill').style.width = '100%')
   const now = new Date()
-  const ds = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
-  const ms = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+  const DS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
+  const MS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
   document.getElementById('h-fecha').textContent =
-    `${ds[now.getDay()]} ${now.getDate()} ${ms[now.getMonth()]}`
+    `${DS[now.getDay()]} ${now.getDate()} ${MS[now.getMonth()]}`
   const h = now.getHours()
   document.getElementById('h-turno').textContent =
     h < 6 ? 'Madrugada' : h < 12 ? 'Mañana' : h < 17 ? 'Tarde' : 'Noche'
-  await loadData()
+  await cargarDatosIniciales()
   setTimeout(hideSplash, 1400)
 })
 
@@ -562,7 +462,7 @@ function hideSplash() {
   setTimeout(() => sp.style.display = 'none', 400)
 }
 
-async function loadData() {
+async function cargarDatosIniciales() {
   try {
     const [rs, ro, rt] = await Promise.all([
       fetch(`${API}/api/supervisores`).then(r => r.json()),
@@ -572,8 +472,8 @@ async function loadData() {
     S.sups = rs; S.otms = ro; S.trabs = rt
     ls('kp_sups', rs); ls('kp_otms', ro); ls('kp_trabs', rt)
   } catch {
-    S.sups = lsGet('kp_sups') || []
-    S.otms = lsGet('kp_otms') || []
+    S.sups  = lsGet('kp_sups')  || []
+    S.otms  = lsGet('kp_otms')  || []
     S.trabs = lsGet('kp_trabs') || []
     if (S.sups.length) toast('Sin conexión — usando caché', 'warn')
     else toast('Sin datos — verifica la conexión', 'err')
@@ -587,7 +487,7 @@ async function loadData() {
 function ir(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
   document.getElementById(id).classList.add('active')
-  window.scrollTo(0, 0)
+  window.scrollTo(0,0)
 }
 
 // ═══════════════════════════════════════════
@@ -611,275 +511,33 @@ function renderSups() {
 }
 
 async function elegirSup(id) {
-  S.sup = S.sups.find(s => s.id === id)
-  S.lista = []
-  S.otm = null
-  S.hhTurno = 9.5
-  // Actualizar S2
+  S.sup     = S.sups.find(s => s.id === id)
+  S.otm     = null
+  S.partida = null
+  S.lista   = []
+
   const now = new Date()
-  const ds = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
-  const ms = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
-  document.getElementById('s2-sup').textContent = S.sup.nombre.split(' ').slice(0,2).join(' ')
-  document.getElementById('s2-fecha').textContent =
-    `${ds[now.getDay()]} ${now.getDate()} ${ms[now.getMonth()]}`
-  ir('s2')
-  // Cargar cuadrilla y sesiones en paralelo
-  await Promise.all([cargarCuadrillaFetch(), cargarSesionesHoy()])
-}
+  const DS  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
+  const MS  = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+  const fechaStr = `${DS[now.getDay()]} ${now.getDate()} ${MS[now.getMonth()]}`
 
-// ═══════════════════════════════════════════
-// S2 — CUADRILLA
-// ═══════════════════════════════════════════
-async function cargarCuadrillaFetch() {
-  const preset = document.getElementById('cua-card-preset')
-  const meta = document.getElementById('cua-meta-preset')
-  const count = document.getElementById('cua-count-preset')
-  try {
-    const r = await fetch(`${API}/api/cuadrilla/${S.sup.id}`)
-    S.cuadrilla = r.ok ? await r.json() : []
-  } catch { S.cuadrilla = [] }
+  document.getElementById('s2-sup').textContent  = S.sup.nombre.split(' ').slice(0,2).join(' ')
+  document.getElementById('s2-fecha').textContent = fechaStr
 
-  if (!S.cuadrilla.length) {
-    preset.classList.add('disabled')
-    meta.textContent = 'Sin configurar — pide al admin que la configure'
-    count.textContent = '0'
-    count.style.opacity = '.4'
-  } else {
-    preset.classList.remove('disabled')
-    meta.textContent = `${S.cuadrilla.length} trabajador${S.cuadrilla.length > 1 ? 'es' : ''} pre-configurado${S.cuadrilla.length > 1 ? 's' : ''}`
-    count.textContent = S.cuadrilla.length
-    count.style.opacity = '1'
-  }
-}
-
-async function cargarSesionesHoy() {
-  const el = document.getElementById('s2-enviadas')
-  try {
-    const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
-    if (!r.ok) { el.innerHTML = ''; S.sesionesHoy = []; return }
-    const todas = await r.json()
-    S.sesionesHoy = todas  // guardar para chequeo de duplicados en S4
-    const enviadas = todas.filter(s => s.estado === 'enviada')
-    if (!enviadas.length) { el.innerHTML = ''; return }
-    const hhTotal = enviadas.reduce((sum, s) =>
-      sum + (s.total || 0) * parseFloat(s.hh_turno), 0).toFixed(1)
-    el.innerHTML = `
-      <div class="slabel">Enviado hoy · ${hhTotal} HH totales</div>
-      <div style="background:var(--surface);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);overflow:hidden;margin-bottom:8px">
-        ${enviadas.map(s => {
-          const hhSes = ((s.total || 0) * parseFloat(s.hh_turno)).toFixed(1)
-          return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border)">
-            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--amber);min-width:80px">${s.otm_id}</span>
-            <span style="flex:1;font-size:11px;color:var(--text3)">${s.total || 0} trabajadores</span>
-            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)">✓ ${hhSes} HH</span>
-          </div>`
-        }).join('').replace(/border-bottom:[^"]+"/,'style="display:flex;align-items:center;gap:12px;padding:10px 14px"')}
-      </div>`
-  } catch { el.innerHTML = ''; S.sesionesHoy = [] }
-}
-
-function usarCuadrilla() {
-  if (!S.cuadrilla.length) return
-  S.lista = S.cuadrilla.map(t => ({
-    id: t.trab_id || t.id,
-    nombre: t.nombre,
-    cargo: t.cargo,
-    hhOverride: null,
-    via: 'cuadrilla'
-  }))
-  vibrate()
-  abrirS3('Mi cuadrilla habitual', `${S.lista.length} miembros cargados`)
-}
-
-function nuevaCuadrilla() {
-  S.lista = []
-  abrirS3('Nueva cuadrilla', 'Lista vacía — agrega trabajadores')
-}
-
-// ═══════════════════════════════════════════
-// S3 — EDITAR LISTA
-// ═══════════════════════════════════════════
-function abrirS3(titulo, sub) {
-  document.getElementById('s3-titulo').textContent = titulo || 'Lista de trabajadores'
-  document.getElementById('s3-sub').textContent = sub || 'Agrega o retira personal'
-  document.getElementById('q-trab').value = ''
-  document.getElementById('res-trab').innerHTML = ''
-  renderLista()
-  ir('s3')
-}
-
-function buscarTrab(q) {
-  const el = document.getElementById('res-trab')
-  if (q.length < 1) { el.innerHTML = ''; return }
-  const enLista = new Set(S.lista.map(t => t.id))
-  const f = S.trabs.filter(t =>
-    t.nombre.toLowerCase().includes(q.toLowerCase()) ||
-    t.cargo.toLowerCase().includes(q.toLowerCase()) ||
-    t.id === q.padStart(3, '0')
-  ).slice(0, 8)
-  if (!f.length) {
-    el.innerHTML = '<p style="padding:12px;color:var(--text3);font-size:13px">Sin coincidencias</p>'
-    return
-  }
-  el.innerHTML = f.map(t => {
-    const ya = enLista.has(t.id)
-    return `
-      <div class="wrow-res${ya ? ' ya' : ''}"
-           onclick="${ya ? `quitarDeLista('${t.id}')` : `agregarTrab('${t.id}')`}">
-        <div class="wava">${ya ? '✓' : '👷'}</div>
-        <div>
-          <div class="wid">ID: ${t.id}</div>
-          <div class="wnom">${t.nombre}</div>
-          <div class="wcarg">${t.cargo}</div>
-        </div>
-        <div class="wadd" style="color:${ya ? 'var(--red)' : 'var(--green)'}">${ya ? '✕' : '+'}</div>
-      </div>`
-  }).join('')
-}
-
-function agregarTrab(id) {
-  const t = S.trabs.find(x => x.id === id)
-  if (!t || S.lista.find(x => x.id === id)) return
-  S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, hhOverride: null, via: 'busqueda' })
-  vibrate()
-  renderLista()
-  buscarTrab(document.getElementById('q-trab').value)
-}
-
-function quitarDeLista(id) {
-  S.lista = S.lista.filter(x => x.id !== id)
-  renderLista()
-  buscarTrab(document.getElementById('q-trab').value)
-}
-
-function renderLista() {
-  const n = S.lista.length
-  document.getElementById('count-lista').textContent = `${n} persona${n !== 1 ? 's' : ''}`
-  const btn = document.getElementById('btn-sig')
-  btn.style.opacity = n ? '1' : '.4'
-  btn.style.pointerEvents = n ? 'auto' : 'none'
-  document.getElementById('btn-sig-txt').textContent =
-    n ? `ELEGIR OTM (${n} persona${n !== 1 ? 's' : ''})` : 'ELEGIR OTM'
-  const el = document.getElementById('lista-actual')
-  if (!n) {
-    el.innerHTML = '<p style="text-align:center;padding:16px;color:var(--text3);font-size:13px">Usa el buscador para agregar trabajadores ↑</p>'
-    return
-  }
-  el.innerHTML = S.lista.map(t => {
-    const hh = t.hhOverride ?? S.hhTurno
-    return `
-      <div class="lrow">
-        <div class="wava">👷</div>
-        <div class="linfo">
-          <div class="wid">ID: ${t.id}${t.via === 'qr' ? ' · <span style="color:#60a5fa">QR</span>' : ''}</div>
-          <div class="wnom">${t.nombre}</div>
-          <div class="wcarg">${t.cargo}</div>
-        </div>
-        <div class="lhh" onclick="abrirPicker('${t.id}')">
-          <div class="lhh-val">${hh}h</div>
-          <div class="lhh-lbl">cambiar</div>
-        </div>
-        <button class="ldel" onclick="quitarDeLista('${t.id}')">✕</button>
-      </div>`
-  }).join('')
-}
-
-function irAOTM() {
-  if (!S.lista.length) return
-  document.getElementById('hh-display').textContent = S.hhTurno
+  // Resetear S2
   document.getElementById('q-otm').value = ''
   S.otm = null
-  actualizarBtnEnviar()
+  actualizarBtnS2()
   renderOTMs(S.otms)
-  document.getElementById('s4-titulo').textContent = `Elegir OTM`
-  document.getElementById('s4-sub').textContent = `${S.lista.length} personas · ${S.hhTurno}h por persona`
-  ir('s4')
+  ir('s2')
+
+  // Cargar cuadrillas y sesiones en paralelo
+  await Promise.all([cargarCuadrillas(), cargarSesionesHoy()])
 }
 
 // ═══════════════════════════════════════════
-// QR SCANNER
+// S2 — OTM
 // ═══════════════════════════════════════════
-function abrirQR() { ir('s3b'); startCam() }
-
-function toggleTorch() {
-  if (!S.stream) return
-  S.torch = !S.torch
-  document.getElementById('torch-btn').classList.toggle('on', S.torch)
-  try { S.stream.getVideoTracks()[0].applyConstraints({ advanced: [{ torch: S.torch }] }) } catch {}
-}
-
-let _scanTime = 0
-async function startCam() {
-  if (S.stream) { S.scan = true; requestAnimationFrame(tick); return }
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-    })
-    S.stream = stream; S.scan = true
-    document.getElementById('video').srcObject = stream
-    requestAnimationFrame(tick)
-  } catch { toast('No se pudo acceder a la cámara', 'err'); ir('s3') }
-}
-
-function stopCam() {
-  S.scan = false; S.torch = false
-  document.getElementById('torch-btn').classList.remove('on')
-  if (S.stream) { S.stream.getTracks().forEach(t => t.stop()); S.stream = null }
-}
-
-function tick() {
-  if (!S.scan) return
-  const now = Date.now()
-  if (now - _scanTime < 100) { requestAnimationFrame(tick); return }
-  _scanTime = now
-  const v = document.getElementById('video')
-  const c = document.getElementById('canvas')
-  if (v.readyState === v.HAVE_ENOUGH_DATA) {
-    c.height = v.videoHeight; c.width = v.videoWidth
-    const ctx = c.getContext('2d'); ctx.drawImage(v, 0, 0, c.width, c.height)
-    const qr = jsQR(ctx.getImageData(0, 0, c.width, c.height).data, c.width, c.height,
-                    { inversionAttempts: 'dontInvert' })
-    if (qr) { procesarQR(qr.data.trim()); return }
-  }
-  requestAnimationFrame(tick)
-}
-
-function procesarQR(raw) {
-  S.scan = false
-  const id = raw.padStart(3, '0')
-  const t = S.trabs.find(x => x.id === id)
-  if (!t) {
-    toast(`QR no reconocido: ${raw}`, 'err')
-    setTimeout(() => { S.scan = true; requestAnimationFrame(tick) }, 2000)
-    return
-  }
-  if (!S.lista.find(x => x.id === id)) {
-    S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, hhOverride: null, via: 'qr' })
-    toast(`✅ ${t.nombre.split(' ')[0]} agregado`, 'ok')
-    vibrate()
-  } else { toast(`${t.nombre.split(' ')[0]} ya está en la lista`, 'warn') }
-  stopCam()
-  renderLista()
-  ir('s3')
-}
-
-// ═══════════════════════════════════════════
-// S4 — OTM + HH
-// ═══════════════════════════════════════════
-function cambiarHH(delta) {
-  S.hhTurno = parseFloat(Math.min(24, Math.max(0.5, S.hhTurno + delta)).toFixed(1))
-  document.getElementById('hh-display').textContent = S.hhTurno
-  actualizarBtnEnviar()
-}
-
-function validarHH(el) {
-  const v = parseFloat(el.textContent)
-  if (!v || v < 0.5 || v > 24) { el.textContent = S.hhTurno; return }
-  S.hhTurno = Math.round(v * 2) / 2
-  el.textContent = S.hhTurno
-  actualizarBtnEnviar()
-}
-
 function renderOTMs(list) {
   const el = document.getElementById('lista-otms')
   el.innerHTML = list.map(o => {
@@ -900,151 +558,471 @@ function filtOTM(q) {
   const f = q.length < 2 ? S.otms : S.otms.filter(o =>
     o.id.toLowerCase().includes(q.toLowerCase()) ||
     o.descripcion.toLowerCase().includes(q.toLowerCase()) ||
-    (o.area || '').toLowerCase().includes(q.toLowerCase())
+    (o.area||'').toLowerCase().includes(q.toLowerCase())
   )
   renderOTMs(f)
 }
 
-function elegirOTM(id) {
-  S.otm = S.otms.find(o => o.id === id)
+async function elegirOTM(id) {
+  S.otm     = S.otms.find(o => o.id === id)
+  S.partida = null
   filtOTM(document.getElementById('q-otm').value)
-  // Chequear si ya se envió esta OTM hoy
-  const dup = S.sesionesHoy.find(s => s.otm_id === id && s.estado === 'enviada')
-  const aviso = document.getElementById('dup-aviso')
-  if (dup) {
-    aviso.style.display = 'block'
-    aviso.innerHTML = `⚠️ Ya enviaste <strong>${id}</strong> hoy con ${dup.total || 0} trabajadores · ${dup.hh_turno}h por persona. Puedes continuar pero se sobreescribirán los registros.`
-  } else {
-    aviso.style.display = 'none'
+  actualizarBtnS2()
+  // Pre-cargar partidas
+  await cargarPartidasOTM(id)
+}
+
+function actualizarBtnS2() {
+  const btn = document.getElementById('btn-s2')
+  const ok  = !!S.otm
+  btn.style.opacity       = ok ? '1' : '.4'
+  btn.style.pointerEvents = ok ? 'auto' : 'none'
+  document.getElementById('btn-s2-txt').textContent =
+    ok ? `ELEGIR PARTIDA — ${S.otm.id.slice(-4)}` : 'ELEGIR PARTIDA'
+}
+
+async function cargarPartidasOTM(otm_id) {
+  try {
+    const r = await fetch(`${API}/api/partidas-otm/${encodeURIComponent(otm_id)}`)
+    S.partidas = r.ok ? await r.json() : []
+    ls(`kp_partidas_${otm_id}`, S.partidas)
+  } catch {
+    S.partidas = lsGet(`kp_partidas_${otm_id}`) || []
   }
-  actualizarBtnEnviar()
 }
 
-function actualizarBtnEnviar() {
+function irAPartida() {
+  if (!S.otm) return
+  document.getElementById('s3-otm').textContent = S.otm.id + ' · ' + S.otm.descripcion.slice(0,30)
+  document.getElementById('q-partida').value = ''
+  S.partida = null
+  actualizarBtnS3()
+  renderPartidas(S.partidas)
+  ir('s3')
+}
+
+async function cargarSesionesHoy() {
+  const el = document.getElementById('s2-enviadas')
+  try {
+    const r = await fetch(`${API}/api/sesion/hoy/${S.sup.id}`)
+    if (!r.ok) { el.innerHTML = ''; S.sesionesHoy = []; return }
+    const todas   = await r.json()
+    S.sesionesHoy = todas
+    const enviadas = todas.filter(s => s.estado === 'enviada')
+    if (!enviadas.length) { el.innerHTML = ''; return }
+    const hhTotal = enviadas.reduce((sum, s) => sum + (s.total||0) * parseFloat(s.hh_turno), 0).toFixed(1)
+    el.innerHTML = `
+      <div class="slabel">Enviado hoy · ${hhTotal} HH totales</div>
+      <div style="background:var(--surface);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);overflow:hidden;margin-bottom:8px">
+        ${enviadas.map(s => `
+          <div class="ses-row">
+            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--amber);min-width:80px">${s.otm_id}</span>
+            <span style="flex:1;font-size:11px;color:var(--text3)">${s.total||0} trabajadores</span>
+            <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)">✓ ${((s.total||0)*parseFloat(s.hh_turno)).toFixed(1)} HH</span>
+          </div>`).join('')}
+      </div>`
+  } catch { el.innerHTML = ''; S.sesionesHoy = [] }
+}
+
+// ═══════════════════════════════════════════
+// S3 — PARTIDA
+// ═══════════════════════════════════════════
+function renderPartidas(list) {
+  const el = document.getElementById('lista-partidas')
+  if (!list.length) {
+    el.innerHTML = '<p style="padding:20px;color:var(--text3);font-size:13px;text-align:center">Esta OTM no tiene partidas registradas. Importa las partidas desde el panel.</p>'
+    return
+  }
+  el.innerHTML = list.map(p => {
+    const color = FASE_COLORS[p.fase] || '#94a3b8'
+    const sel   = S.partida?.id === p.id
+    return `
+      <div class="partida-item${sel ? ' sel' : ''}" onclick="elegirPartida(${p.id})">
+        <div class="partida-badge" style="background:${color}20;border:1px solid ${color}50;color:${color}">
+          ${(p.fase||'?').slice(0,4)}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div class="partida-codigo">${p.codigo}</div>
+          <div class="partida-desc">${p.descripcion}</div>
+          <div class="partida-meta">${p.unidad} · HH pres: ${(p.hh_presup||0).toFixed(0)}</div>
+        </div>
+        <span class="partida-chk">✓</span>
+      </div>`
+  }).join('')
+}
+
+function filtPartidas(q) {
+  const f = q.length < 1 ? S.partidas : S.partidas.filter(p =>
+    p.codigo.toLowerCase().includes(q.toLowerCase()) ||
+    p.descripcion.toLowerCase().includes(q.toLowerCase()) ||
+    (p.fase||'').toLowerCase().includes(q.toLowerCase())
+  )
+  renderPartidas(f)
+}
+
+function elegirPartida(id) {
+  S.partida = S.partidas.find(p => p.id === id)
+  filtPartidas(document.getElementById('q-partida').value)
+  actualizarBtnS3()
+}
+
+function actualizarBtnS3() {
+  const btn = document.getElementById('btn-s3')
+  const ok  = !!S.partida
+  btn.style.opacity       = ok ? '1' : '.4'
+  btn.style.pointerEvents = ok ? 'auto' : 'none'
+  document.getElementById('btn-s3-txt').textContent =
+    ok ? `ELEGIR CUADRILLA — ${S.partida.codigo}` : 'ELEGIR CUADRILLA'
+}
+
+// ═══════════════════════════════════════════
+// S4 — CUADRILLA
+// ═══════════════════════════════════════════
+async function cargarCuadrillas() {
+  try {
+    const r = await fetch(`${API}/api/cuadrillas/${S.sup.id}`)
+    S.cuadrilla_grupos = r.ok ? await r.json() : []
+    ls(`kp_grupos_${S.sup.id}`, S.cuadrilla_grupos)
+  } catch {
+    S.cuadrilla_grupos = lsGet(`kp_grupos_${S.sup.id}`) || []
+  }
+}
+
+function irACuadrilla() {
+  if (!S.partida) return
+  document.getElementById('s4-sup').textContent      = S.sup.nombre.split(' ').slice(0,2).join(' ')
+  document.getElementById('s4-partida-lbl').textContent =
+    `${S.otm.id} · ${S.partida.codigo} — ${S.partida.descripcion.slice(0,28)}`
+  document.getElementById('nueva-cua-nombre').value = ''
+  actualizarBtnNueva('')
+  renderCuadrillas()
+  ir('s4')
+}
+
+function renderCuadrillas() {
+  const el = document.getElementById('lista-cuadrillas')
+  if (!S.cuadrilla_grupos.length) {
+    el.innerHTML = '<p style="padding:12px;color:var(--text3);font-size:12px">Aún no tienes cuadrillas guardadas. Crea la primera ↓</p>'
+    return
+  }
+  el.innerHTML = S.cuadrilla_grupos.map((g, i) => {
+    const icoClass = i === 0 ? 'amber' : i === 1 ? 'green' : 'blue'
+    const emoji    = i === 0 ? '👥' : i === 1 ? '🏗️' : '⚙️'
+    return `
+      <div class="cua-card preset" onclick="usarGrupo(${g.id})">
+        <div class="cua-ico ${icoClass}">${emoji}</div>
+        <div style="flex:1;min-width:0">
+          <div class="cua-title">${g.nombre}</div>
+          <div class="cua-meta">${g.total} trabajador${g.total!==1?'es':''} pre-configurado${g.total!==1?'s':''}</div>
+        </div>
+        <span class="cua-count">${g.total}</span>
+        <span class="cua-arr">›</span>
+      </div>`
+  }).join('')
+}
+
+function usarGrupo(grupo_id) {
+  const g = S.cuadrilla_grupos.find(x => x.id === grupo_id)
+  if (!g || !g.miembros?.length) { toast('Este grupo está vacío', 'warn'); return }
+  S.lista = g.miembros.map(m => ({
+    id: m.trab_id, nombre: m.nombre, cargo: m.cargo, via: 'cuadrilla'
+  }))
+  S.nuevaCuadrillaNombre = ''
+  vibrate()
+  abrirS5(g.nombre, `${g.miembros.length} miembros cargados`)
+}
+
+function iniciarNuevaCuadrilla() {
+  const nombre = document.getElementById('nueva-cua-nombre').value.trim()
+  if (!nombre) return
+  S.lista                = []
+  S.nuevaCuadrillaNombre = nombre
+  abrirS5('Nueva cuadrilla', 'Lista vacía — agrega trabajadores')
+}
+
+function actualizarBtnNueva(val) {
+  const btn  = document.getElementById('btn-nueva-cua')
+  const ok   = val.trim().length > 0
+  btn.style.opacity       = ok ? '1' : '.4'
+  btn.style.pointerEvents = ok ? 'auto' : 'none'
+}
+
+// ═══════════════════════════════════════════
+// S5 — EDITAR LISTA
+// ═══════════════════════════════════════════
+function abrirS5(titulo, sub) {
+  document.getElementById('s5-titulo').textContent  = titulo || 'Lista de trabajadores'
+  document.getElementById('s5-sub').textContent     = sub    || ''
+  document.getElementById('q-trab').value           = ''
+  document.getElementById('res-trab').innerHTML     = ''
+  // Resumen OTM + partida
+  const rsm = document.getElementById('s5-resumen')
+  if (S.otm && S.partida) {
+    rsm.style.display = 'flex'
+    document.getElementById('s5-otm-tag').textContent     = S.otm.id
+    document.getElementById('s5-partida-tag').textContent =
+      `${S.partida.codigo} · ${S.partida.descripcion}`
+  } else {
+    rsm.style.display = 'none'
+  }
+  renderLista()
+  ir('s5')
+}
+
+function buscarTrab(q) {
+  const el     = document.getElementById('res-trab')
+  if (q.length < 1) { el.innerHTML = ''; return }
+  const enLista = new Set(S.lista.map(t => t.id))
+  const f = S.trabs.filter(t =>
+    t.nombre.toLowerCase().includes(q.toLowerCase()) ||
+    t.cargo.toLowerCase().includes(q.toLowerCase()) ||
+    t.id === q.padStart(3,'0')
+  ).slice(0,8)
+  if (!f.length) {
+    el.innerHTML = '<p style="padding:12px;color:var(--text3);font-size:13px">Sin coincidencias</p>'
+    return
+  }
+  el.innerHTML = f.map(t => {
+    const ya = enLista.has(t.id)
+    return `
+      <div class="wrow-res${ya?' ya':''}"
+           onclick="${ya?`quitarDeLista('${t.id}')`:`agregarTrab('${t.id}')`}">
+        <div class="wava">${ya?'✓':'👷'}</div>
+        <div>
+          <div class="wid">ID: ${t.id}</div>
+          <div class="wnom">${t.nombre}</div>
+          <div class="wcarg">${t.cargo}</div>
+        </div>
+        <div class="wadd" style="color:${ya?'var(--red)':'var(--green)'}">${ya?'✕':'+'}</div>
+      </div>`
+  }).join('')
+}
+
+function agregarTrab(id) {
+  const t = S.trabs.find(x => x.id === id)
+  if (!t || S.lista.find(x => x.id === id)) return
+  S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, via: 'busqueda' })
+  vibrate()
+  renderLista()
+  buscarTrab(document.getElementById('q-trab').value)
+}
+
+function quitarDeLista(id) {
+  S.lista = S.lista.filter(x => x.id !== id)
+  renderLista()
+  buscarTrab(document.getElementById('q-trab').value)
+}
+
+function renderLista() {
+  const n   = S.lista.length
+  document.getElementById('count-lista').textContent = `${n} persona${n!==1?'s':''}`
   const btn = document.getElementById('btn-enviar')
-  const activo = !!(S.otm && S.lista.length)
-  btn.style.opacity = activo ? '1' : '.4'
-  btn.style.pointerEvents = activo ? 'auto' : 'none'
-  const hhTotal = parseFloat(S.lista.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0).toFixed(1))
-  document.getElementById('btn-enviar-txt').textContent = activo
-    ? `ENVIAR — ${S.lista.length} PERS · ${hhTotal} HH`
-    : 'ENVIAR TAREO (elige una OTM)'
-}
-
-// ═══════════════════════════════════════════
-// HH PICKER
-// ═══════════════════════════════════════════
-function abrirPicker(id) {
-  S.pickerTrabId = id
-  const t = S.lista.find(x => x.id === id)
-  document.getElementById('picker-sub').textContent =
-    t ? t.nombre.split(' ').slice(0, 2).join(' ') : ''
-  document.getElementById('picker-inp').value = ''
-  const actual = t?.hhOverride ?? S.hhTurno
-  document.getElementById('picker-grid').innerHTML = HH_OPTS.map(h => `
-    <div class="picker-opt${h === actual ? ' sel' : ''}" onclick="aplicarPicker(${h})">
-      <div class="picker-opt-val">${h}</div>
-      <div class="picker-opt-lbl">horas</div>
+  btn.style.opacity       = n ? '1' : '.4'
+  btn.style.pointerEvents = n ? 'auto' : 'none'
+  document.getElementById('btn-enviar-txt').textContent =
+    n ? `ENVIAR — ${n} PERS · HH AUTO` : 'ENVIAR TAREO'
+  const el = document.getElementById('lista-actual')
+  if (!n) {
+    el.innerHTML = '<p style="text-align:center;padding:16px;color:var(--text3);font-size:13px">Usa el buscador para agregar trabajadores ↑</p>'
+    return
+  }
+  el.innerHTML = S.lista.map(t => `
+    <div class="lrow">
+      <div class="wava">👷</div>
+      <div class="linfo">
+        <div class="wid">ID: ${t.id}${t.via==='qr'?' · <span style="color:#60a5fa">QR</span>':''}</div>
+        <div class="wnom">${t.nombre}</div>
+        <div class="wcarg">${t.cargo}</div>
+      </div>
+      <button class="ldel" onclick="quitarDeLista('${t.id}')">✕</button>
     </div>`).join('')
-  document.getElementById('picker-overlay').classList.add('open')
 }
 
-function aplicarPicker(hh) {
-  const t = S.lista.find(x => x.id === S.pickerTrabId)
-  if (t) { t.hhOverride = hh; renderLista() }
-  document.getElementById('picker-overlay').classList.remove('open')
+// ═══════════════════════════════════════════
+// QR SCANNER
+// ═══════════════════════════════════════════
+function abrirQR() { ir('s5b'); startCam() }
+
+function toggleTorch() {
+  if (!S.stream) return
+  S.torch = !S.torch
+  document.getElementById('torch-btn').classList.toggle('on', S.torch)
+  try { S.stream.getVideoTracks()[0].applyConstraints({ advanced: [{ torch: S.torch }] }) } catch {}
 }
 
-function aplicarPickerCustom() {
-  const v = parseFloat(document.getElementById('picker-inp').value)
-  if (!v || v < 0.5 || v > 24) { toast('Valor inválido (0.5–24)', 'err'); return }
-  aplicarPicker(Math.round(v * 2) / 2)
+let _scanTime = 0
+async function startCam() {
+  if (S.stream) { S.scan = true; requestAnimationFrame(tick); return }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode:'environment', width:{ideal:1280}, height:{ideal:720} }
+    })
+    S.stream = stream; S.scan = true
+    document.getElementById('video').srcObject = stream
+    requestAnimationFrame(tick)
+  } catch { toast('No se pudo acceder a la cámara','err'); ir('s5') }
 }
 
-function cerrarPicker(e) {
-  if (e && e.target !== document.getElementById('picker-overlay')) return
-  document.getElementById('picker-overlay').classList.remove('open')
+function stopCam() {
+  S.scan = false; S.torch = false
+  document.getElementById('torch-btn').classList.remove('on')
+  if (S.stream) { S.stream.getTracks().forEach(t => t.stop()); S.stream = null }
+}
+
+function tick() {
+  if (!S.scan) return
+  const now2 = Date.now()
+  if (now2 - _scanTime < 100) { requestAnimationFrame(tick); return }
+  _scanTime = now2
+  const v = document.getElementById('video')
+  const c = document.getElementById('canvas')
+  if (v.readyState === v.HAVE_ENOUGH_DATA) {
+    c.height = v.videoHeight; c.width = v.videoWidth
+    const ctx = c.getContext('2d'); ctx.drawImage(v,0,0,c.width,c.height)
+    const qr = jsQR(ctx.getImageData(0,0,c.width,c.height).data,c.width,c.height,
+                    { inversionAttempts:'dontInvert' })
+    if (qr) { procesarQR(qr.data.trim()); return }
+  }
+  requestAnimationFrame(tick)
+}
+
+function procesarQR(raw) {
+  S.scan = false
+  const id = raw.padStart(3,'0')
+  const t  = S.trabs.find(x => x.id === id)
+  if (!t) {
+    toast(`QR no reconocido: ${raw}`, 'err')
+    setTimeout(() => { S.scan = true; requestAnimationFrame(tick) }, 2000)
+    return
+  }
+  if (!S.lista.find(x => x.id === id)) {
+    S.lista.push({ id: t.id, nombre: t.nombre, cargo: t.cargo, via: 'qr' })
+    toast(`✅ ${t.nombre.split(' ')[0]} agregado`, 'ok')
+    vibrate()
+  } else { toast(`${t.nombre.split(' ')[0]} ya está en la lista`, 'warn') }
+  stopCam()
+  renderLista()
+  ir('s5')
 }
 
 // ═══════════════════════════════════════════
 // ENVIAR
 // ═══════════════════════════════════════════
 async function enviar() {
-  if (!S.lista.length || !S.otm) return
-  const hhTotal = parseFloat(S.lista.reduce((s, t) => s + (t.hhOverride ?? S.hhTurno), 0).toFixed(1))
+  if (!S.lista.length) return
   ir('s6')
   document.getElementById('s6t').textContent =
-    `Enviando ${S.lista.length} trabajador${S.lista.length > 1 ? 'es' : ''}...`
-  document.getElementById('s6s').textContent = `${S.otm.id} · ${S.sup.nombre.split(' ')[0]}`
-  const now = new Date()
+    `Enviando ${S.lista.length} trabajador${S.lista.length>1?'es':''}...`
+  document.getElementById('s6s').textContent =
+    `${S.otm?.id||'—'} · ${S.partida?.codigo||'—'}`
+
+  const now  = new Date()
   const fecha = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
   const payload = {
     supervisor_id: S.sup.id,
-    otm_id: S.otm.id,
+    otm_id:       S.otm?.id,
     fecha,
-    hh_turno: S.hhTurno,
     trabajadores: S.lista.map(t => ({
-      trab_id: t.id,
-      hh_override: t.hhOverride,
-      agregado_via: t.via
+      trab_id:    t.id,
+      partida_id: S.partida?.id || null,
+      via:        t.via
     }))
   }
   try {
-    const r = await fetch(`${API}/api/sesion/enviar-directo`, {
+    const r = await fetch(`${API}/api/sesion/enviar-con-partidas`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
     const d = await r.json()
     if (!r.ok) throw new Error(d.detail || 'Error ' + r.status)
-    mostrarResultado(d.enviados, hhTotal)
+    // Si la cuadrilla era nueva, preguntar si guardar
+    if (S.nuevaCuadrillaNombre && S.lista.length) {
+      document.getElementById('modal-nombre').value = S.nuevaCuadrillaNombre
+      document.getElementById('modal-sub').textContent =
+        `"${S.nuevaCuadrillaNombre}" con ${S.lista.length} personas`
+      document.getElementById('modal-guardar').classList.add('open')
+    }
+    mostrarResultado(d.enviados, d.hh_dia)
   } catch (e) {
     toast('Error al enviar: ' + e.message, 'err')
-    ir('s4')
+    ir('s5')
   }
 }
 
-function mostrarResultado(enviados, hhTotal) {
+function mostrarResultado(enviados, hhDia) {
   document.getElementById('s7-sub').textContent = `${enviados} registros creados`
   document.getElementById('s7-ibox').innerHTML = `
-    <div class="irow"><span class="ikey">OTM</span><span class="ival a">${S.otm.id}</span></div>
+    <div class="irow"><span class="ikey">OTM</span><span class="ival a">${S.otm?.id||'—'}</span></div>
+    <div class="irow"><span class="ikey">Partida</span><span class="ival a">${S.partida?.codigo||'—'}</span></div>
     <div class="irow"><span class="ikey">Supervisor</span><span class="ival">${S.sup.nombre.split(' ').slice(0,2).join(' ')}</span></div>
-    <div class="irow"><span class="ikey">Trabajadores registrados</span><span class="ival g">${enviados}</span></div>
-    <div class="irow"><span class="ikey">HH totales</span><span class="ival g">${hhTotal}</span></div>
+    <div class="irow"><span class="ikey">Trabajadores</span><span class="ival g">${enviados}</span></div>
+    <div class="irow"><span class="ikey">HH por persona</span><span class="ival g">${hhDia}</span></div>
     <div class="irow"><span class="ikey">Fecha</span><span class="ival">${new Date().toLocaleDateString('es-PE')}</span></div>`
-  vibrate([100, 50, 200])
+  vibrate([100,50,200])
   ir('s7')
+}
+
+// ═══════════════════════════════════════════
+// GUARDAR NUEVA CUADRILLA
+// ═══════════════════════════════════════════
+async function guardarNuevaCuadrilla() {
+  const nombre = document.getElementById('modal-nombre').value.trim()
+  if (!nombre) { toast('Escribe un nombre', 'warn'); return }
+  try {
+    const r = await fetch(`${API}/api/cuadrillas/${S.sup.id}`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({ nombre, trab_ids: S.lista.map(t => t.id) })
+    })
+    if (!r.ok) throw new Error()
+    toast(`✅ "${nombre}" guardada`, 'ok')
+    // Actualizar caché
+    await cargarCuadrillas()
+  } catch {
+    toast('No se pudo guardar. Inténtalo desde el panel.', 'err')
+  }
+  document.getElementById('modal-guardar').classList.remove('open')
+  S.nuevaCuadrillaNombre = ''
+}
+
+function cerrarModal(e) {
+  if (e && e.target !== document.getElementById('modal-guardar')) return
+  document.getElementById('modal-guardar').classList.remove('open')
+}
+function cerrarModalBtn() {
+  document.getElementById('modal-guardar').classList.remove('open')
 }
 
 // ═══════════════════════════════════════════
 // NAVEGACIÓN EXTRA
 // ═══════════════════════════════════════════
 function irNuevoRegistro() {
-  // Vuelve a S2 (misma cuadrilla disponible, nueva OTM)
-  S.lista = []; S.otm = null; S.hhTurno = 9.5
-  document.getElementById('hh-display').textContent = '9.5'
-  document.getElementById('dup-aviso').style.display = 'none'
+  S.partida = null; S.lista = []; S.otm = null; S.nuevaCuadrillaNombre = ''
+  document.getElementById('q-otm').value = ''
+  actualizarBtnS2()
+  renderOTMs(S.otms)
   cargarSesionesHoy()
   ir('s2')
 }
 
 function irInicio() {
-  S.sup = null; S.lista = []; S.otm = null; S.cuadrilla = []
+  S.sup = null; S.otm = null; S.partida = null; S.lista = []; S.cuadrilla_grupos = []
   ir('s1')
 }
 
 // ═══════════════════════════════════════════
 // UTILS
 // ═══════════════════════════════════════════
-function vibrate(p = 80) { navigator.vibrate?.(p) }
-function ls(k, v) { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
+function vibrate(p=80) { navigator.vibrate?.(p) }
+function ls(k,v) { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)) } catch { return null } }
 
 let _tt
-function toast(msg, tipo = 'ok') {
+function toast(msg, tipo='ok') {
   const t = document.getElementById('toast')
   t.textContent = msg
-  t.className = `toast t${tipo} show`
+  t.className   = `toast t${tipo} show`
   clearTimeout(_tt)
   _tt = setTimeout(() => t.classList.remove('show'), 3500)
 }
