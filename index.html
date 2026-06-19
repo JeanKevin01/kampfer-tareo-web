@@ -118,10 +118,20 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 
 /* ── S5 Partida cards ── */
 .part-card{background:var(--surf);border:1.5px solid var(--b1);border-radius:var(--r);margin-bottom:12px;overflow:hidden;transition:border-color .2s}
-.wbs-header{display:flex;align-items:center;gap:8px;padding:8px 10px;margin:10px 0 6px;border-radius:7px;background:rgba(255,255,255,.02)}
+.wbs-header{display:flex;flex-direction:column;gap:5px;padding:9px 10px;margin:10px 0 6px;border-radius:7px;background:rgba(255,255,255,.025)}
+.wbs-header-top{display:flex;align-items:center;gap:8px;width:100%}
 .wbs-nivel-chip{font-size:8px;font-weight:800;letter-spacing:.4px;padding:2px 6px;border-radius:5px;flex-shrink:0;text-transform:uppercase}
 .wbs-codigo{font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0}
 .wbs-desc{font-size:11px;font-weight:600;color:var(--tx2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wbs-stats{display:flex;align-items:center;gap:8px;flex-shrink:0;font-family:var(--mono)}
+.ev-stats{display:flex;flex-wrap:wrap;gap:6px 14px;padding:0 14px 10px;align-items:center}
+.ev-stat{display:flex;flex-direction:column;gap:1px;min-width:50px}
+.ev-stat-lbl{font-size:8px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--tx3)}
+.ev-stat-val{font-family:var(--mono);font-size:12px;font-weight:700}
+.ev-pct-wrap{flex:1;min-width:90px;display:flex;align-items:center;gap:8px}
+.ev-pct-bar{flex:1;height:7px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+.ev-pct-fill{height:100%;border-radius:6px;transition:width .4s}
+.ev-pct-txt{font-family:var(--mono);font-size:11px;font-weight:800;min-width:38px;text-align:right}
 .part-card.has-workers{border-color:rgba(16,185,129,.3)}
 .part-head{padding:13px 14px;display:flex;align-items:center;gap:10px}
 .part-badge{padding:2px 7px;border-radius:5px;font-size:9px;font-weight:800;flex-shrink:0;letter-spacing:.5px}
@@ -690,6 +700,62 @@ async function cargarPartidasOTM(){
   }catch{
     S.partidas=lsG(`kp_par_${S.otm.id}`)||[]
   }
+  await cargarEVOTM()
+}
+
+// ── Trae HH Gastadas/Ganadas/%Avance (mismo cálculo que el panel) ─
+async function cargarEVOTM(){
+  if(!S.partidas.length) return
+  try{
+    // Semana actual: última semana activa del proyecto
+    const rs = await fetch(`${API}/ev/semanas-auto`)
+    const semanas = rs.ok ? await rs.json() : []
+    const activa = [...semanas].reverse().find(s=>s.activa)
+    const semanaActual = activa ? activa.semana : (semanas[semanas.length-1]?.semana ?? 1)
+
+    const ra = await fetch(`${API}/ev/arbol?otm=${encodeURIComponent(S.otm.id)}&semana=${semanaActual}`)
+    const arbol = ra.ok ? await ra.json() : { filas: [] }
+    const evPorCodigo = {}
+    ;(arbol.filas||[]).forEach(f=>{ evPorCodigo[f.codigo] = f })
+
+    // Asignar valores propios (hoja) — 0 para padres, se calculan abajo con rollup
+    S.partidas.forEach(p=>{
+      const ev = evPorCodigo[p.codigo]
+      p.hh_gastadas_acum = ev ? Number(ev.hh_gastadas_acum)||0 : 0
+      p.hh_ganadas_acum  = ev ? Number(ev.hh_ganadas_acum)||0  : 0
+    })
+
+    // Rollup bottom-up por parent_codigo — idéntico al panel (WBSArbol.tsx)
+    const porCodigo = {}
+    S.partidas.forEach(p=>{ porCodigo[p.codigo] = p })
+    const hijosDe = {}
+    S.partidas.forEach(p=>{
+      if(p.parent_codigo){
+        if(!hijosDe[p.parent_codigo]) hijosDe[p.parent_codigo]=[]
+        hijosDe[p.parent_codigo].push(p.codigo)
+      }
+    })
+    function rollup(codigo){
+      const p = porCodigo[codigo]
+      const hijos = hijosDe[codigo]||[]
+      if(!hijos.length){
+        p.r_gast = p.hh_gastadas_acum||0
+        p.r_gan  = p.hh_ganadas_acum||0
+      } else {
+        hijos.forEach(rollup)
+        p.r_gast = hijos.reduce((s,c)=>s+(porCodigo[c].r_gast||0),0)
+        p.r_gan  = hijos.reduce((s,c)=>s+(porCodigo[c].r_gan||0),0)
+      }
+      p.r_pct = p.hh_presup>0 ? p.r_gan/p.hh_presup : 0
+    }
+    // Raíces = sin parent_codigo o cuyo parent no está en el set
+    S.partidas.filter(p=>!p.parent_codigo || !porCodigo[p.parent_codigo]).forEach(p=>rollup(p.codigo))
+
+    ls(`kp_ev_${S.otm.id}`,{semana:semanaActual,partidas:S.partidas})
+  }catch{
+    const cache = lsG(`kp_ev_${S.otm.id}`)
+    if(cache) S.partidas = cache.partidas
+  }
 }
 async function cargarSesionesHoy(){
   const el=document.getElementById('s2-sesiones')
@@ -876,11 +942,28 @@ function buildWBSHeader(p){
   const nivel = p.nivel || 1
   const clr = NIVEL_CLR[nivel] || '#94a3b8'
   const lbl = NIVEL_LBL[nivel] || `Nivel ${nivel}`
+  const hhPlan = p.hh_presup || 0
+  const hhGast = p.r_gast || 0
+  const pct    = (p.r_pct || 0) * 100
+  const barClr = pct >= 100 ? 'var(--gn)' : '#60a5fa'
   return `
     <div class="wbs-header" style="border-left:2px solid ${clr}66;padding-left:${6 + (nivel-1)*8}px">
-      <span class="wbs-nivel-chip" style="background:${clr}2E;color:${clr}">${lbl}</span>
-      <span class="wbs-codigo" style="color:${clr}">${p.codigo}</span>
-      <span class="wbs-desc">${p.descripcion}</span>
+      <div class="wbs-header-top">
+        <span class="wbs-nivel-chip" style="background:${clr}2E;color:${clr}">${lbl}</span>
+        <span class="wbs-codigo" style="color:${clr}">${p.codigo}</span>
+        <span class="wbs-desc">${p.descripcion}</span>
+      </div>
+      ${hhPlan > 0 ? `
+      <div class="wbs-stats">
+        <span style="font-size:9px;color:var(--tx3)">Plan <b style="color:var(--tx2)">${hhPlan.toLocaleString('es-PE',{maximumFractionDigits:1})}</b></span>
+        <span style="font-size:9px;color:var(--tx3)">Gast <b style="color:${hhGast>0?'var(--am)':'var(--tx3)'}">${hhGast.toLocaleString('es-PE',{maximumFractionDigits:1})}</b></span>
+        <div class="ev-pct-wrap" style="min-width:70px">
+          <div class="ev-pct-bar" style="height:5px">
+            <div class="ev-pct-fill" style="width:${Math.min(pct,100)}%;background:${barClr}"></div>
+          </div>
+          <span class="ev-pct-txt" style="font-size:10px;color:${barClr}">${pct.toFixed(0)}%</span>
+        </div>
+      </div>` : ''}
     </div>`
 }
 
@@ -923,6 +1006,11 @@ function buildPartidaCard(p){
     workersHtml+=`</div>`
   }
 
+  const hhPlan = p.hh_presup || 0
+  const hhGast = p.r_gast != null ? p.r_gast : (p.hh_gastadas_acum || 0)
+  const pct    = (p.r_pct != null ? p.r_pct : 0) * 100
+  const barClr = pct >= 100 ? 'var(--gn)' : pct >= 50 ? '#60a5fa' : 'var(--am)'
+
   return `
     <div class="part-card${hasW?' has-workers':''}" id="pc-${pid}" style="margin-left:${indent}px">
       <div class="part-head">
@@ -930,6 +1018,22 @@ function buildPartidaCard(p){
         <span class="part-code">${p.codigo}</span>
         <span class="part-desc">${p.descripcion}</span>
         <span class="part-unit">${p.unidad}</span>
+      </div>
+      <div class="ev-stats">
+        <div class="ev-stat">
+          <span class="ev-stat-lbl">HH Plan</span>
+          <span class="ev-stat-val" style="color:var(--tx2)">${hhPlan.toLocaleString('es-PE',{maximumFractionDigits:1})}</span>
+        </div>
+        <div class="ev-stat">
+          <span class="ev-stat-lbl">HH Gast.</span>
+          <span class="ev-stat-val" style="color:${hhGast>0?'var(--am)':'var(--tx3)'}">${hhGast.toLocaleString('es-PE',{maximumFractionDigits:1})}</span>
+        </div>
+        <div class="ev-pct-wrap">
+          <div class="ev-pct-bar">
+            <div class="ev-pct-fill" style="width:${Math.min(pct,100)}%;background:${barClr}"></div>
+          </div>
+          <span class="ev-pct-txt" style="color:${barClr}">${pct.toFixed(0)}%</span>
+        </div>
       </div>
       <div class="part-actions">
         <button class="pa-btn pa-all" onclick="todoAPartida(${pid})" ${getUnassigned().length===0&&!workers.length?'disabled':''}>
