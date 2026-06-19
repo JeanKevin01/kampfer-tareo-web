@@ -118,6 +118,10 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 
 /* ── S5 Partida cards ── */
 .part-card{background:var(--surf);border:1.5px solid var(--b1);border-radius:var(--r);margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.wbs-header{display:flex;align-items:center;gap:8px;padding:8px 10px;margin:10px 0 6px;border-radius:7px;background:rgba(255,255,255,.02)}
+.wbs-nivel-chip{font-size:8px;font-weight:800;letter-spacing:.4px;padding:2px 6px;border-radius:5px;flex-shrink:0;text-transform:uppercase}
+.wbs-codigo{font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0}
+.wbs-desc{font-size:11px;font-weight:600;color:var(--tx2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .part-card.has-workers{border-color:rgba(16,185,129,.3)}
 .part-head{padding:13px 14px;display:flex;align-items:center;gap:10px}
 .part-badge{padding:2px 7px;border-radius:5px;font-size:9px;font-weight:800;flex-shrink:0;letter-spacing:.5px}
@@ -452,10 +456,13 @@ const AREA_CLR = {
   'Aguas':'c-ag','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gs'
 }
 const FASE_CLR = {
-  CIV:'#fb923c',FAB:'#818cf8',MEC:'#60a5fa',ELE:'#f59e0b',
-  TUB:'#22d3ee',INS:'#a78bfa',EST:'#34d399',AND:'#4ade80',
-  APY:'#94a3b8',ING:'#f472b6',MON:'#e879f9'
+  FAB:'#2DD4A8',EST:'#60A5FA',MEC:'#FB923C',ELE:'#FACC15',
+  TUB:'#A78BFA',INS:'#F472B6',CIV:'#94A3B8',AND:'#34D399',
+  APY:'#86EFAC',ING:'#FCD34D',COM:'#C4B5FD'
 }
+// Colores por nivel WBS — idénticos al panel (WBSArbol.tsx)
+const NIVEL_CLR = {1:'#FF7070',2:'#4ECDC4',3:'#C77DFF',4:'#FCA94C'}
+const NIVEL_LBL = {1:'Raíz',2:'Sección',3:'Sub-sección',4:'Detalle'}
 // HH por día de semana (0=lun…6=dom)
 const HH_DOW = {0:9.5,1:9.5,2:10.0,3:9.5,4:9.5,5:0,6:0}
 function hhHoy(){ const d=new Date().getDay(); return HH_DOW[d===0?6:d-1]||9.5 }
@@ -839,8 +846,9 @@ function renderListaS4(){
 }
 function irAPartidas(){
   if(!S.lista.length) return
-  if(!S.partidas.length){
-    toast('Esta OTM no tiene partidas importadas','err')
+  const hojas = S.partidas.filter(p=>p.es_hoja)
+  if(!hojas.length){
+    toast('Esta OTM no tiene partidas hoja registrables','err')
     return
   }
   S.asig={}; S.hhMap={}
@@ -856,9 +864,24 @@ function irAPartidas(){
 function renderS5(){
   actualizarUnassigned()
   const body=document.getElementById('s5-body')
-  const cards=S.partidas.map(p=>buildPartidaCard(p)).join('')
-  body.innerHTML=cards+'<div style="height:80px"></div>'
+  const html=S.partidas.map(p=>
+    p.es_hoja ? buildPartidaCard(p) : buildWBSHeader(p)
+  ).join('')
+  body.innerHTML=html+'<div style="height:80px"></div>'
   actualizarBtnEnviar()
+}
+
+function buildWBSHeader(p){
+  // Nodo padre del WBS — solo visual, no interactivo (no se puede registrar tareo aquí)
+  const nivel = p.nivel || 1
+  const clr = NIVEL_CLR[nivel] || '#94a3b8'
+  const lbl = NIVEL_LBL[nivel] || `Nivel ${nivel}`
+  return `
+    <div class="wbs-header" style="border-left:2px solid ${clr}66;padding-left:${6 + (nivel-1)*8}px">
+      <span class="wbs-nivel-chip" style="background:${clr}1f;color:${clr}">${lbl}</span>
+      <span class="wbs-codigo" style="color:${clr}">${p.codigo}</span>
+      <span class="wbs-desc">${p.descripcion}</span>
+    </div>`
 }
 
 function buildPartidaCard(p){
@@ -868,6 +891,8 @@ function buildPartidaCard(p){
   const hasW=workers.length>0
   const unasig=getUnassigned()
   const allInThis=unasig.length===0 && !hasW  // disabled if no one left
+  const nivel = p.nivel || 0
+  const indent = nivel > 0 ? (nivel-1)*8 : 0
 
   let workersHtml=''
   if(hasW){
@@ -899,7 +924,7 @@ function buildPartidaCard(p){
   }
 
   return `
-    <div class="part-card${hasW?' has-workers':''}" id="pc-${pid}">
+    <div class="part-card${hasW?' has-workers':''}" id="pc-${pid}" style="margin-left:${indent}px">
       <div class="part-head">
         <span class="part-badge" style="background:${clr}20;border:1px solid ${clr}40;color:${clr}">${p.fase}${p.sub_fase?'.'+p.sub_fase:''}</span>
         <span class="part-code">${p.codigo}</span>
@@ -1052,7 +1077,7 @@ async function enviar(){
   if(!allAssigned()) return
   ir('s6')
   document.getElementById('s6t').textContent=`Enviando ${S.lista.length} trabajador${S.lista.length>1?'es':''}…`
-  document.getElementById('s6s').textContent=`${S.otm?.id} · ${S.partidas.length} partidas`
+  document.getElementById('s6s').textContent=`${S.otm?.id} · ${S.partidas.filter(p=>p.es_hoja).length} partidas`
 
   const now=new Date()
   const fecha=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
