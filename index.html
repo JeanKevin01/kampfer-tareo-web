@@ -456,12 +456,12 @@ const AREA_CLR = {
   'Aguas':'c-ag','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gs'
 }
 const FASE_CLR = {
-  FAB:'#2DD4A8',EST:'#60A5FA',MEC:'#FB923C',ELE:'#FACC15',
-  TUB:'#A78BFA',INS:'#F472B6',CIV:'#94A3B8',AND:'#34D399',
-  APY:'#86EFAC',ING:'#FCD34D',COM:'#C4B5FD'
+  FAB:'#6EE7C0',EST:'#7FB2FF',MEC:'#FFB37A',ELE:'#FFE08A',
+  TUB:'#C7A8FF',INS:'#FFA6C9',CIV:'#AEB9CC',AND:'#7FE3A0',
+  APY:'#A8F0BF',ING:'#FFD97D',COM:'#D8C2FF'
 }
-// Colores por nivel WBS — idénticos al panel (WBSArbol.tsx)
-const NIVEL_CLR = {1:'#FF7070',2:'#4ECDC4',3:'#C77DFF',4:'#FCA94C'}
+// Colores por nivel WBS — idénticos al panel (WBSArbol.tsx), tono pastel
+const NIVEL_CLR = {1:'#FF9B9B',2:'#7FE0D4',3:'#D6B3FF',4:'#FFC98B'}
 const NIVEL_LBL = {1:'Raíz',2:'Sección',3:'Sub-sección',4:'Detalle'}
 // HH por día de semana (0=lun…6=dom)
 const HH_DOW = {0:9.5,1:9.5,2:10.0,3:9.5,4:9.5,5:0,6:0}
@@ -878,7 +878,7 @@ function buildWBSHeader(p){
   const lbl = NIVEL_LBL[nivel] || `Nivel ${nivel}`
   return `
     <div class="wbs-header" style="border-left:2px solid ${clr}66;padding-left:${6 + (nivel-1)*8}px">
-      <span class="wbs-nivel-chip" style="background:${clr}1f;color:${clr}">${lbl}</span>
+      <span class="wbs-nivel-chip" style="background:${clr}2E;color:${clr}">${lbl}</span>
       <span class="wbs-codigo" style="color:${clr}">${p.codigo}</span>
       <span class="wbs-desc">${p.descripcion}</span>
     </div>`
@@ -926,7 +926,7 @@ function buildPartidaCard(p){
   return `
     <div class="part-card${hasW?' has-workers':''}" id="pc-${pid}" style="margin-left:${indent}px">
       <div class="part-head">
-        <span class="part-badge" style="background:${clr}20;border:1px solid ${clr}40;color:${clr}">${p.fase}${p.sub_fase?'.'+p.sub_fase:''}</span>
+        <span class="part-badge" style="background:${clr}2E;border:1px solid ${clr}66;color:${clr}">${p.fase}${p.sub_fase?'.'+p.sub_fase:''}</span>
         <span class="part-code">${p.codigo}</span>
         <span class="part-desc">${p.descripcion}</span>
         <span class="part-unit">${p.unidad}</span>
