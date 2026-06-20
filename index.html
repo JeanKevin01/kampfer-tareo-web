@@ -461,6 +461,16 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 // CONFIG
 // ═══════════════════════════════════════════════════════════════
 const API = 'https://api.apps1.astraera.space'
+// Seguridad Fase 1: pega aquí la misma API key que pongas en el backend (API_KEY).
+// Mientras esté vacía no hace nada (compatibilidad). Se inyecta en todas las llamadas a la API.
+const API_KEY = ''
+if(API_KEY){
+  const _fetch = window.fetch.bind(window)
+  window.fetch = (u, o={}) => {
+    if(typeof u==='string' && u.startsWith(API)) o.headers = {...(o.headers||{}), 'X-API-Key': API_KEY}
+    return _fetch(u, o)
+  }
+}
 const AREA_CLR = {
   'SX-EW':'c-sx','Mina':'c-mn','Lixviacion':'c-lx','Lixviación':'c-lx',
   'Aguas':'c-ag','C2 Area Seca':'c-c2','C2 Área Seca':'c-c2','GSC':'c-gs'
