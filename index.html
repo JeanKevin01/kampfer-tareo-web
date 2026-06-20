@@ -582,6 +582,10 @@ window.addEventListener('load',async()=>{
   const MS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
   document.getElementById('h-fecha').textContent=`${DS[now.getDay()]} ${now.getDate()} ${MS[now.getMonth()]}`
   S.hhDia=hhHoy()
+  try{
+    const rj=await fetch(`${API}/api/jornada/resolver`)
+    if(rj.ok){ const j=await rj.json(); if(j&&j.hh>0) S.hhDia=Number(j.hh) }
+  }catch{}
   document.getElementById('h-hh').textContent=`${S.hhDia} HH`
   await cargarDatos()
   setTimeout(hideSplash,1400)
@@ -673,6 +677,11 @@ async function elegirOTM(id){
   S.asig={}; S.hhMap={}
   filtOTM(document.getElementById('q-otm').value)
   actualizarBtnS2(true)
+  // Jornada referencial específica de esta OTM (regla de OTM gana sobre la global)
+  try{
+    const rj=await fetch(`${API}/api/jornada/resolver?otm=${encodeURIComponent(S.otm.id)}`)
+    if(rj.ok){ const j=await rj.json(); if(j&&j.hh>0){ S.hhDia=Number(j.hh); document.getElementById('h-hh').textContent=`${S.hhDia} HH` } }
+  }catch{}
   // Cargar plantillas de cuadrilla para esta OTM + partidas en paralelo
   await Promise.all([cargarPlantillasOTM(),cargarPartidasOTM()])
 }
@@ -723,6 +732,9 @@ async function cargarEVOTM(){
       const ev = evPorCodigo[p.codigo]
       p.hh_gastadas_acum = ev ? Number(ev.hh_gastadas_acum)||0 : 0
       p.hh_ganadas_acum  = ev ? Number(ev.hh_ganadas_acum)||0  : 0
+      // Metrado: presupuestado y avance real (solo hojas tienen unidad comparable)
+      p.metrado_presup_v = ev ? (Number(ev.metrado_presup)||0) : (Number(p.metrado_presup)||0)
+      p.metrado_ejec     = ev ? (Number(ev.metrado_ejec)||0) : 0
     })
 
     // Rollup bottom-up por parent_codigo — idéntico al panel (WBSArbol.tsx)
@@ -986,19 +998,18 @@ function buildPartidaCard(p){
       const nParts=getWorkerPartidas(tid).length
       const hh=getHH(tid,pid)
       const isMulti=nParts>1
-      const hhOk=isMulti?workerHHOk(tid):true
+      // Alerta suave: el total del trabajador difiere de la jornada (paró antes / horas extra)
+      const hhOk=Math.abs(totalHHWorker(tid)-S.hhDia)<0.15
       workersHtml+=`
         <div class="pw">
           <span style="font-size:15px">👷</span>
           <span class="pw-name">${t.nombre.split(' ').slice(0,2).join(' ')}</span>
           ${isMulti?`<span class="pw-split">÷${nParts}</span>`:''}
           <div class="pw-hh">
-            ${isMulti
-              ?`<input class="pw-inp${hhOk?'':' warn'}" type="number" step="0.5" min="0.5" max="${S.hhDia}"
-                  value="${hh}" oninput="onHHInput('${tid}',${pid},this.value)" onblur="onHHBlur('${tid}',${pid})"
-                  style="width:58px">`
-              :`<span class="pw-hh-lbl">${hh.toFixed(1)} HH</span>`
-            }
+            <input class="pw-inp${hhOk?'':' warn'}" type="number" step="0.5" min="0"
+                value="${hh}" oninput="onHHInput('${tid}',${pid},this.value)" onblur="onHHBlur('${tid}',${pid})"
+                style="width:58px" title="HH del trabajador en esta partida (editable)">
+            <span class="pw-hh-lbl">HH</span>
           </div>
           <button class="pw-del" onclick="quitarDePartida('${tid}',${pid})">✕</button>
         </div>`
@@ -1010,6 +1021,9 @@ function buildPartidaCard(p){
   const hhGast = p.r_gast != null ? p.r_gast : (p.hh_gastadas_acum || 0)
   const pct    = (p.r_pct != null ? p.r_pct : 0) * 100
   const barClr = pct >= 100 ? 'var(--gn)' : pct >= 50 ? '#60a5fa' : 'var(--am)'
+  const mPlan  = p.metrado_presup_v || 0
+  const mEjec  = p.metrado_ejec || 0
+  const nf1    = v => v.toLocaleString('es-PE',{maximumFractionDigits:1})
 
   return `
     <div class="part-card${hasW?' has-workers':''}" id="pc-${pid}" style="margin-left:${indent}px">
@@ -1026,7 +1040,15 @@ function buildPartidaCard(p){
         </div>
         <div class="ev-stat">
           <span class="ev-stat-lbl">HH Gast.</span>
-          <span class="ev-stat-val" style="color:${hhGast>0?'var(--am)':'var(--tx3)'}">${hhGast.toLocaleString('es-PE',{maximumFractionDigits:1})}</span>
+          <span class="ev-stat-val" style="color:${hhGast>0?'var(--am)':'var(--tx3)'}">${nf1(hhGast)}</span>
+        </div>
+        <div class="ev-stat">
+          <span class="ev-stat-lbl">Met. Plan</span>
+          <span class="ev-stat-val" style="color:var(--tx2)">${nf1(mPlan)}<small style="color:var(--tx3);font-weight:400"> ${p.unidad||''}</small></span>
+        </div>
+        <div class="ev-stat">
+          <span class="ev-stat-lbl">Met. Real</span>
+          <span class="ev-stat-val" style="color:${mEjec>0?'var(--gn)':'var(--tx3)'}">${nf1(mEjec)}<small style="color:var(--tx3);font-weight:400"> ${p.unidad||''}</small></span>
         </div>
         <div class="ev-pct-wrap">
           <div class="ev-pct-bar">
