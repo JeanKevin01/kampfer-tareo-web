@@ -527,11 +527,17 @@ function getHH(tid,pid){
 function recalcHH(tid){
   const parts=getWorkerPartidas(tid)
   if(!parts.length) return
-  // Solo recalcula los que no tienen override manual establecido distinto al split
-  const hhEach=Math.round(S.hhDia/parts.length*4)/4
-  parts.forEach(pid=>{
-    const k=`${tid}__${pid}`
-    if(S.hhMap[k]===undefined) S.hhMap[k]=hhEach
+  // Reparte la jornada SOLO entre las partidas sin override manual, en pasos de 0.5,
+  // y deja el residuo en la última libre para que la suma sea EXACTAMENTE la jornada (#13).
+  const libres=parts.filter(pid=>S.hhMap[`${tid}__${pid}`]===undefined)
+  if(!libres.length) return
+  const fijadas=parts.reduce((s,pid)=>{const v=S.hhMap[`${tid}__${pid}`];return s+(v===undefined?0:v)},0)
+  const restante=Math.max(S.hhDia-fijadas,0)
+  const base=Math.round(restante/libres.length*2)/2
+  libres.forEach((pid,i)=>{
+    S.hhMap[`${tid}__${pid}`]= i===libres.length-1
+      ? Math.round((restante-base*(libres.length-1))*100)/100
+      : base
   })
 }
 function addToPartida(tid,pid){
@@ -1201,6 +1207,14 @@ function cerrarSel(){
 // ═══════════════════════════════════════════════════════════════
 async function enviar(){
   if(!allAssigned()) return
+  if(S.enviando) return            // #5: evita doble envío (doble toque / red lenta)
+  // #11: avisar si algún trabajador tiene HH distintas a la jornada (extra/menos)
+  const desbal=S.lista.filter(t=>!workerHHOk(t.id))
+  if(desbal.length){
+    const nombres=desbal.slice(0,5).map(t=>t.nombre.split(' ')[0]).join(', ')
+    if(!confirm(`${desbal.length} trabajador(es) (${nombres}${desbal.length>5?'…':''}) tienen HH distintas a la jornada de ${S.hhDia}. ¿Enviar de todos modos?`)) return
+  }
+  S.enviando=true
   ir('s6')
   document.getElementById('s6t').textContent=`Enviando ${S.lista.length} trabajador${S.lista.length>1?'es':''}…`
   document.getElementById('s6s').textContent=`${S.otm?.id} · ${S.partidas.filter(p=>p.es_hoja).length} partidas`
@@ -1245,6 +1259,8 @@ async function enviar(){
   }catch(e){
     toast('Error al enviar: '+e.message,'err')
     ir('s5')
+  }finally{
+    S.enviando=false              // #5: libera el envío (éxito o error)
   }
 }
 
