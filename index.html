@@ -35,6 +35,20 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .sp-bar{width:160px;height:2px;background:var(--b1);border-radius:2px;overflow:hidden;margin-top:8px}
 .sp-fill{height:100%;background:var(--am);width:0;transition:width 1.2s ease}
 
+/* ── Login ── */
+#login{position:fixed;inset:0;z-index:10000;background:var(--void);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+#login.show{display:flex}
+.lg-card{width:100%;max-width:360px;background:var(--surf);border:1px solid var(--b1);border-radius:var(--r);padding:28px 24px}
+.lg-logo{font-family:var(--cond);font-size:32px;font-weight:800;letter-spacing:5px;color:var(--am);text-align:center}
+.lg-sub{font-size:11px;letter-spacing:1px;color:var(--tx3);text-align:center;margin-top:2px;margin-bottom:20px}
+.lg-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);margin-bottom:5px;display:block}
+.lg-inp{width:100%;background:var(--void);border:1px solid var(--b1);border-radius:var(--rs);padding:12px 14px;font-size:15px;color:var(--tx);outline:none;font-family:var(--font)}
+.lg-inp:focus{border-color:var(--am)}
+.lg-field{margin-bottom:14px}
+.lg-btn{width:100%;background:var(--am);color:var(--void);font-weight:800;border:none;border-radius:var(--rs);padding:13px;font-size:15px;cursor:pointer;font-family:var(--font);margin-top:4px}
+.lg-btn:disabled{opacity:.5}
+.lg-err{color:var(--rd);font-size:12px;font-weight:700;margin-bottom:10px;min-height:16px}
+
 /* ── Screens ── */
 .screen{display:none;min-height:100svh;flex-direction:column}
 .screen.active{display:flex;animation:fu .2s ease}
@@ -247,6 +261,24 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 </head>
 <body>
 
+<!-- LOGIN (Fase 2) -->
+<div id="login">
+  <div class="lg-card">
+    <div class="lg-logo">KAMPFER</div>
+    <div class="lg-sub">Tareo · Iniciar sesión</div>
+    <div class="lg-field">
+      <label class="lg-lbl">Usuario</label>
+      <input id="lg-user" class="lg-inp" autocomplete="username" placeholder="usuario" autocapitalize="off">
+    </div>
+    <div class="lg-field">
+      <label class="lg-lbl">Contraseña</label>
+      <input id="lg-pass" class="lg-inp" type="password" autocomplete="current-password" placeholder="••••••••">
+    </div>
+    <div class="lg-err" id="lg-err"></div>
+    <button class="lg-btn" id="lg-btn" onclick="hacerLogin()">Ingresar</button>
+  </div>
+</div>
+
 <!-- SPLASH -->
 <div id="splash">
   <div class="sp-logo">KAMPFER</div>
@@ -271,6 +303,9 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   <div class="body">
     <div class="slabel">¿Quién eres?</div>
     <div id="lista-sups"></div>
+    <div style="text-align:center;margin-top:24px">
+      <span onclick="cerrarSesion()" style="font-size:12px;color:var(--tx3);cursor:pointer;letter-spacing:.5px">Cerrar sesión</span>
+    </div>
   </div>
 </div>
 
@@ -462,14 +497,47 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 // ═══════════════════════════════════════════════════════════════
 const API = 'https://api.apps1.astraera.space'
 // Seguridad Fase 1: pega aquí la misma API key que pongas en el backend (API_KEY).
-// Mientras esté vacía no hace nada (compatibilidad). Se inyecta en todas las llamadas a la API.
+// Mientras esté vacía no hace nada (compatibilidad).
 const API_KEY = ''
-if(API_KEY){
-  const _fetch = window.fetch.bind(window)
-  window.fetch = (u, o={}) => {
-    if(typeof u==='string' && u.startsWith(API)) o.headers = {...(o.headers||{}), 'X-API-Key': API_KEY}
-    return _fetch(u, o)
+
+// ── Sesión Fase 2: token JWT propio en localStorage ──
+const TOKEN_KEY='kampfer_token'
+function getToken(){ return localStorage.getItem(TOKEN_KEY) }
+function setTokenLS(t){ localStorage.setItem(TOKEN_KEY,t) }
+function clearToken(){ localStorage.removeItem(TOKEN_KEY) }
+function decodeToken(t){
+  if(!t) return null
+  try{
+    let b=t.split('.')[0].replace(/-/g,'+').replace(/_/g,'/')
+    while(b.length%4) b+='='
+    const bin=atob(b)
+    const json=new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0)))
+    return JSON.parse(json)
+  }catch{ return null }
+}
+function sesionValida(){
+  const p=decodeToken(getToken())
+  return !!(p && (!p.exp || p.exp*1000>Date.now()))
+}
+function cerrarSesion(){ clearToken(); location.reload() }
+
+// Inyecta API key (si está) y Bearer token en todas las llamadas a la API.
+// Si la API responde 401 con token presente, la sesión expiró → vuelve al login.
+const _fetch = window.fetch.bind(window)
+window.fetch = async (u, o={}) => {
+  const url = typeof u==='string' ? u : (u && u.url) || ''
+  if(url.startsWith(API)){
+    const h={...(o.headers||{})}
+    if(API_KEY) h['X-API-Key']=API_KEY
+    const tk=getToken()
+    if(tk) h['Authorization']='Bearer '+tk
+    o.headers=h
   }
+  const res=await _fetch(u,o)
+  if(res.status===401 && getToken() && url.startsWith(API) && !url.includes('/api/auth/login')){
+    clearToken(); location.reload()
+  }
+  return res
 }
 const AREA_CLR = {
   'SX-EW':'c-sx','Mina':'c-mn','Lixviacion':'c-lx','Lixviación':'c-lx',
@@ -592,6 +660,16 @@ function workerHHOk(tid){
 // INIT
 // ═══════════════════════════════════════════════════════════════
 window.addEventListener('load',async()=>{
+  // Compuerta de sesión: sin token válido → pantalla de login (no carga nada más).
+  if(!sesionValida()){
+    document.getElementById('splash').style.display='none'
+    document.getElementById('login').classList.add('show')
+    document.getElementById('lg-user').focus()
+    const pass=document.getElementById('lg-pass')
+    pass.addEventListener('keydown',e=>{ if(e.key==='Enter') hacerLogin() })
+    document.getElementById('lg-user').addEventListener('keydown',e=>{ if(e.key==='Enter') pass.focus() })
+    return
+  }
   requestAnimationFrame(()=>document.getElementById('sp-fill').style.width='100%')
   const now=new Date()
   const DS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
@@ -610,6 +688,28 @@ function hideSplash(){
   const sp=document.getElementById('splash')
   sp.classList.add('hide')
   setTimeout(()=>sp.style.display='none',400)
+}
+async function hacerLogin(){
+  const btn=document.getElementById('lg-btn')
+  const err=document.getElementById('lg-err')
+  const username=document.getElementById('lg-user').value.trim()
+  const password=document.getElementById('lg-pass').value
+  err.textContent=''
+  if(!username||!password){ err.textContent='Ingresa usuario y contraseña'; return }
+  btn.disabled=true; btn.textContent='Ingresando...'
+  try{
+    const r=await fetch(`${API}/api/auth/login`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username,password})
+    })
+    const d=await r.json().catch(()=>({}))
+    if(!r.ok) throw new Error(d.detail||'No se pudo iniciar sesión')
+    setTokenLS(d.token)
+    location.reload()
+  }catch(e){
+    err.textContent=e.message
+    btn.disabled=false; btn.textContent='Ingresar'
+  }
 }
 async function cargarDatos(){
   try{
