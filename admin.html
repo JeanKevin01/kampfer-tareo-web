@@ -189,6 +189,20 @@ nav{
 </head>
 <body>
 
+<!-- LOGIN (Fase 2) -->
+<div id="login" style="position:fixed;inset:0;z-index:9999;background:#060810;display:none;align-items:center;justify-content:center;padding:24px">
+  <div style="width:100%;max-width:360px;background:#141926;border:1px solid #252f45;border-radius:14px;padding:28px 24px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;letter-spacing:5px;color:#f59e0b;text-align:center">KAMPFER</div>
+    <div style="font-size:11px;letter-spacing:1px;color:#4e5a72;text-align:center;margin:2px 0 20px">Admin · Iniciar sesión</div>
+    <label style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#4e5a72;display:block;margin-bottom:5px">Usuario</label>
+    <input id="lg-user" autocomplete="username" autocapitalize="off" style="width:100%;background:#060810;border:1px solid #252f45;border-radius:9px;padding:12px 14px;font-size:15px;color:#e8edf5;outline:none;margin-bottom:14px">
+    <label style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#4e5a72;display:block;margin-bottom:5px">Contraseña</label>
+    <input id="lg-pass" type="password" autocomplete="current-password" style="width:100%;background:#060810;border:1px solid #252f45;border-radius:9px;padding:12px 14px;font-size:15px;color:#e8edf5;outline:none;margin-bottom:10px">
+    <div id="lg-err" style="color:#ef4444;font-size:12px;font-weight:700;min-height:16px;margin-bottom:10px"></div>
+    <button id="lg-btn" onclick="hacerLogin()" style="width:100%;background:#f59e0b;color:#060810;font-weight:800;border:none;border-radius:9px;padding:13px;font-size:15px;cursor:pointer">Ingresar</button>
+  </div>
+</div>
+
 <nav>
   <div>
     <div class="nav-logo">KAMPFER</div>
@@ -200,6 +214,7 @@ nav{
     <button class="tab" onclick="showPage('p-qrs',this)">📷 QRs</button>
     <button class="tab" onclick="showPage('p-registros',this)">📊 Registros</button>
     <button class="tab" onclick="showPage('p-cuadrillas',this)">👥 Cuadrillas</button>
+    <button class="tab" onclick="cerrarSesion()">🚪 Salir</button>
   </div>
 </nav>
 
@@ -433,6 +448,49 @@ nav{
 <script>
 const API = 'https://api.apps1.astraera.space';
 
+// ── Sesión Fase 2: token JWT en localStorage ──
+var TOKEN_KEY='kampfer_token';
+function getToken(){ return localStorage.getItem(TOKEN_KEY); }
+function setTokenLS(t){ localStorage.setItem(TOKEN_KEY,t); }
+function clearToken(){ localStorage.removeItem(TOKEN_KEY); }
+function decodeToken(t){
+  if(!t) return null;
+  try{
+    var b=t.split('.')[0].replace(/-/g,'+').replace(/_/g,'/');
+    while(b.length%4) b+='=';
+    var bin=atob(b);
+    var json=new TextDecoder().decode(Uint8Array.from(bin,function(c){return c.charCodeAt(0)}));
+    return JSON.parse(json);
+  }catch(e){ return null; }
+}
+function sesionValida(){
+  var p=decodeToken(getToken());
+  return !!(p && (!p.exp || p.exp*1000>Date.now()));
+}
+function cerrarSesion(){ clearToken(); location.reload(); }
+
+// Inyecta token Bearer en todas las llamadas a la API; si responde 401, vuelve al login.
+(function(){
+  var _fetch = window.fetch.bind(window);
+  window.fetch = function(u, o){
+    o = o || {};
+    var url = (typeof u==='string') ? u : (u && u.url) || '';
+    if(url.indexOf(API)===0){
+      var h = {};
+      if(o.headers) for(var k in o.headers) h[k]=o.headers[k];
+      var tk=getToken();
+      if(tk) h['Authorization']='Bearer '+tk;
+      o.headers=h;
+    }
+    return _fetch(u,o).then(function(res){
+      if(res.status===401 && getToken() && url.indexOf(API)===0 && url.indexOf('/api/auth/login')<0){
+        clearToken(); location.reload();
+      }
+      return res;
+    });
+  };
+})();
+
 // ═══════ QR DATA PRE-GENERADO (SVG — sin CDN, sin canvas) ═══════
 const QR_DATA = {
 "001":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2025%2025%22%20shape-rendering%3D%22crispEdges%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M0%200h25v25H0z%22%2F%3E%3Cpath%20stroke%3D%22%23000000%22%20d%3D%22M2%202.5h7m2%200h1m2%200h1m1%200h7M2%203.5h1m5%200h1m3%200h1m1%200h1m1%200h1m5%200h1M2%204.5h1m1%200h3m1%200h1m1%200h2m2%200h1m1%200h1m1%200h3m1%200h1M2%205.5h1m1%200h3m1%200h1m1%200h2m1%200h2m1%200h1m1%200h3m1%200h1M2%206.5h1m1%200h3m1%200h1m1%200h1m2%200h2m1%200h1m1%200h3m1%200h1M2%207.5h1m5%200h1m1%200h1m3%200h1m1%200h1m5%200h1M2%208.5h7m1%200h1m1%200h1m1%200h1m1%200h7M10%209.5h5M2%2010.5h1m1%200h5m5%200h1m1%200h5M2%2011.5h2m3%200h1m1%200h1m2%200h1m1%200h1m2%200h1m2%200h2M2%2012.5h7m2%200h3m1%200h1m2%200h1m1%200h1M3%2013.5h5m1%200h1m7%200h2m1%200h1M4%2014.5h1m1%200h1m1%200h1m2%200h1m1%200h1m1%200h1m2%200h1m1%200h1M10%2015.5h1m1%200h5m2%200h1M2%2016.5h7m2%200h1m2%200h1m1%200h2m3%200h2M2%2017.5h1m5%200h1m1%200h7m2%200h1M2%2018.5h1m1%200h3m1%200h1m1%200h1m3%200h1m2%200h1m2%200h1M2%2019.5h1m1%200h3m1%200h1m1%200h1m1%200h1m1%200h1m2%200h1m2%200h1M2%2020.5h1m1%200h3m1%200h1m1%200h2m1%200h1m1%200h1m2%200h3M2%2021.5h1m5%200h1m3%200h1m4%200h2m1%200h2M2%2022.5h7m1%200h4m1%200h1m2%200h3%22%2F%3E%3C%2Fsvg%3E%0A",
@@ -543,10 +601,39 @@ var currentQR = null;
 
 // ═══════ INIT ═══════
 window.addEventListener('load', function() {
+  // Compuerta de sesión: sin token válido → pantalla de login.
+  if(!sesionValida()){
+    document.getElementById('login').style.display='flex';
+    document.getElementById('lg-user').focus();
+    document.getElementById('lg-pass').addEventListener('keydown',function(e){ if(e.key==='Enter') hacerLogin(); });
+    document.getElementById('lg-user').addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('lg-pass').focus(); });
+    return;
+  }
   document.getElementById('fecha-filtro').value = new Date().toISOString().slice(0,10);
   cargarWorkers();
   cargarOTMs();
 });
+function hacerLogin(){
+  var btn=document.getElementById('lg-btn');
+  var err=document.getElementById('lg-err');
+  var username=document.getElementById('lg-user').value.trim();
+  var password=document.getElementById('lg-pass').value;
+  err.textContent='';
+  if(!username||!password){ err.textContent='Ingresa usuario y contraseña'; return; }
+  btn.disabled=true; btn.textContent='Ingresando...';
+  fetch(API+'/api/auth/login',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:username,password:password})
+  }).then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
+  .then(function(res){
+    if(!res.ok) throw new Error(res.d.detail||'No se pudo iniciar sesión');
+    setTokenLS(res.d.token);
+    location.reload();
+  }).catch(function(e){
+    err.textContent=e.message;
+    btn.disabled=false; btn.textContent='Ingresar';
+  });
+}
 
 // ═══════ NAV ═══════
 function showPage(id, tabEl) {
