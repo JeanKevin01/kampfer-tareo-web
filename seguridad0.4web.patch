@@ -1,0 +1,24 @@
+diff --git a/index.html b/index.html
+index fb95c3a..6d5eebb 100644
+--- a/index.html
++++ b/index.html
+@@ -496,9 +496,8 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
+ // CONFIG
+ // ═══════════════════════════════════════════════════════════════
+ const API = 'https://api.apps1.astraera.space'
+-// Seguridad Fase 1: pega aquí la misma API key que pongas en el backend (API_KEY).
+-// Mientras esté vacía no hace nada (compatibilidad).
+-const API_KEY = ''
++// EPIC 0.4.4: la app de campo se autentica SOLO con el token JWT del usuario (login).
++// NO se usa API key en el cliente: una key embebida aquí sería visible en el código fuente.
+ 
+ // ── Sesión Fase 2: token JWT propio en localStorage ──
+ const TOKEN_KEY='kampfer_token'
+@@ -528,7 +527,6 @@ window.fetch = async (u, o={}) => {
+   const url = typeof u==='string' ? u : (u && u.url) || ''
+   if(url.startsWith(API)){
+     const h={...(o.headers||{})}
+-    if(API_KEY) h['X-API-Key']=API_KEY
+     const tk=getToken()
+     if(tk) h['Authorization']='Bearer '+tk
+     o.headers=h
