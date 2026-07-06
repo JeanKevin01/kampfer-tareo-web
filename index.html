@@ -317,7 +317,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
       <div class="bar-title" id="s2-sup">—</div>
       <div class="bar-sub">Elige tu OTM de hoy</div>
     </div>
-    <button class="bar-back" onclick="ir('s1')">← Sup.</button>
+    <button class="bar-back" id="s2-back" onclick="ir('s1')">← Sup.</button>
   </div>
   <div class="body">
     <div class="sw"><span class="sico">🔍</span>
@@ -472,7 +472,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     <div class="gap"></div>
     <button class="btn btn-a" onclick="irNuevo()">+ NUEVA OTM / PARTIDA</button>
     <div class="gap"></div>
-    <button class="btn btn-h btn-sm" onclick="irInicio()">← Cambiar supervisor</button>
+    <button class="btn btn-h btn-sm" id="s7-cambiar" onclick="irInicio()">← Cambiar supervisor</button>
   </div>
 </div>
 
@@ -724,6 +724,23 @@ async function cargarDatos(){
     else toast('Sin datos — verifica la conexión','err')
   }
   renderSups()
+  // F0.6: si el usuario logueado ES un supervisor (su token trae sup_id), su
+  // identidad ya está definida → se salta la pantalla "¿Quién eres?" (un paso
+  // menos, y el API igual rechaza con 403 cualquier envío a nombre de otro).
+  // Admin/oficina no traen sup_id y conservan el selector completo.
+  const p=decodeToken(getToken())
+  if(p && p.sup_id){
+    const propio=S.sups.find(s=>s.id===p.sup_id)
+    if(propio){
+      S.supFijoId=propio.id
+      // El botón "← Sup." se vuelve "Salir" (ya no existe pantalla de elegir supervisor)
+      const back=document.getElementById('s2-back')
+      back.textContent='Salir'
+      back.onclick=()=>{ if(confirm('¿Cerrar sesión?')) cerrarSesion() }
+      document.getElementById('s7-cambiar').style.display='none'
+      elegirSup(propio.id)
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1435,6 +1452,7 @@ function irNuevo(){
   ir('s2')
 }
 function irInicio(){
+  if(S.supFijoId){ elegirSup(S.supFijoId); return }  // identidad fija: no hay a quién cambiar
   S.sup=null;S.otm=null;S.asig={};S.hhMap={};S.lista=[];S.plantillas={}
   ir('s1')
 }
