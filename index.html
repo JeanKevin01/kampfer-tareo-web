@@ -327,9 +327,12 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     <div id="s2-sesiones"></div>
     <div style="height:80px"></div>
   </div>
-  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px;display:flex;flex-direction:column;gap:8px">
     <button class="btn btn-a btn-icon" id="btn-s2" onclick="irACuadrilla()" style="opacity:.4;pointer-events:none">
       <span>›</span><span id="btn-s2-txt">ELEGIR CUADRILLA</span>
+    </button>
+    <button class="btn btn-h btn-sm btn-icon" id="btn-s2-rep" onclick="abrirReporte()" style="opacity:.4;pointer-events:none">
+      <span>📷</span><span>REPORTE DEL DÍA (FOTOS)</span>
     </button>
   </div>
 </div>
@@ -473,6 +476,39 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     <button class="btn btn-a" onclick="irNuevo()">+ NUEVA OTM / PARTIDA</button>
     <div class="gap"></div>
     <button class="btn btn-h btn-sm" id="s7-cambiar" onclick="irInicio()">← Cambiar supervisor</button>
+  </div>
+</div>
+
+<!-- S8: REPORTE DEL DÍA CON FOTOS (opcional — no toca el flujo del tareo) -->
+<div id="s8" class="screen">
+  <div class="bar">
+    <div class="bar-ico">📷</div>
+    <div>
+      <div class="bar-title" id="s8-otm">—</div>
+      <div class="bar-sub">Reporte del día con fotos</div>
+    </div>
+    <button class="bar-back" onclick="ir('s2')">← OTM</button>
+  </div>
+  <div class="body">
+    <div id="s8-act-wrap" style="display:none">
+      <div class="slabel">Actividad programada de hoy (opcional)</div>
+      <select class="nueva-inp" id="s8-act" style="width:100%;margin-bottom:12px"></select>
+    </div>
+    <div class="slabel">Fotos (máx. 5 — se comprimen antes de subir)</div>
+    <label class="btn btn-h btn-sm btn-icon" style="cursor:pointer">
+      <span>📷</span><span>TOMAR / ELEGIR FOTOS</span>
+      <input type="file" accept="image/*" capture="environment" multiple hidden onchange="repFotos(this)">
+    </label>
+    <div id="s8-previews" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"></div>
+    <div class="slabel">¿Qué se hizo hoy?</div>
+    <textarea class="nueva-inp" id="s8-desc" rows="4" style="width:100%;resize:vertical"
+      placeholder="Ej: Vaciado de losa bahía 4 completado (38 m³). Sin observaciones de seguridad."></textarea>
+    <div style="height:90px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+    <button class="btn btn-a btn-icon" id="btn-s8" onclick="enviarReporte()">
+      <span>➤</span><span id="btn-s8-txt">ENVIAR REPORTE</span>
+    </button>
   </div>
 </div>
 
@@ -822,6 +858,9 @@ function actualizarBtnS2(ok){
   btn.style.pointerEvents=ok?'auto':'none'
   document.getElementById('btn-s2-txt').textContent=
     ok?`ELEGIR CUADRILLA — ${S.otm.id.slice(-4)}`:'ELEGIR CUADRILLA'
+  const rep=document.getElementById('btn-s2-rep')
+  rep.style.opacity=ok?'1':'.4'
+  rep.style.pointerEvents=ok?'auto':'none'
 }
 async function cargarPlantillasOTM(){
   try{
@@ -1512,6 +1551,99 @@ function procesarQR(raw){
     vibrate()
   }else{toast(`${t.nombre.split(' ')[0]} ya está en la lista`,'warn')}
   stopCam(); renderListaS4(); ir('s4')
+}
+
+// ═══════════════════════════════════════════════════════════════
+// S8 — REPORTE DEL DÍA CON FOTOS (opcional; el tareo no cambia)
+// ═══════════════════════════════════════════════════════════════
+const REP={fotos:[]}
+function hoyISO(){const d=new Date();const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
+
+async function abrirReporte(){
+  if(!S.otm){toast('Primero elige tu OTM','warn');return}
+  document.getElementById('s8-otm').textContent=S.otm.id
+  REP.fotos=[];renderPrevRep()
+  document.getElementById('s8-desc').value=''
+  // Actividades programadas de hoy para esta OTM (si el endpoint no existe o
+  // no hay ninguna, el selector simplemente no se muestra).
+  const wrap=document.getElementById('s8-act-wrap')
+  wrap.style.display='none'
+  try{
+    const r=await fetch(`${API}/campo/programacion-dia?fecha=${hoyISO()}&otm_id=${encodeURIComponent(S.otm.id)}`)
+    if(r.ok){
+      const acts=await r.json()
+      if(Array.isArray(acts)&&acts.length){
+        document.getElementById('s8-act').innerHTML=
+          '<option value="">— Sin vincular a una actividad —</option>'+
+          acts.map(a=>`<option value="${a.id}">${a.titulo}</option>`).join('')
+        wrap.style.display='block'
+      }
+    }
+  }catch{}
+  ir('s8')
+}
+
+// Compresión en el celular ANTES de subir (~5 MB → ~400 KB): con mala señal
+// es la diferencia entre usable y no usable. El servidor re-procesa igual.
+async function comprimirFoto(file){
+  try{
+    const bmp=await createImageBitmap(file)
+    const esc=Math.min(1,1600/Math.max(bmp.width,bmp.height))
+    const cv=document.createElement('canvas')
+    cv.width=Math.round(bmp.width*esc);cv.height=Math.round(bmp.height*esc)
+    cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height)
+    const blob=await new Promise(res=>cv.toBlob(res,'image/jpeg',0.8))
+    return blob||file
+  }catch{return file}
+}
+
+async function repFotos(inp){
+  for(const f of Array.from(inp.files||[])){
+    if(REP.fotos.length>=5){toast('Máximo 5 fotos por reporte','warn');break}
+    REP.fotos.push(await comprimirFoto(f))
+  }
+  inp.value=''
+  renderPrevRep()
+}
+function quitarFotoRep(i){REP.fotos.splice(i,1);renderPrevRep()}
+function renderPrevRep(){
+  const w=document.getElementById('s8-previews')
+  w.innerHTML=REP.fotos.map((b,i)=>`
+    <div style="position:relative">
+      <img src="${URL.createObjectURL(b)}" style="width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--b1)">
+      <button onclick="quitarFotoRep(${i})" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border:0;border-radius:50%;background:#e5484d;color:#fff;font-weight:700;line-height:1">×</button>
+    </div>`).join('')
+}
+
+async function enviarReporte(){
+  const desc=document.getElementById('s8-desc').value.trim()
+  if(!desc&&!REP.fotos.length){toast('Agrega una foto o describe lo realizado','warn');return}
+  const btn=document.getElementById('btn-s8')
+  btn.style.opacity='.5';btn.style.pointerEvents='none'
+  document.getElementById('btn-s8-txt').textContent='ENVIANDO…'
+  const fd=new FormData()
+  fd.append('proyecto_id','1')
+  fd.append('fecha',hoyISO())
+  fd.append('otm_id',S.otm.id)
+  fd.append('supervisor_id',S.sup.id)
+  fd.append('descripcion',desc)
+  const act=document.getElementById('s8-act').value
+  if(act)fd.append('actividad_id',act)
+  REP.fotos.forEach((b,i)=>fd.append('fotos',b,`foto${i+1}.jpg`))
+  try{
+    const r=await fetch(`${API}/campo/reportes`,{method:'POST',body:fd})
+    if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.detail||('Error '+r.status))}
+    const j=await r.json()
+    vibrate()
+    toast(`✅ Reporte enviado (${j.fotos} foto${j.fotos!==1?'s':''})`,'ok')
+    REP.fotos=[];renderPrevRep();document.getElementById('s8-desc').value=''
+    ir('s2')
+  }catch(e){
+    // Sin cola offline todavía (F4): las fotos quedan seleccionadas para reintentar.
+    toast((e.message||'No se pudo enviar')+' — revisa tu señal y reintenta','err')
+  }
+  btn.style.opacity='1';btn.style.pointerEvents='auto'
+  document.getElementById('btn-s8-txt').textContent='ENVIAR REPORTE'
 }
 
 // ═══════════════════════════════════════════════════════════════
