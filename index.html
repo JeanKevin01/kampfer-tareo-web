@@ -860,6 +860,7 @@ async function cargarMisActividades(){
       </div>
       <div style="font-size:13px;font-weight:700;margin-bottom:2px">${a.titulo}</div>
       ${a.partida_codigo?`<div style="font-size:11px;color:var(--tx2);margin-bottom:2px">📌 ${a.partida_codigo}${a.partida_desc?' — '+a.partida_desc:''}</div>`:''}
+      ${a.metrado_dia?`<div style="font-size:11px;color:#3fcf8e;margin-bottom:2px">🎯 Meta de hoy: <b>${a.metrado_dia}</b>${a.und?' '+a.und:''}</div>`:''}
       ${a.descripcion?`<div style="font-size:11px;color:var(--tx3);margin-bottom:6px">${a.descripcion}</div>`:''}
       ${a.estado==='NO_CUMPLIDA'&&(a.causa_nc||a.causa_nc_cat)?`<div style="font-size:11px;color:#e5484d">Causa: ${a.causa_nc||a.causa_nc_cat}</div>`:''}
       ${a.estado==='PROGRAMADO'?`
