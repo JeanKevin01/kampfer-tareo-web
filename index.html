@@ -282,7 +282,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 <!-- SPLASH -->
 <div id="splash">
   <div class="sp-logo">KAMPFER</div>
-  <div class="sp-sub">Tareo · SMCV · Sistema Activo</div>
+  <div class="sp-sub">Tareo · Sistema Activo</div>
   <div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div>
 </div>
 
@@ -291,7 +291,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   <div class="hero">
     <div class="hero-grid"></div>
     <div class="hero-inner">
-      <div class="hero-tag"><div class="hero-dot"></div><span class="hero-tag-txt">Sistema Activo · SMCV</span></div>
+      <div class="hero-tag"><div class="hero-dot"></div><span class="hero-tag-txt">Sistema Activo</span></div>
       <div class="hero-title">TAREO <em>DIARIO</em></div>
       <div class="hero-desc">Control HH por trabajador y partida</div>
       <div class="hrow">
@@ -315,14 +315,14 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     <div class="bar-ico">📋</div>
     <div>
       <div class="bar-title" id="s2-sup">—</div>
-      <div class="bar-sub">Elige tu OTM de hoy</div>
+      <div class="bar-sub">Elige tu proyecto de hoy</div>
     </div>
     <button class="bar-back" id="s2-back" onclick="ir('s1')">← Sup.</button>
   </div>
   <div class="body">
     <div id="s2-mis-acts"></div>
     <div class="sw"><span class="sico">🔍</span>
-      <input class="si" id="q-otm" type="text" placeholder="Buscar OTM o área…" oninput="filtOTM(this.value)" autocomplete="off">
+      <input class="si" id="q-otm" type="text" placeholder="Buscar proyecto o área…" oninput="filtOTM(this.value)" autocomplete="off">
     </div>
     <div id="lista-otms"></div>
     <div id="s2-sesiones"></div>
@@ -346,14 +346,14 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
       <div class="bar-title" id="s3-otm">—</div>
       <div class="bar-sub" id="s3-sub">Elige tu cuadrilla</div>
     </div>
-    <button class="bar-back" onclick="ir('s2')">← OTM</button>
+    <button class="bar-back" onclick="ir('s2')">← Proyecto</button>
   </div>
   <div class="body">
     <div class="slabel">Cuadrillas guardadas</div>
     <div id="lista-cuadrillas-otm"></div>
     <div class="slabel">O crea una nueva</div>
     <div class="nueva-w">
-      <div style="font-size:12px;font-weight:600;color:var(--tx2)">Nueva cuadrilla para esta OTM</div>
+      <div style="font-size:12px;font-weight:600;color:var(--tx2)">Nueva cuadrilla para este proyecto</div>
       <input class="nueva-inp" id="nueva-nombre" type="text" placeholder="Ej: Cuadrilla excavación…" oninput="actualizarBtnNueva(this.value)">
     </div>
     <button class="btn btn-h btn-sm btn-icon" id="btn-nueva" onclick="iniciarNueva()" style="opacity:.4;pointer-events:none">
@@ -474,7 +474,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
   <div class="body">
     <div class="ibox" id="s7-ibox"></div>
     <div class="gap"></div>
-    <button class="btn btn-a" onclick="irNuevo()">+ NUEVA OTM / PARTIDA</button>
+    <button class="btn btn-a" onclick="irNuevo()">+ NUEVO PROYECTO / PARTIDA</button>
     <div class="gap"></div>
     <button class="btn btn-h btn-sm" id="s7-cambiar" onclick="irInicio()">← Cambiar supervisor</button>
   </div>
@@ -488,7 +488,7 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
       <div class="bar-title" id="s8-otm">—</div>
       <div class="bar-sub">Reporte del día con fotos</div>
     </div>
-    <button class="bar-back" onclick="ir('s2')">← OTM</button>
+    <button class="bar-back" onclick="ir('s2')">← Proyecto</button>
   </div>
   <div class="body">
     <div id="s8-act-wrap" style="display:none">
@@ -870,11 +870,11 @@ async function cargarMisActividades(){
         <button class="btn btn-h btn-sm" style="flex:1" onclick="actividadNoCumplida(${a.id})">✗ NO SE HIZO</button>
       </div>`:''}
     </div>`).join('')
-    +'<div class="slabel">O elige cualquier OTM (si trabajaste en otra área)</div>'
+    +'<div class="slabel">O elige cualquier proyecto (si trabajaste en otra área)</div>'
 }
 async function tarearActividad(otmId){
   await elegirOTM(otmId)
-  toast('OTM seleccionada — elige tu cuadrilla','ok')
+  toast('Proyecto seleccionado — elige tu cuadrilla','ok')
   document.getElementById('btn-s2').scrollIntoView({behavior:'smooth'})
 }
 async function reportarActividad(otmId,actId){
