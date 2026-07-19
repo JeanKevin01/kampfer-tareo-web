@@ -6,12 +6,12 @@ App de campo del sistema KAMPFER: registro de tareo con QR desde el celular del 
 ## Archivos
 
 - `index.html` — la app de campo (HTML+JS inline, ~1,500 líneas). **Es donde se capturan las HH.**
-- `admin.html` — consola admin legacy (predecesora del panel React; se deprecará en el corte v2).
+(admin.html legacy eliminada en la Fase S 2026-07-19 — el panel React la reemplaza.)
 - `manifest.json` — manifest PWA básico (ícono SVG inline; iOS lo ignora — se corrige en v2).
 
 ## Configuración
 
-La URL del API está en `index.html` (`const API`, línea ~498) y `admin.html` (~449).
+La URL del API está en `index.html` (`const API`).
 
 ## Deploy
 
