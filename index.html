@@ -2395,6 +2395,14 @@ async function enviarReporteAct(){
   if(R.enviando) return
   const presentes=S.lista.filter(t=>R.presentes.has(t.id))
   if(!presentes.length){toast('Marca quién trabajó','warn');ir('r1');return}
+  // Las HH en 0 no entran al tareo (el servidor las descarta): antes se perdían
+  // en silencio y la partida quedaba con 0 HH gastadas en el ISP y en el sustento.
+  const hhDe=t=>R.hh[t.id]!==undefined?Number(R.hh[t.id]):S.hhDia
+  const enCero=presentes.filter(t=>!(hhDe(t)>0))
+  if(enCero.length && !confirm(
+      `${enCero.length} persona(s) están con 0 HH (${enCero.slice(0,3).map(t=>t.nombre.split(' ')[0]).join(', ')}`
+      +`${enCero.length>3?'…':''}) y NO contarán en las HH de esta partida. ¿Enviar así?`)){ ir('r1'); return }
+  if(!R.act.partida_id) toast('Esta actividad no tiene partida: las HH no se sumarán al ISP','warn')
   R.enviando=true
   const btn=document.getElementById('btn-r4')
   btn.style.opacity='.5';btn.style.pointerEvents='none'
