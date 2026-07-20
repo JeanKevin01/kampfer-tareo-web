@@ -235,6 +235,24 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
 .spinner{width:36px;height:36px;border:2px solid var(--b2);border-top-color:var(--am);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ok-top{background:linear-gradient(135deg,#0a1a0f,#0d2015);border-bottom:1px solid rgba(16,185,129,.2);padding:28px 16px;text-align:center}
+/* ── Flujo REPORTAR (F4·reporte del supervisor) ── */
+.rep-pasos{display:flex;gap:4px;padding:8px 12px;background:var(--surf);border-bottom:1px solid var(--b1);overflow-x:auto}
+.rp{flex:1;text-align:center;font-size:9px;font-weight:800;letter-spacing:.4px;color:var(--tx3);
+    padding:5px 4px;border-radius:6px;background:var(--void);white-space:nowrap}
+.rp.on{color:var(--void);background:var(--am)}
+.rp.ok{color:var(--gn);background:var(--gn-bg)}
+.hh-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--b1);
+        border-radius:var(--rs);margin-bottom:8px;background:var(--surf)}
+.hh-row.off{opacity:.45}
+.hh-chk{width:26px;height:26px;border-radius:8px;border:2px solid var(--b2);display:flex;align-items:center;
+        justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;color:var(--void)}
+.hh-chk.on{background:var(--gn);border-color:var(--gn)}
+.nota-row{display:flex;align-items:flex-start;gap:8px;padding:9px 12px;border:1px solid var(--b1);
+          border-radius:var(--rs);margin-bottom:6px;background:var(--surf);font-size:13px;line-height:1.35}
+.nota-del{margin-left:auto;border:0;background:none;color:var(--rd);font-size:16px;font-weight:800;cursor:pointer;flex-shrink:0}
+.parte{background:var(--surf);border:1px solid var(--b2);border-radius:var(--rs);padding:14px;
+       font-family:var(--mono);font-size:11.5px;line-height:1.5;color:var(--tx);white-space:pre-wrap;
+       word-break:break-word;max-height:52vh;overflow-y:auto}
 .ibox{background:var(--surf);border:1px solid var(--b2);border-radius:var(--rs);overflow:hidden;margin-bottom:14px}
 .irow{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--b1)}
 .irow:last-child{border:none}
@@ -500,10 +518,16 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
       <select class="nueva-inp" id="s8-act" style="width:100%;margin-bottom:12px"></select>
     </div>
     <div class="slabel">Fotos (máx. 5 — se comprimen antes de subir)</div>
-    <label class="btn btn-h btn-sm btn-icon" style="cursor:pointer">
-      <span>📷</span><span>TOMAR / ELEGIR FOTOS</span>
-      <input type="file" accept="image/*" capture="environment" multiple hidden onchange="repFotos(this)">
-    </label>
+    <div style="display:flex;gap:8px">
+      <label class="btn btn-h btn-sm btn-icon" style="cursor:pointer;flex:1">
+        <span>📷</span><span>TOMAR FOTO</span>
+        <input type="file" accept="image/*" capture="environment" multiple hidden onchange="repFotos(this)">
+      </label>
+      <label class="btn btn-h btn-sm btn-icon" style="cursor:pointer;flex:1">
+        <span>🖼️</span><span>DE LA GALERÍA</span>
+        <input type="file" accept="image/*" multiple hidden onchange="repFotos(this)">
+      </label>
+    </div>
     <div id="s8-previews" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"></div>
     <div class="slabel">¿Qué se hizo hoy?</div>
     <textarea class="nueva-inp" id="s8-desc" rows="4" style="width:100%;resize:vertical"
@@ -514,6 +538,156 @@ html,body{height:100%;background:var(--void);font-family:var(--font);color:var(-
     <button class="btn btn-a btn-icon" id="btn-s8" onclick="enviarReporte()">
       <span>➤</span><span id="btn-s8-txt">ENVIAR REPORTE</span>
     </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FLUJO «REPORTAR» (actividad programada) — secuencial:
+     cuadrilla (s3/s4) → HH (R1) → fotos (R2) → viñetas (R3) → parte (R4)
+     La actividad ya trae proyecto, partida y unidad: no se vuelve a elegir.
+     ══════════════════════════════════════════════════════════ -->
+
+<!-- R1: HH de la cuadrilla -->
+<div id="r1" class="screen">
+  <div class="bar">
+    <div class="bar-ico">⏱</div>
+    <div>
+      <div class="bar-title" id="r1-tit">—</div>
+      <div class="bar-sub" id="r1-sub">Horas de la cuadrilla</div>
+    </div>
+    <button class="bar-back" onclick="ir('s4')">← Cuadrilla</button>
+  </div>
+  <div class="rep-pasos"><span class="rp on">1 Personal</span><span class="rp">2 Fotos</span><span class="rp">3 Detalle</span><span class="rp">4 Parte</span></div>
+  <div class="body">
+    <div class="slabel">¿Todos trabajaron la jornada completa?</div>
+    <div id="r1-lista"></div>
+    <div class="gap"></div>
+    <div class="ibox"><div class="irow"><span class="ik">Total HH del día</span><span class="iv g" id="r1-total">—</span></div></div>
+    <div style="height:90px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+    <button class="btn btn-a btn-icon" onclick="repPaso(2)"><span>›</span><span>SIGUIENTE · FOTOS</span></button>
+  </div>
+</div>
+
+<!-- R2: fotos -->
+<div id="r2" class="screen">
+  <div class="bar">
+    <div class="bar-ico">📷</div>
+    <div>
+      <div class="bar-title" id="r2-tit">—</div>
+      <div class="bar-sub">Fotos del avance</div>
+    </div>
+    <button class="bar-back" onclick="ir('r1')">← Personal</button>
+  </div>
+  <div class="rep-pasos"><span class="rp ok">1 Personal</span><span class="rp on">2 Fotos</span><span class="rp">3 Detalle</span><span class="rp">4 Parte</span></div>
+  <div class="body">
+    <div class="slabel">Máx. 5 fotos — se comprimen antes de subir</div>
+    <div style="display:flex;gap:8px">
+      <label class="btn btn-a btn-icon" style="cursor:pointer;flex:1">
+        <span>📷</span><span>TOMAR FOTO</span>
+        <input type="file" accept="image/*" capture="environment" multiple hidden onchange="repFotos(this)">
+      </label>
+      <label class="btn btn-h btn-icon" style="cursor:pointer;flex:1">
+        <span>🖼️</span><span>GALERÍA</span>
+        <input type="file" accept="image/*" multiple hidden onchange="repFotos(this)">
+      </label>
+    </div>
+    <div id="r2-previews" style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"></div>
+    <div style="height:90px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+    <button class="btn btn-a btn-icon" id="btn-r2" onclick="repPaso(3)"><span>›</span><span id="btn-r2-txt">SIGUIENTE · DETALLE</span></button>
+  </div>
+</div>
+
+<!-- R3: qué se hizo (viñetas) + restricciones -->
+<div id="r3" class="screen">
+  <div class="bar">
+    <div class="bar-ico">📝</div>
+    <div>
+      <div class="bar-title" id="r3-tit">—</div>
+      <div class="bar-sub">Qué se hizo y qué lo frenó</div>
+    </div>
+    <button class="bar-back" onclick="ir('r2')">← Fotos</button>
+  </div>
+  <div class="rep-pasos"><span class="rp ok">1 Personal</span><span class="rp ok">2 Fotos</span><span class="rp on">3 Detalle</span><span class="rp">4 Parte</span></div>
+  <div class="body">
+    <div id="r3-plantilla"></div>
+    <div style="display:flex;gap:10px;align-items:flex-end">
+      <div style="flex:1">
+        <div class="slabel">Área / frente de trabajo</div>
+        <input class="nueva-inp" id="r3-area" type="text" style="width:100%" placeholder="Ej: PLANTA SX / EW">
+      </div>
+      <div>
+        <div class="slabel">Turno</div>
+        <select class="nueva-inp" id="r3-turno" style="width:110px" onchange="R.turno=this.value">
+          <option value="DIA">Día</option><option value="NOCHE">Noche</option>
+        </select>
+      </div>
+    </div>
+    <div class="slabel" style="margin-top:16px">¿Qué se hizo? (una línea por actividad)</div>
+    <div id="r3-notas"></div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <input class="nueva-inp" id="r3-nueva" type="text" style="flex:1" placeholder="Ej: Instalación del cerco completo"
+             onkeydown="if(event.key==='Enter')addNota()">
+      <button class="btn btn-a btn-sm" style="width:auto;padding:0 18px" onclick="addNota()">+</button>
+    </div>
+    <div class="slabel" style="margin-top:20px">Restricciones que bajaron el rendimiento (opcional)</div>
+    <div id="r3-rest"></div>
+    <button class="btn btn-h btn-sm btn-icon" style="margin-top:8px" onclick="addRest()">
+      <span>+</span><span>AGREGAR RESTRICCIÓN</span>
+    </button>
+    <div style="height:90px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+    <button class="btn btn-a btn-icon" onclick="repPaso(4)"><span>›</span><span>VER EL PARTE</span></button>
+  </div>
+</div>
+
+<!-- R4: parte listo (copiar / compartir) + enviar -->
+<div id="r4" class="screen">
+  <div class="bar">
+    <div class="bar-ico">📋</div>
+    <div>
+      <div class="bar-title" id="r4-tit">Parte de la actividad</div>
+      <div class="bar-sub" id="r4-sub">Revisa y envía</div>
+    </div>
+    <button class="bar-back" onclick="ir('r3')">← Detalle</button>
+  </div>
+  <div class="rep-pasos"><span class="rp ok">1 Personal</span><span class="rp ok">2 Fotos</span><span class="rp ok">3 Detalle</span><span class="rp on">4 Parte</span></div>
+  <div class="body">
+    <pre class="parte" id="r4-texto">—</pre>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-h btn-sm btn-icon" style="flex:1" onclick="copiarParte('r4-texto')"><span>⧉</span><span>COPIAR</span></button>
+      <button class="btn btn-h btn-sm btn-icon" style="flex:1" onclick="compartirParte('r4-texto')"><span>↗</span><span>COMPARTIR</span></button>
+    </div>
+    <div style="height:90px"></div>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--void);border-top:1px solid var(--b1);padding:12px 16px">
+    <button class="btn btn-g btn-icon" id="btn-r4" onclick="enviarReporteAct()">
+      <span>📤</span><span id="btn-r4-txt">ENVIAR REPORTE</span>
+    </button>
+  </div>
+</div>
+
+<!-- R5: parte consolidado del día -->
+<div id="r5" class="screen">
+  <div class="bar">
+    <div class="bar-ico">📋</div>
+    <div>
+      <div class="bar-title">Reporte del día</div>
+      <div class="bar-sub" id="r5-sub">Todo lo reportado hoy</div>
+    </div>
+    <button class="bar-back" onclick="ir('s2')">← Volver</button>
+  </div>
+  <div class="body">
+    <pre class="parte" id="r5-texto">—</pre>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-a btn-sm btn-icon" style="flex:1" onclick="copiarParte('r5-texto')"><span>⧉</span><span>COPIAR</span></button>
+      <button class="btn btn-h btn-sm btn-icon" style="flex:1" onclick="compartirParte('r5-texto')"><span>↗</span><span>COMPARTIR</span></button>
+    </div>
+    <div style="height:40px"></div>
   </div>
 </div>
 
@@ -1059,21 +1233,14 @@ async function cargarMisActividades(){
       ${a.estado==='NO_CUMPLIDA'&&(a.causa_nc||a.causa_nc_cat)?`<div style="font-size:11px;color:#e5484d">Causa: ${a.causa_nc||a.causa_nc_cat}</div>`:''}
       ${a.estado==='PROGRAMADO'?`
       <div style="display:flex;gap:8px;margin-top:8px">
-        ${a.otm_id?`<button class="btn btn-h btn-sm" style="flex:1" onclick="tarearActividad('${a.otm_id}')">⏱ TAREAR</button>
-        <button class="btn btn-h btn-sm" style="flex:1" onclick="reportarActividad('${a.otm_id}',${a.id})">📷 REPORTAR</button>`:''}
+        ${a.otm_id?`<button class="btn btn-a btn-sm" style="flex:2" onclick="reportarActividad(${a.id})">✓ REPORTAR</button>`:''}
         <button class="btn btn-h btn-sm" style="flex:1" onclick="actividadNoCumplida(${a.id})">✗ NO SE HIZO</button>
       </div>`:''}
     </div>`).join('')
+    +(hayReportadas()?`<button class="btn btn-h btn-sm btn-icon" style="margin-bottom:14px" onclick="verParteDia()">
+        <span>📋</span><span>VER EL REPORTE DEL DÍA</span></button>`:'')
     +'<div class="slabel">O elige cualquier proyecto (si trabajaste en otra área)</div>'
-}
-async function tarearActividad(otmId){
-  await elegirOTM(otmId)
-  toast('Proyecto seleccionado — elige tu cuadrilla','ok')
-  document.getElementById('btn-s2').scrollIntoView({behavior:'smooth'})
-}
-async function reportarActividad(otmId,actId){
-  await elegirOTM(otmId)
-  await abrirReporte(actId)
+  S.acts=acts
 }
 let NC_ACT=null
 function actividadNoCumplida(actId){
@@ -1131,7 +1298,7 @@ function filtOTM(q){
 }
 async function elegirOTM(id){
   S.otm=S.otms.find(o=>o.id===id)
-  S.asig={}; S.hhMap={}
+  S.asig={}; S.hhMap={}; S.modoReporte=false   // el flujo REPORTAR lo reactiva
   filtOTM(document.getElementById('q-otm').value)
   actualizarBtnS2(true)
   // Jornada referencial específica de esta OTM (regla de OTM gana sobre la global)
@@ -1365,7 +1532,9 @@ function renderListaS4(){
   const btn=document.getElementById('btn-s4')
   btn.style.opacity=n?'1':'.4'
   btn.style.pointerEvents=n?'auto':'none'
-  document.getElementById('btn-s4-txt').textContent=n?`ASIGNAR A PARTIDAS — ${n} PERS`:'ASIGNAR A PARTIDAS'
+  document.getElementById('btn-s4-txt').textContent=
+    S.modoReporte ? (n?`SIGUIENTE · HORAS — ${n} PERS`:'SIGUIENTE · HORAS')
+                  : (n?`ASIGNAR A PARTIDAS — ${n} PERS`:'ASIGNAR A PARTIDAS')
   const el=document.getElementById('lista-actual')
   if(!n){
     el.innerHTML='<p style="text-align:center;padding:16px;color:var(--tx3);font-size:13px">Agrega trabajadores con el buscador ↑</p>'
@@ -1384,6 +1553,9 @@ function renderListaS4(){
 }
 function irAPartidas(){
   if(!S.lista.length) return
+  // Modo REPORTAR: la partida ya viene de la actividad programada → se salta
+  // la distribución y pasa directo a las HH de la cuadrilla.
+  if(S.modoReporte && R.act){ repPaso(1); return }
   const hojas = S.partidas.filter(p=>p.es_hoja)
   if(!hojas.length){
     toast('Esta OTM no tiene partidas hoja registrables','err')
@@ -1794,7 +1966,7 @@ function cerrarModalGrdBtn(){
 // NAVEGACIÓN EXTRA
 // ═══════════════════════════════════════════════════════════════
 function irNuevo(){
-  S.otm=null;S.asig={};S.hhMap={};S.lista=[];S.nuevaNombre=''
+  S.otm=null;S.asig={};S.hhMap={};S.lista=[];S.nuevaNombre='';S.modoReporte=false
   document.getElementById('q-otm').value=''
   actualizarBtnS2(false); filtOTM(''); cargarSesionesHoy()
   ir('s2')
@@ -1923,12 +2095,18 @@ async function repFotos(inp){
 }
 function quitarFotoRep(i){REP.fotos.splice(i,1);renderPrevRep()}
 function renderPrevRep(){
-  const w=document.getElementById('s8-previews')
-  w.innerHTML=REP.fotos.map((b,i)=>`
+  const html=REP.fotos.map((b,i)=>`
     <div style="position:relative">
       <img src="${URL.createObjectURL(b)}" style="width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--b1)">
       <button onclick="quitarFotoRep(${i})" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border:0;border-radius:50%;background:#e5484d;color:#fff;font-weight:700;line-height:1">×</button>
     </div>`).join('')
+  document.getElementById('s8-previews').innerHTML=html
+  const r2=document.getElementById('r2-previews')
+  if(r2){
+    r2.innerHTML=html
+    document.getElementById('btn-r2-txt').textContent=
+      REP.fotos.length?`SIGUIENTE · DETALLE (${REP.fotos.length})`:'CONTINUAR SIN FOTOS'
+  }
 }
 
 async function enviarReporte(){
@@ -1968,6 +2146,314 @@ async function enviarReporte(){
   REP.fotos=[];renderPrevRep();document.getElementById('s8-desc').value=''
   if(REP.desdeTareo){ pintarPasoFotos(); ir('s7') }   // cierre del día en el mismo hilo
   else ir('s2')
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FLUJO «REPORTAR» — el cierre del día de una actividad programada
+//
+// El planner ya definió proyecto, partida y meta: el supervisor solo pone
+// QUIÉN trabajó (y sus HH), las FOTOS, QUÉ hizo (viñetas) y QUÉ lo frenó
+// (restricciones del catálogo CNC). Al final obtiene el parte listo para
+// pegar en el grupo — ese es el incentivo para reportar.
+//
+// El tareo de cada actividad se ACUMULA por proyecto y día: el API reemplaza
+// por (supervisor, proyecto, fecha), así que siempre se envía el día completo
+// y reportar una 2ª actividad no borra la 1ª.
+// ═══════════════════════════════════════════════════════════════
+const TURNOS=['DIA','NOCHE']
+const CNC={MATERIALES:'Falta de materiales',MANO_OBRA:'Falta de mano de obra',
+  EQUIPOS:'Falta de equipos',INFORMACION:'Falta de información / planos',CLIMA:'Clima',
+  INTERFERENCIA:'Interferencia con otra disciplina',PRERREQUISITO:'Prerrequisito no terminado',
+  CLIENTE:'Cambio de prioridad del cliente',PROGRAMACION:'Mala programación',OTROS:'Otros'}
+
+const R={act:null,presentes:new Set(),hh:{},notas:[],rests:[],area:'',turno:'DIA'}
+
+// ── Estado del día (persistente): tareo acumulado + partes ya hechos ──
+function claveDia(){ return `kp_dia_${S.sup?.id}_${hoyISO()}` }
+function leerDia(){ return lsG(claveDia()) || {tareo:{},partes:[]} }
+function guardarDia(d){ ls(claveDia(),d) }
+function hayReportadas(){ return (leerDia().partes||[]).length>0 }
+
+async function reportarActividad(actId){
+  const a=(S.acts||[]).find(x=>x.id===actId)
+  if(!a){toast('No encuentro esa actividad','err');return}
+  if(!a.partida_id){toast('Esa actividad no tiene partida asignada — avisa a oficina','warn');return}
+  R.act=a; R.presentes=new Set(); R.hh={}; R.notas=[]; R.rests=[]
+  R.area=a.otm_area||''; R.turno=lsG('kp_turno')||'DIA'; REP.fotos=[]
+  R.avisoFoto=false; R.plantilla=null
+  await elegirOTM(a.otm_id)                 // fija S.otm + carga cuadrillas y partidas
+  S.modoReporte=true
+  document.getElementById('s3-otm').textContent=a.titulo.slice(0,28)
+  document.getElementById('s3-sub').textContent='¿Con qué cuadrilla trabajaste?'
+  document.getElementById('nueva-nombre').value=''
+  actualizarBtnNueva('')
+  renderCuadrillasOTM()
+  ir('s3')
+}
+
+// Título de contexto en las pantallas del flujo
+function repTit(){
+  const a=R.act||{}
+  return `${a.partida_codigo?a.partida_codigo+' · ':''}${(a.titulo||'').slice(0,26)}`
+}
+
+function repPaso(n){
+  if(n===1){
+    document.getElementById('r1-tit').textContent=repTit()
+    document.getElementById('r1-sub').textContent=`${S.hhDia} HH de jornada · ${S.lista.length} personas`
+    if(!R.presentes.size) S.lista.forEach(t=>R.presentes.add(t.id))
+    renderHH(); ir('r1')
+  }else if(n===2){
+    document.getElementById('r2-tit').textContent=repTit()
+    renderPrevRep(); ir('r2')
+  }else if(n===3){
+    if(!REP.fotos.length && !R.avisoFoto){
+      R.avisoFoto=true
+      if(!confirm('No agregaste ninguna foto. La foto es la evidencia del avance.\n\n¿Continuar sin foto?')) return
+    }
+    document.getElementById('r3-tit').textContent=repTit()
+    document.getElementById('r3-area').value=R.area
+    document.getElementById('r3-turno').value=R.turno
+    renderNotas(); renderRests(); cargarPlantillaRep(); ir('r3')
+  }else if(n===4){
+    R.area=document.getElementById('r3-area').value.trim()
+    if(!R.notas.length){toast('Escribe al menos una línea de lo que se hizo','warn');return}
+    document.getElementById('r4-texto').textContent=textoParte()
+    ir('r4')
+  }
+}
+
+// ── R1: presencia y HH ──
+function renderHH(){
+  const el=document.getElementById('r1-lista')
+  el.innerHTML=S.lista.map(t=>{
+    const on=R.presentes.has(t.id)
+    const hh=R.hh[t.id]!==undefined?R.hh[t.id]:S.hhDia
+    return `<div class="hh-row${on?'':' off'}">
+      <div class="hh-chk${on?' on':''}" onclick="togglePres('${t.id}')">${on?'✓':''}</div>
+      <div style="flex:1;min-width:0" onclick="togglePres('${t.id}')">
+        <div class="wnm">${t.nombre.split(' ').slice(0,3).join(' ')}</div>
+        <div class="wcg">${t.cargo}</div>
+      </div>
+      ${on?`<div class="pw-hh">
+        <input class="pw-inp" type="number" step="0.5" min="0" max="24" value="${hh}"
+               oninput="setHHRep('${t.id}',this.value)" style="width:62px">
+        <span class="pw-hh-lbl">HH</span></div>`:'<span style="font-size:11px;color:var(--tx3)">No vino</span>'}
+    </div>`}).join('')
+  const tot=S.lista.filter(t=>R.presentes.has(t.id))
+    .reduce((s,t)=>s+(R.hh[t.id]!==undefined?Number(R.hh[t.id]):S.hhDia),0)
+  document.getElementById('r1-total').textContent=
+    `${tot.toFixed(1)} HH · ${R.presentes.size} pers`
+}
+function togglePres(tid){
+  if(R.presentes.has(tid)) R.presentes.delete(tid); else R.presentes.add(tid)
+  vibrate(40); renderHH()
+}
+function setHHRep(tid,v){
+  R.hh[tid]=Math.max(0,Number(v)||0)
+  const tot=S.lista.filter(t=>R.presentes.has(t.id))
+    .reduce((s,t)=>s+(R.hh[t.id]!==undefined?Number(R.hh[t.id]):S.hhDia),0)
+  document.getElementById('r1-total').textContent=`${tot.toFixed(1)} HH · ${R.presentes.size} pers`
+}
+
+// ── R3: viñetas, restricciones y plantilla del último reporte ──
+function addNota(){
+  const inp=document.getElementById('r3-nueva')
+  const v=inp.value.trim()
+  if(!v) return
+  R.notas.push(v); inp.value=''; renderNotas(); vibrate(40)
+}
+function delNota(i){ R.notas.splice(i,1); renderNotas() }
+function renderNotas(){
+  const el=document.getElementById('r3-notas')
+  el.innerHTML=R.notas.length?R.notas.map((n,i)=>`
+    <div class="nota-row"><span style="color:var(--am);font-weight:800">•</span>
+      <span style="flex:1">${n.replace(/</g,'&lt;')}</span>
+      <button class="nota-del" onclick="delNota(${i})">✕</button></div>`).join('')
+    :'<p style="font-size:12px;color:var(--tx3);padding:6px 2px">Aún no escribiste nada. Escribe abajo y toca +</p>'
+}
+function addRest(){
+  R.rests.push({cat:'MATERIALES',detalle:''}); renderRests()
+}
+function delRest(i){ R.rests.splice(i,1); renderRests() }
+function setRest(i,campo,v){ R.rests[i][campo]=v }
+function renderRests(){
+  const el=document.getElementById('r3-rest')
+  el.innerHTML=R.rests.map((r,i)=>`
+    <div style="border:1px solid var(--b1);border-radius:var(--rs);padding:10px;margin-bottom:8px;background:var(--surf)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+        <select class="nueva-inp" style="flex:1;padding:8px" onchange="setRest(${i},'cat',this.value)">
+          ${Object.entries(CNC).map(([k,v])=>`<option value="${k}"${r.cat===k?' selected':''}>${v}</option>`).join('')}
+        </select>
+        <button class="nota-del" onclick="delRest(${i})">✕</button>
+      </div>
+      <input class="nueva-inp" type="text" style="width:100%" placeholder="Detalle (ej: no hubo camión grúa)"
+             value="${(r.detalle||'').replace(/"/g,'&quot;')}" oninput="setRest(${i},'detalle',this.value)">
+    </div>`).join('')
+}
+async function cargarPlantillaRep(){
+  const w=document.getElementById('r3-plantilla')
+  w.innerHTML=''
+  if(R.notas.length||!R.act) return
+  let p=null
+  try{
+    const r=await fetchT(`${API}/campo/reporte-plantilla?actividad_id=${R.act.id}`,{},6000)
+    if(r.ok) p=await r.json()
+  }catch{}
+  if(!p||!(p.anotaciones||[]).length) return
+  R.plantilla=p
+  w.innerHTML=`<div style="border:1px solid var(--am-bd);background:var(--am-bg);border-radius:var(--rs);padding:10px;margin-bottom:14px">
+    <div style="font-size:12px;font-weight:700;color:var(--am2);margin-bottom:4px">📄 Ya reportaste esta partida (${p.fecha})</div>
+    <div style="font-size:11px;color:var(--tx2);margin-bottom:8px">Puedes traer lo de esa vez y cambiar solo lo que cambió.</div>
+    <button class="btn btn-h btn-sm" onclick="usarPlantillaRep()">USAR COMO BASE</button>
+  </div>`
+}
+function usarPlantillaRep(){
+  const p=R.plantilla||{}
+  R.notas=[...(p.anotaciones||[])]
+  R.rests=(p.restricciones||[]).map(x=>({cat:x.cat||'OTROS',detalle:x.detalle||''}))
+  if(p.area && !document.getElementById('r3-area').value.trim()){
+    document.getElementById('r3-area').value=p.area
+  }
+  document.getElementById('r3-plantilla').innerHTML=''
+  renderNotas(); renderRests(); vibrate(); toast('Datos anteriores cargados — edítalos','ok')
+}
+
+// ── Texto del parte (mismo formato que arma el API) ──
+function contarCargos(lista){
+  const m={}
+  lista.forEach(t=>{ const c=(t.cargo||'SIN CARGO').toUpperCase(); m[c]=(m[c]||0)+1 })
+  return Object.entries(m).sort((a,b)=>b[1]-a[1])
+}
+function titulo1(s){ return String(s).toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase()) }
+function cabeceraParte(personal){
+  const d=new Date()
+  const f=`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`
+  const tot=personal.reduce((s,[,n])=>s+n,0)
+  return [`Fecha: ${f}`,`Turno: ${R.turno}`,`Responsable: ${S.sup?.nombre||'—'}`,'-'.repeat(41),
+          `CANTIDAD TOTAL PERSONAL: ${tot}`,
+          ...personal.map(([c,n])=>`* ${titulo1(c)}: ${String(n).padStart(2,'0')}`),
+          '-'.repeat(41),''].join('\n')
+}
+function bloqueParte(area,notas){
+  const L=['ACTIVIDADES REALIZADAS']
+  if(area) L.push(`AREA: ${area}`)
+  notas.forEach(n=>L.push(`* ${n}`))
+  return L.join('\n')
+}
+function restParte(rests){
+  const con=rests.filter(r=>(r.detalle||'').trim()||r.cat)
+  if(!con.length) return ''
+  return '\nRESTRICCIONES.\n'+con.map(r=>{
+    const d=(r.detalle||'').trim(), c=CNC[r.cat]||''
+    return `* ${d||c}${d&&c?` (${c})`:''}`
+  }).join('\n')
+}
+function textoParte(){
+  const presentes=S.lista.filter(t=>R.presentes.has(t.id))
+  return (cabeceraParte(contarCargos(presentes))+bloqueParte(R.area,R.notas)+'\n'+restParte(R.rests)).trim()
+}
+function textoParteDia(){
+  const d=leerDia()
+  const partes=d.partes||[]
+  if(!partes.length) return 'Aún no has reportado ninguna actividad hoy.'
+  // Personal del día sin repetir a nadie (una persona cuenta una vez)
+  const vistos=new Map()
+  partes.forEach(p=>(p.personal||[]).forEach(x=>{ if(!vistos.has(x.id)) vistos.set(x.id,x) }))
+  const cargos=contarCargos([...vistos.values()])
+  const bloques=partes.map(p=>bloqueParte(p.area,p.notas).replace('ACTIVIDADES REALIZADAS\n',''))
+  const rests=partes.flatMap(p=>p.rests||[])
+  return (cabeceraParte(cargos)+'ACTIVIDADES REALIZADAS\n'+bloques.join('\n\n')+'\n'+restParte(rests)).trim()
+}
+function verParteDia(){
+  document.getElementById('r5-texto').textContent=textoParteDia()
+  const n=(leerDia().partes||[]).length
+  document.getElementById('r5-sub').textContent=`${n} actividad${n!==1?'es':''} reportada${n!==1?'s':''}`
+  ir('r5')
+}
+function copiarParte(id){
+  const txt=document.getElementById(id).textContent
+  const ok=()=>{ vibrate(); toast('✅ Copiado — pégalo en el grupo','ok') }
+  if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(txt).then(ok).catch(()=>fallbackCopia(txt,ok)) }
+  else fallbackCopia(txt,ok)
+}
+function fallbackCopia(txt,ok){
+  const ta=document.createElement('textarea')
+  ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'
+  document.body.appendChild(ta); ta.select()
+  try{ document.execCommand('copy'); ok() }catch{ toast('Copia manual: mantén presionado el texto','warn') }
+  document.body.removeChild(ta)
+}
+function compartirParte(id){
+  const text=document.getElementById(id).textContent
+  if(navigator.share) navigator.share({text}).catch(()=>{})
+  else copiarParte(id)
+}
+
+// ── Envío: tareo acumulado del día + reporte con fotos ──
+async function enviarReporteAct(){
+  if(R.enviando) return
+  const presentes=S.lista.filter(t=>R.presentes.has(t.id))
+  if(!presentes.length){toast('Marca quién trabajó','warn');ir('r1');return}
+  R.enviando=true
+  const btn=document.getElementById('btn-r4')
+  btn.style.opacity='.5';btn.style.pointerEvents='none'
+  document.getElementById('btn-r4-txt').textContent='ENVIANDO…'
+
+  const dia=leerDia()
+  const pid=String(R.act.partida_id)
+  // 1) Tareo: acumulado por proyecto → se reenvía el día COMPLETO
+  dia.tareo[S.otm.id]=dia.tareo[S.otm.id]||{}
+  dia.tareo[S.otm.id][pid]={}
+  presentes.forEach(t=>{
+    dia.tareo[S.otm.id][pid][t.id]=R.hh[t.id]!==undefined?Number(R.hh[t.id]):S.hhDia
+  })
+  const porTrab={}
+  Object.entries(dia.tareo[S.otm.id]).forEach(([p,ts])=>{
+    Object.entries(ts).forEach(([tid,hh])=>{
+      (porTrab[tid]=porTrab[tid]||[]).push({partida_id:parseInt(p),hh:Number(hh)})
+    })
+  })
+  const payload={supervisor_id:S.sup.id,otm_id:S.otm.id,fecha:hoyISO(),
+    trabajadores:Object.entries(porTrab).map(([tid,asig])=>({trab_id:tid,asignaciones:asig,via:'reporte'}))}
+  const itT=await encolar('tareo',payload,`${S.otm.id} · ${Object.keys(porTrab).length} pers · ${hoyISO()}`)
+  const rT=await enviarItem(itT)
+  if(rT==='ok'){ await obDel(itT.id) } else if(rT==='fatal'){
+    await obDel(itT.id); refrescarChip()
+    toast(itT.error||'No se pudo registrar el tareo','err')
+    btn.style.opacity='1';btn.style.pointerEvents='auto'
+    document.getElementById('btn-r4-txt').textContent='ENVIAR REPORTE'
+    R.enviando=false; return
+  }
+
+  // 2) Reporte estructurado con fotos (marca la actividad como EJECUTADA)
+  const campos={proyecto_id:'1',fecha:hoyISO(),otm_id:S.otm.id,supervisor_id:S.sup.id,
+    actividad_id:String(R.act.id),area:R.area,turno:R.turno,
+    anotaciones:JSON.stringify(R.notas),
+    restricciones:JSON.stringify(R.rests.filter(x=>(x.detalle||'').trim()||x.cat)),
+    descripcion:R.notas.map(n=>'• '+n).join('\n')}
+  const itR=await encolar('reporte',campos,
+    `${R.act.partida_codigo||S.otm.id} · ${REP.fotos.length} foto${REP.fotos.length!==1?'s':''}`,REP.fotos.slice())
+  const rR=await enviarItem(itR)
+  if(rR==='ok') await obDel(itR.id)
+  refrescarChip()
+
+  // 3) Guardar el parte del día (para el consolidado, aunque cierre la app)
+  dia.partes=(dia.partes||[]).filter(p=>p.act_id!==R.act.id)
+  dia.partes.push({act_id:R.act.id,area:R.area,notas:[...R.notas],rests:[...R.rests],
+    personal:presentes.map(t=>({id:t.id,cargo:t.cargo})),titulo:R.act.titulo})
+  guardarDia(dia)
+  ls('kp_turno',R.turno)
+
+  vibrate([100,50,200])
+  toast(rR==='ok'?'✅ Reporte enviado':'📴 Guardado — se enviará al reconectar','ok')
+  btn.style.opacity='1';btn.style.pointerEvents='auto'
+  document.getElementById('btn-r4-txt').textContent='ENVIAR REPORTE'
+  R.enviando=false
+  S.modoReporte=false
+  REP.fotos=[]
+  cargarMisActividades()
+  verParteDia()
 }
 
 // ═══════════════════════════════════════════════════════════════
